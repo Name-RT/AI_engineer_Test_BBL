@@ -1,12 +1,12 @@
 # === App Settings ===
 app:
-  name: "RAG_BBL Agentic System"
+  name: "AI ENGINEER TEST | AI Policy Assistant"
   version: "1.0.0"
   log_level: "INFO"    # DEBUG, INFO, WARNING, ERROR
 
 # === Search Settings ===
 search:
-  mode: "chroma"       # ตัวเลือก: "chroma" (Vector DB), "tfidf" (Lexical), "hybrid" (RRF)
+  mode: "hybrid"       # ตัวเลือก: "chroma" (Vector DB), "tfidf" (Lexical), "hybrid" (RRF)
   chunk_size: 500       # characters per chunk
   chunk_overlap: 50     # overlap between chunks
   top_k: 5              # จำนวน chunks ที่ return
@@ -25,7 +25,7 @@ reranking:
   enabled: true                        # สลับเปิด-ปิดการทำ Two-Stage Reranking
   model_name: "BAAI/bge-reranker-v2-m3" # Multilingual Cross-Encoder (Thai & English)
   candidate_top_k: 10                  # Stage 1: จำนวน candidate chunks ที่ดึงมารอบแรก
-  final_top_k: 3                       # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่
+  final_top_k:  5                      # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่
   device: "cpu"                        # "cpu" หรือ "cuda"
   
 # === LLM Settings ===

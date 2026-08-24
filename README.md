@@ -1,4 +1,4 @@
-# Bangkok Bank (BBL) — Agentic RAG Policy Assistant
+# AI ENGINEER TEST | AI Policy Assistant
 
 [![CI / Automated Testing](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml/badge.svg)](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml)
 [![Tests Passing](https://img.shields.io/badge/tests-57%2F57%20passing-brightgreen.svg)](tests/)
@@ -22,7 +22,7 @@
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
 </p>
 
-Multi-agent RAG system for answering corporate policy questions (HR, IT Security, Operations). Built on **LangGraph** with **ChromaDB** vector search and **DeepSeek / Azure APIM** as the LLM backend. Supports Thai and English.
+Enterprise Multi-Agent RAG system for querying, verifying, and synthesizing corporate policies (HR, IT Security, Finance, Operations). Built with **LangGraph**, **ChromaDB** vector search, **Two-Stage Cross-Encoder Re-ranking**, and **Azure APIM (GPT-5-Mini) / DeepSeek** backend. Supports both Thai and English.
 
 ---
 
@@ -252,7 +252,7 @@ RAG_BBL/
 
 ---
 
-## License
+## License & Project Info
 
-Developed for the Bangkok Bank (BBL) AI Policy Assistant project.  
-Built with LangGraph, ChromaDB, and DeepSeek.
+Developed for the **AI ENGINEER TEST \| AI Policy Assistant** project.  
+Built with LangGraph, ChromaDB, Azure APIM (GPT-5-Mini), and DeepSeek.
