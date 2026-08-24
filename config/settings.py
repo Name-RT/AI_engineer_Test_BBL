@@ -116,33 +116,10 @@ class ChatAzureAPIM(SimpleChatModel):
                     )
 
                 data = response.json()
-
-                # Parse different potential response structures from APIM / Gateway
-                if isinstance(data, dict):
-                    if "response" in data:
-                        return str(data["response"])
-                    elif "output" in data:
-                        return str(data["output"])
-                    elif "content" in data:
-                        return str(data["content"])
-                    elif "text" in data:
-                        return str(data["text"])
-                    elif "choices" in data and len(data["choices"]) > 0:
-                        choice = data["choices"][0]
-                        if isinstance(choice, dict):
-                            if "message" in choice and "content" in choice["message"]:
-                                return str(choice["message"]["content"])
-                            elif "text" in choice:
-                                return str(choice["text"])
-                    # Fallback: if single key with text
-                    for val in data.values():
-                        if isinstance(val, str) and len(val) > 0:
-                            return val
-                    return str(data)
-                elif isinstance(data, str):
-                    return data
-                else:
-                    return str(data)
+                parsed_text = self._extract_text_from_apim_response(data)
+                if parsed_text:
+                    return parsed_text
+                return str(data)
 
             except requests.exceptions.RequestException as e:
                 if attempt < max_retries - 1:
@@ -153,6 +130,91 @@ class ChatAzureAPIM(SimpleChatModel):
                 raise RuntimeError(f"Azure APIM Connection Error: {e}")
 
         raise RuntimeError("Azure APIM failed after maximum rate limit retries.")
+
+    @staticmethod
+    def _extract_text_from_apim_response(data: Any) -> str:
+        """
+        Extracts clean text from diverse API schemas including OpenAI / Responses API,
+        skipping raw encrypted reasoning blocks.
+        """
+        if isinstance(data, str):
+            return data
+
+        if isinstance(data, dict):
+            # 1. Direct text fields
+            for field in ["output_text", "text", "content"]:
+                if field in data and isinstance(data[field], str) and data[field].strip():
+                    return data[field].strip()
+
+            # 2. Nested output / response fields
+            for field in ["output", "response", "messages", "results"]:
+                if field in data:
+                    extracted = ChatAzureAPIM._extract_text_from_apim_response(data[field])
+                    if extracted:
+                        return extracted
+
+            # 3. Standard OpenAI choices format
+            if "choices" in data and isinstance(data["choices"], list) and len(data["choices"]) > 0:
+                choice = data["choices"][0]
+                if isinstance(choice, dict):
+                    if "message" in choice:
+                        return ChatAzureAPIM._extract_text_from_apim_response(choice["message"])
+                    elif "text" in choice and isinstance(choice["text"], str):
+                        return choice["text"].strip()
+
+            # 4. Content array format
+            if "content" in data:
+                if isinstance(data["content"], list):
+                    texts = []
+                    for item in data["content"]:
+                        if isinstance(item, dict):
+                            if item.get("type") == "text" and "text" in item:
+                                texts.append(str(item["text"]))
+                            elif "text" in item:
+                                texts.append(str(item["text"]))
+                        elif isinstance(item, str):
+                            texts.append(item)
+                    if texts:
+                        return "\n".join(texts).strip()
+                elif isinstance(data["content"], str):
+                    return data["content"].strip()
+
+            # Fallback for single text value
+            for val in data.values():
+                if isinstance(val, str) and len(val.strip()) > 0:
+                    return val.strip()
+
+        elif isinstance(data, list):
+            text_parts = []
+            for item in data:
+                if isinstance(item, dict):
+                    # Skip internal/encrypted reasoning chunks
+                    item_type = item.get("type", "")
+                    if item_type == "reasoning":
+                        continue
+
+                    # Extract message text
+                    if item_type == "message" or "content" in item:
+                        content = item.get("content")
+                        if isinstance(content, list):
+                            for c in content:
+                                if isinstance(c, dict) and "text" in c:
+                                    text_parts.append(str(c["text"]))
+                                elif isinstance(c, str):
+                                    text_parts.append(c)
+                        elif isinstance(content, str):
+                            text_parts.append(content)
+                    elif "text" in item and isinstance(item["text"], str):
+                        text_parts.append(item["text"])
+                    elif "output" in item:
+                        text_parts.append(ChatAzureAPIM._extract_text_from_apim_response(item["output"]))
+                elif isinstance(item, str):
+                    text_parts.append(item)
+
+            if text_parts:
+                return "\n".join([t for t in text_parts if t.strip()]).strip()
+
+        return ""
 
 
 def load_config() -> Dict[str, Any]:
