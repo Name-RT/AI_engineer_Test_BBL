@@ -1,0 +1,42 @@
+name: CI / Automated Testing Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Pytest Suite (${{ matrix.os }} - Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.11" ]
+
+    env:
+      DEEPSEEK_API_KEY: test_dummy_key
+      OPENAI_API_KEY: test_dummy_key
+      GEMINI_API_KEY: test_dummy_key
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: 📦 Install Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+
+      - name: 🧪 Run Pytest with Coverage
+        run: |
+          python -m pytest tests/ -v --cov=agents --cov=tools --cov=config --cov-report=term-missing --tb=short

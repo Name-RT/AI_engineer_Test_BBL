@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-08-23 14:36:27",
+  "total_test_cases": 5,
+  "metrics": {
+    "retrieval_recall_percent": 100.0,
+    "groundedness_rate_percent": 100.0,
+    "guardrail_accuracy_percent": 100.0,
+    "avg_latency_seconds": 38.067
+  },
+  "detailed_results": [
+    {
+      "test_id": 1,
+      "query": "What is the policy on international travel?",
+      "expected_sections": [
+        "International Travel Policy"
+      ],
+      "retrieved_sections": [
+        "Section 1: International Travel Policy",
+        "Section 4: Expense Reimbursement Policy",
+        "Section 2: Remote Work Policy"
+      ],
+      "ground_truth": "Employees traveling internationally must obtain approval from their department head and HR at least 30 days prior to departure. The company covers flights (economy), lodging, and meals based on per diem rates, and provides travel insurance.",
+      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานทุกคนที่เดินทางไปต่างประเทศเพื่อวัตถุประสงค์ทางธุรกิจ **ต้องได้รับอนุมัติ** จากหัวหน้าฝ่ายและฝ่ายทรัพยากรบุคคล (HR) *(Section 1: International Travel Policy)*\n- บริษัทครอบคลุมค่าใช้จ่ายที่อนุญาต ได้แก่:\n  - ตั๋วเครื่องบิน (ชั้นประหยัด)\n  - ที่พัก\n  - ค่าอาหารตามอัตรา per diem ที่กำหนดตามประเทศปลายทาง\n- บริษัทจัดให้มี **ประกันการเดินทาง** ครอบคลุมตลอดระยะเวลาการเดินทาง *(Section 1: International Travel Policy)*\n- พนักงานต้องใช้ **พอร์ทัลจองที่บริษัทกำหนด** สำหรับการจองทั้งหมด *(Section 1: International Travel Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- ยื่นขออนุมัติการเดินทางล่วงหน้า **อย่างน้อย 30 วัน** ก่อนวันเดินทาง ต่อหัวหน้าฝ่ายและฝ่าย HR *(Section 1: International Travel Policy)*\n- การขออนุมัติค่าใช้จ่ายเป็นแบบลำดับชั้น (Tiered):\n  - ผู้จัดการอนุมัติได้สูงสุด **500 ดอลลาร์สหรัฐ**\n  - จำนวนที่เกิน 500 ดอลลาร์สหรัฐ ต้องได้รับการอนุมัติจากระดับผู้อำนวยการ *(Section 4: Expense Reimbursement Policy)*\n- สำหรับผู้ที่เดินทางบ่อยและหัวหน้าฝ่ายที่ใช้บัตรเครดิตองค์กร: ต้องใช้บัตรเพื่อธุรกิจเท่านั้น และต้องกระทบยอดรายการเดินบัญชีทุกเดือน *(Section 4: Expense Reimbursement Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- **ใบเสร็จรับเงินต้นฉบับทั้งหมด** (Original receipts)\n- **กำหนดการเดินทางโดยละเอียด** (Detailed itinerary)\n- **รายงานหลังการเดินทาง** (Post-travel report)\n- ยื่นเอกสารทั้งหมดภายใน **14 วัน** หลังกลับจากการเดินทาง *(Section 1: International Travel Policy)*\n- หมายเหตุ: สำหรับค่าใช้จ่ายที่เกิน 25 ดอลลาร์สหรัฐ ต้องมีใบเสร็จแบบระบุรายการ (Itemized receipt) *(Section 4: Expense Reimbursement Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **กำหนดเวลาเข้มงวด:** ต้องยื่นขออนุมัติล่วงหน้า 30 วัน และยื่นเอกสารเบิกจ่ายภายใน 14 วันหลังกลับ หากไม่ปฏิบัติตามอาจไม่ได้รับการพิจารณา *(Section 1: International Travel Policy)*\n- **ข้อห้ามเด็ดขาด:** ห้ามใช้บัตรเครดิตองค์กรกับค่าใช้จ่ายส่วนตัวโดยเด็ดขาด *(Section 4: Expense Reimbursement Policy)*\n- **การเบิกจ่ายทั่วไป:** สำหรับค่าใช้จ่ายทางธุรกิจอื่น ๆ (เช่น การเลี้ยงลูกค้า) ต้องยื่นภายใน 30 วันนับจากวันที่เกิดค่าใช้จ่าย *(Section 4: Expense Reimbursement Policy)*\n- **ไม่มีข้อยกเว้นเรื่องชั้นโดยสาร:** บริษัทครอบคลุมเฉพาะตั๋วชั้นประหยัดเท่านั้น *(Section 1: International Travel Policy)*",
+      "confidence": 0.981,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 92.338
+    },
+    {
+      "test_id": 2,
+      "query": "How many days in advance do I need to notify for international travel?",
+      "expected_sections": [
+        "International Travel Policy"
+      ],
+      "retrieved_sections": [
+        "Section 1: International Travel Policy",
+        "Section 4: Expense Reimbursement Policy"
+      ],
+      "ground_truth": "You must obtain approval at least 30 days prior to your planned departure.",
+      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n\n- สำหรับการเดินทางระหว่างประเทศเพื่อวัตถุประสงค์ทางธุรกิจ พนักงานทุกคนต้องได้รับอนุมัติจากหัวหน้าฝ่ายและฝ่ายทรัพยากรบุคคล (HR) **ล่วงหน้าอย่างน้อย 30 วัน** ก่อนวันเดินทางตามแผน *(Section 1: International Travel Policy)*\n- บริษัทครอบคลุมค่าใช้จ่ายที่อนุญาต เช่น ตั๋วเครื่องบิน (ชั้นประหยัด) ที่พัก และค่าอาหารตามอัตรา per diem ของประเทศปลายทาง พร้อมประกันการเดินทางตลอดระยะเวลาทริป *(Section 1: International Travel Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n\n1. ยื่นขออนุมัติการเดินทางล่วงหน้าอย่างน้อย **30 วัน** ต่อหัวหน้าฝ่ายและฝ่าย HR\n2. ทำการจองทั้งหมดผ่าน **พอร์ทัลจองที่บริษัทกำหนด (company-approved booking portal)** เท่านั้น\n3. หลังเดินทางกลับ ต้องยื่นเอกสารเพื่อขอรับเงินคืนภายใน **14 วัน** นับจากวันเดินทางกลับ *(Section 1: International Travel Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n\n- **ใบเสร็จรับเงินต้นฉบับทั้งหมด (original receipts)** สำหรับค่าใช้จ่ายที่เกิดขึ้น\n- **กำหนดการเดินทางโดยละเอียด (detailed itinerary)**\n- **รายงานหลังการเดินทาง (post-travel report)** ส่งภายใน 14 วันหลังกลับ *(Section 1: International Travel Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n\n- **ระยะเวลาแจ้งล่วงหน้า 30 วัน** สำหรับการเดินทางระหว่างประเทศเป็นข้อกำหนดที่เคร่งครัด เพื่อให้การจัดการด้านวีซ่าและที่พักเป็นไปอย่างทันเวลา *(Section 1: International Travel Policy)*\n- หมายเหตุ: แม้จะไม่ใช่ข้อกำหนดของการเดินทางโดยตรง แต่ควรระวัง **ช่วงห้ามลา (blackout periods)** ในช่วงสองสัปดาห์สุดท้ายของปีงบประมาณและช่วงเปิดตัวผลิตภัณฑ์หลัก ซึ่งการขอลาอาจถูกปฏิเสธ เว้นแต่มีเหตุสุดวิสัย *(Section 6)*\n- สำหรับการยื่นขอ reimbursement ทั่วไป (นอกเหนือจากการเดินทาง) ต้องส่งใบเสร็จแบบมีรายการ (itemized) สำหรับค่าใช้จ่ายที่เกิน $25 และยื่นภายใน **30 วัน** นับจากวันที่เกิดค่าใช้จ่าย *(Section 4: Expense Reimbursement Policy)*",
+      "confidence": 0.984,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 19.928
+    },
+    {
+      "test_id": 3,
+      "query": "How does the remote work policy work?",
+      "expected_sections": [
+        "Remote Work Policy"
+      ],
+      "retrieved_sections": [
+        "Section 2: Remote Work Policy",
+        "Section 6: IT Security Policy",
+        "Section 1: International Travel Policy",
+        "Section 4: Expense Reimbursement Policy"
+      ],
+      "ground_truth": "Eligible employees (post 90-day probation) can work remotely up to 3 days per week. They must be online during core hours (10 AM to 3 PM) and use a secure VPN.",
+      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว มีสิทธิ์ยื่นขอทำงานระยะไกล (Remote Work) ได้ *(Section 2: Remote Work Policy)*\n- พนักงานที่ได้รับอนุมัติสามารถทำงานระยะไกลได้สูงสุด **3 วันต่อสัปดาห์** *(Section 2: Remote Work Policy)*\n- บริษัทจัดหาอุปกรณ์ที่จำเป็นให้ ได้แก่ **โน้ตบุ๊ก (Laptop)** และ **VPN ที่ปลอดภัย** สำหรับการเชื่อมต่อเครือข่ายองค์กรทั้งหมด *(Section 4)*\n- พนักงานต้องปฏิบัติตามนโยบายความปลอดภัยทางไซเบอร์อย่างเคร่งครัด เช่น การใช้รหัสผ่านที่ซับซ้อน และการยืนยันตัวตนสองขั้นตอน (2FA) *(Section 6: IT Security Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- พนักงานต้องยื่นคำขอทำงานระยะไกลผ่านกระบวนการภายในของบริษัท โดยต้องผ่านการอนุมัติตามลำดับขั้น *(Section 2: Remote Work Policy)*\n- **ข้อกำหนดด้านเวลา**: พนักงานที่ทำงานระยะไกลต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) คือ **10:00 - 15:00 น.** ตามเวลาท้องถิ่นของตนเอง *(Section 2: Remote Work Policy)*\n- หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องแจ้งฝ่าย IT Helpdesk **ทันที** *(Section 4)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- **ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติม** สำหรับการยื่นขอทำงานระยะไกล (สามารถดำเนินการผ่านระบบภายในของบริษัทได้) *(Section 2: Remote Work Policy)*\n- อย่างไรก็ตาม พนักงานต้องใช้อุปกรณ์ที่บริษัทจัดหาให้เท่านั้น (Laptop + VPN) และต้องติดตั้งซอฟต์แวร์ MDM (Mobile Device Management) บนอุปกรณ์องค์กรทุกเครื่อง เพื่อให้สามารถล้างข้อมูลระยะไกลได้ในกรณีที่อุปกรณ์สูญหาย *(Section 4 และ Section 6: IT Security Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **ห้ามใช้การเชื่อมต่อเครือข่ายที่ไม่ปลอดภัย** ต้องใช้ VPN ของบริษัทสำหรับการเชื่อมต่อระบบองค์กรทั้งหมดเท่านั้น *(Section 4)*\n- **ข้อกำหนดด้านรหัสผ่าน**: ต้องมีความยาวอย่างน้อย 12 ตัวอักษร ประกอบด้วยอักขระหลายประเภท และต้องเปลี่ยนทุก 90 วัน *(Section 6: IT Security Policy)*\n- **บังคับใช้ 2FA** สำหรับการเข้าถึงระบบและอีเมลของบริษัททั้งหมด *(Section 6: IT Security Policy)*\n- พนักงานต้องรักษาระดับประสิทธิภาพและการตอบสนองในการทำงานให้เทียบเท่ากับการทำงานที่ออฟฟิศ หากละเลยอาจส่งผลต่อสิทธิ์การทำงานระยะไกล *(Section 4)*\n- *หมายเหตุ: นโยบายการเดินทางระหว่างประเทศ (Section 1) ไม่เกี่ยวข้องโดยตรงกับ Remote Work แต่หากพนักงานทำงานระยะไกลจากต่างประเทศ ควรตรวจสอบข้อกำหนดการเดินทางระหว่างประเทศเพิ่มเติม*",
+      "confidence": 0.9661,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 20.52
+    },
+    {
+      "test_id": 4,
+      "query": "Am I allowed to WFH every day?",
+      "expected_sections": [
+        "Remote Work Policy"
+      ],
+      "retrieved_sections": [
+        "Section 2: Remote Work Policy",
+        "Section 1: International Travel Policy"
+      ],
+      "ground_truth": "No, approved employees may work remotely for a maximum of 3 days per week.",
+      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n\n- **ไม่สามารถทำงานจากที่บ้าน (WFH) ได้ทุกวัน** ตามนโยบาย Remote Work Policy กำหนดให้พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว สามารถยื่นขอทำงานระยะไกลได้สูงสุด **3 วันต่อสัปดาห์** เท่านั้น *(Section 2: Remote Work Policy)*\n- พนักงานที่ได้รับอนุมัติให้ทำงานระยะไกล ต้องปฏิบัติตามข้อกำหนดดังนี้:\n  - ต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) ระหว่าง **10:00 - 15:00 น.** ตามเวลาท้องถิ่นของตนเอง\n  - ต้องรักษาระดับการทำงานและความรับผิดชอบให้เทียบเท่ากับการทำงานที่ออฟฟิศ *(Section 2: Remote Work Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n\n- พนักงานต้องยื่นคำขอทำงานระยะไกล และต้องผ่านการอนุมัติตามกระบวนการของบริษัท\n- หมายเหตุ: นโยบายนี้ไม่ระบุขั้นตอนการยื่นเรื่องโดยละเอียด แต่การทำงานระยะไกลต้องอยู่ภายใต้การอนุมัติจากผู้บังคับบัญชาโดยตรง *(Section 2: Remote Work Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n\n- ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติม (สามารถดำเนินการผ่านระบบภายในได้ทันที) เนื่องจากนโยบายไม่ได้ระบุให้ต้องยื่นเอกสารใดเป็นพิเศษ\n- อย่างไรก็ตาม พนักงานต้องใช้อุปกรณ์ที่บริษัทจัดหาให้ ได้แก่ **แล็ปท็อปและ VPN ที่ปลอดภัย** สำหรับการเชื่อมต่อเครือข่ายของบริษัททั้งหมด *(Section 4)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n\n- **ข้อจำกัดด้านจำนวนวัน:** การทำงานระยะไกลจำกัดเพียง 3 วันต่อสัปดาห์ ไม่สามารถขอเพิ่มเติมได้ตามนโยบาย\n- **ช่วงเวลาห้าม (Blackout Periods):** แม้จะไม่เกี่ยวกับการทำงานระยะไกลโดยตรง แต่หากต้องการลาหยุดในช่วง **2 สัปดาห์สุดท้ายของปีงบประมาณ** หรือ **ช่วงการเปิดตัวผลิตภัณฑ์หลัก** คำขอมักจะถูกปฏิเสธ เว้นแต่มีเหตุจำเป็นพิเศษ *(Section 6)*\n- **การรายงานปัญหา:** หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องแจ้งฝ่าย IT Helpdesk ทันที *(Section 4)*\n- **การรักษาความลับ:** พนักงานที่ทำงานระยะไกลต้องรักษาความลับของข้อมูลบริษัท ทรัพย์สินทางปัญญา และข้อมูลลูกค้าอย่างเคร่งครัด รวมถึงปฏิบัติตามแนวทางโซเชียลมีเดียของบริษัท *(Section 10)*\n\n**สรุป:** คุณไม่สามารถทำงานจากที่บ้านทุกวันได้ เนื่องจากนโยบายกำหนดสูงสุดเพียง 3 วันต่อสัปดาห์ และต้องผ่านการอนุมัติตามขั้นตอนของบริษัท",
+      "confidence": 0.774,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 27.826
+    },
+    {
+      "test_id": 5,
+      "query": "What equipment is provided for telecommuting?",
+      "expected_sections": [
+        "Remote Work Policy"
+      ],
+      "retrieved_sections": [
+        "Section 2: Remote Work Policy",
+        "Section 4: Expense Reimbursement Policy",
+        "Section 6: IT Security Policy"
+      ],
+      "ground_truth": "The company provides essential equipment, including a laptop and secure VPN access.",
+      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว มีสิทธิ์ขอยืดหยุ่นการทำงานทางไกล (Remote Work) ได้สูงสุด 3 วันต่อสัปดาห์ *(Section 2: Remote Work Policy)*\n- บริษัทจัดหาอุปกรณ์ที่จำเป็นสำหรับการทำงานทางไกลให้แก่พนักงาน ได้แก่ **โน้ตบุ๊ก (Laptop)** และ **การเข้าถึง VPN ที่ปลอดภัย (Secure VPN Access)** *(Section 4)*\n- อุปกรณ์ที่บริษัทจัดให้ถือเป็นอุปกรณ์องค์กร และต้องใช้สำหรับการเชื่อมต่อเครือข่าย corporates ทั้งหมดเท่านั้น *(Section 4)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- พนักงานต้องยื่นคำขอทำงานทางไกลตามขั้นตอนภายในองค์กร และต้องได้รับอนุมัติก่อนเริ่มปฏิบัติงาน *(Section 2: Remote Work Policy)*\n- ระหว่างทำงานทางไกล พนักงานต้องปฏิบัติตามข้อกำหนดด้านความปลอดภัย IT อย่างเคร่งครัด เช่น การใช้ VPN สำหรับการเชื่อมต่อเครือข่าย และการรายงานปัญหาทางเทคนิคไปยัง IT Helpdesk ทันที *(Section 4)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติมสำหรับการขอรับอุปกรณ์ (สามารถดำเนินการผ่านระบบภายในได้ทันที) เนื่องจากอุปกรณ์เป็นส่วนหนึ่งของการจัดเตรียมของฝ่าย IT\n- อย่างไรก็ตาม หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องรายงานไปยัง IT Helpdesk ทันที *(Section 4)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **ข้อจำกัดด้านเวลา**: พนักงานที่ทำงานทางไกลต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) 10:00 - 15:00 น. ตามเวลาท้องถิ่น *(Section 2: Remote Work Policy)*\n- **ข้อกำหนดด้านความปลอดภัย**: อุปกรณ์ที่บริษัทจัดให้ต้องติดตั้งซอฟต์แวร์ MDM (Mobile Device Management) เพื่อให้สามารถล้างข้อมูลระยะไกลได้หากอุปกรณ์สูญหาย และต้องใช้ VPN สำหรับการเชื่อมต่อเครือข่าย corporates ทั้งหมด *(Section 6: IT Security Policy)*\n- **ข้อห้าม**: ห้ามติดตั้งซอฟต์แวร์นอกเหนือจากที่ได้รับอนุมัติจากบริษัท (Company Catalog) บนอุปกรณ์ทำงาน และห้ามละเลยการรายงานเหตุการณ์ด้านความปลอดภัย เช่น การโจมตีแบบ Phishing หรือการละเมิดข้อมูล *(Section 12)*\n- **การรักษาความลับ**: ข้อมูลที่มีความละเอียดอ่อนสูง (Highly Sensitive Data) ต้องเข้ารหัสทั้งขณะจัดเก็บ (At Rest) และขณะส่งผ่าน (In Transit) *(Section 12)*",
+      "confidence": 0.2254,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 29.723
+    }
+  ]
+}

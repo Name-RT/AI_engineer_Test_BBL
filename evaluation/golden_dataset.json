@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the policy on international travel?",
+    "ground_truth": "Employees traveling internationally must obtain approval from their department head and HR at least 30 days prior to departure. The company covers flights (economy), lodging, and meals based on per diem rates, and provides travel insurance.",
+    "expected_sections": ["International Travel Policy"]
+  },
+  {
+    "question": "How many days in advance do I need to notify for international travel?",
+    "ground_truth": "You must obtain approval at least 30 days prior to your planned departure.",
+    "expected_sections": ["International Travel Policy"]
+  },
+  {
+    "question": "How does the remote work policy work?",
+    "ground_truth": "Eligible employees (post 90-day probation) can work remotely up to 3 days per week. They must be online during core hours (10 AM to 3 PM) and use a secure VPN.",
+    "expected_sections": ["Remote Work Policy"]
+  },
+  {
+    "question": "Am I allowed to WFH every day?",
+    "ground_truth": "No, approved employees may work remotely for a maximum of 3 days per week.",
+    "expected_sections": ["Remote Work Policy"]
+  },
+  {
+    "question": "What equipment is provided for telecommuting?",
+    "ground_truth": "The company provides essential equipment, including a laptop and secure VPN access.",
+    "expected_sections": ["Remote Work Policy"]
+  },
+  {
+    "question": "How many vacation days do I get?",
+    "ground_truth": "The standard accrual rate is 1.5 days per month for the first three years of service.",
+    "expected_sections": ["Annual Leave Policy"]
+  },
+  {
+    "question": "Can I carry over unused sick time or PTO?",
+    "ground_truth": "A maximum of 5 days of unused annual leave can be carried over to the following calendar year.",
+    "expected_sections": ["Annual Leave Policy"]
+  },
+  {
+    "question": "What are the rules for expense reimbursement?",
+    "ground_truth": "Eligible expenses include client entertainment, travel, and office supplies. Itemized receipts are required for expenses over $25, and claims must be submitted within 30 days.",
+    "expected_sections": ["Expense Reimbursement Policy"]
+  },
+  {
+    "question": "Who needs to approve a $600 expense claim?",
+    "ground_truth": "Amounts above $500 require director-level approval.",
+    "expected_sections": ["Expense Reimbursement Policy"]
+  },
+  {
+    "question": "Can I use the corporate credit card for personal purchases?",
+    "ground_truth": "No, personal expenses on corporate cards are strictly prohibited.",
+    "expected_sections": ["Expense Reimbursement Policy"]
+  },
+  {
+    "question": "What is the policy regarding gifts from clients?",
+    "ground_truth": "The gifts policy limits the acceptance of gifts from clients or vendors to a value of $50 or less, and cash gifts are never permitted.",
+    "expected_sections": ["Code of Conduct"]
+  },
+  {
+    "question": "How should I handle my social media accounts?",
+    "ground_truth": "Social media guidelines require employees to clearly state that their views are their own and not representative of the company.",
+    "expected_sections": ["Code of Conduct"]
+  },
+  {
+    "question": "Tell me about password requirements and IT security.",
+    "ground_truth": "Passwords must be at least 12 characters, include a mix of character types, and be changed every 90 days. 2FA is mandatory.",
+    "expected_sections": ["IT Security Policy"]
+  },
+  {
+    "question": "What should I do if my work laptop is stolen?",
+    "ground_truth": "All corporate devices have MDM installed for remote wiping. Employees should familiarize themselves with incident reporting procedures and notify IT immediately.",
+    "expected_sections": ["IT Security Policy"]
+  },
+  {
+    "question": "What do I need to know before going on a business trip abroad?",
+    "ground_truth": "You need HR and department head approval 30 days prior. Use the company portal for flights (economy) and lodging. Keep itemized receipts for expenses over $25 and submit them within 14 days of returning (overall expense policy allows 30 days, but travel requires post-travel report within 14 days).",
+    "expected_sections": ["International Travel Policy", "Expense Reimbursement Policy"]
+  },
+  {
+    "question": "If I am working from home, do I need to use the VPN?",
+    "ground_truth": "Yes, secure VPN access must be used for all corporate network connections.",
+    "expected_sections": ["Remote Work Policy"]
+  },
+  {
+    "question": "What is the weather like in Bangkok today?",
+    "ground_truth": "Rejected: off-topic",
+    "expected_sections": []
+  },
+  {
+    "question": "How do I bake a chocolate cake?",
+    "ground_truth": "Rejected: off-topic",
+    "expected_sections": []
+  },
+  {
+    "question": "Who won the premier league last year?",
+    "ground_truth": "Rejected: off-topic",
+    "expected_sections": []
+  },
+  {
+    "question": "I need to take time off.",
+    "ground_truth": "Leave requests require sign-off from your direct manager with a minimum notice of 14 days. Standard accrual is 1.5 days per month.",
+    "expected_sections": ["Annual Leave Policy"]
+  }
+]

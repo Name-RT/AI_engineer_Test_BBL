@@ -1,0 +1,36 @@
+# ==============================================================================
+# Docker Compose: Bangkok Bank AI Policy Assistant
+# 1-Click Launch: docker compose up
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # Primary Web UI (Gradio Dark Edition)
+  rag-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rag-bbl:latest
+    container_name: rag_bbl_assistant
+    restart: unless-stopped
+    ports:
+      - "7861:7861"
+    env_file:
+      - .env
+    volumes:
+      - ./knowledge_base.txt:/app/knowledge_base.txt:ro
+      - ./config.yaml:/app/config.yaml:ro
+      - chroma_data:/app/chroma_db
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7861/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  chroma_data:
+    driver: local

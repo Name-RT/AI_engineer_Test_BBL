@@ -1,0 +1,47 @@
+# === Secrets & Environment ===
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# === Internal Project Rules & Notes ===
+RULES.md
+rules.md
+โจทย์.txt
+
+# === External Repositories & Submodules ===
+AI_engineer_Test_BBL/
+
+# === Vector Database & Local Cache ===
+chroma_db/
+*.sqlite3
+*.db
+
+# === Python Cache & Builds ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# === Testing & Code Quality ===
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# === Logs & System Files ===
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === IDE Configurations ===
+.vscode/
+.idea/

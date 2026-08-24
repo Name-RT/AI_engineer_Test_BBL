@@ -1,0 +1,59 @@
+# === App Settings ===
+app:
+  name: "RAG_BBL Agentic System"
+  version: "1.0.0"
+  log_level: "INFO"    # DEBUG, INFO, WARNING, ERROR
+
+# === Search Settings ===
+search:
+  mode: "chroma"       # ตัวเลือก: "chroma" (Vector DB), "tfidf" (Lexical), "hybrid" (RRF)
+  chunk_size: 500       # characters per chunk
+  chunk_overlap: 50     # overlap between chunks
+  top_k: 5              # จำนวน chunks ที่ return
+  similarity_threshold: 0.1   # minimum similarity score
+  knowledge_base_path: "knowledge_base.txt"
+  persist_directory: "./chroma_db"  # Directory สำหรับเก็บข้อมูล ChromaDB
+  collection_name: "rag_bbl_policies"
+
+# === Embedding Settings (ใช้เมื่อ mode=hybrid หรือ mode=chroma) ===
+embedding:
+  model_name: "intfloat/multilingual-e5-small"
+  device: "cpu"         # "cpu" หรือ "cuda"
+
+# === Two-Stage Re-ranking Settings ===
+reranking:
+  enabled: true                        # สลับเปิด-ปิดการทำ Two-Stage Reranking
+  model_name: "BAAI/bge-reranker-v2-m3" # Multilingual Cross-Encoder (Thai & English)
+  candidate_top_k: 10                  # Stage 1: จำนวน candidate chunks ที่ดึงมารอบแรก
+  final_top_k: 3                       # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่
+  device: "cpu"                        # "cpu" หรือ "cuda"
+  
+# === LLM Settings ===
+llm:
+  temperature: 0.3
+  max_tokens: 2048
+  max_retries: 3
+  retry_delay: 1        # seconds
+
+# === Guardrails ===
+guardrails:
+  max_query_length: 500
+  min_query_length: 3
+  confidence_threshold: 0.18   # เหมาะสมกับ TF-IDF lexical search
+  max_generation_attempts: 2   # จำนวนครั้งที่ retry generation
+
+# === Security Shield (OWASP Top 10 for LLM Defense) ===
+security:
+  enable_jailbreak_defense: true
+  enable_pii_masking: true
+  enable_system_prompt_protection: true
+  enable_code_injection_defense: true
+  enable_rate_limiting: true
+  rate_limit_requests_per_minute: 30
+  enable_profanity_filter: true
+
+# === Evaluation ===
+evaluation:
+  golden_dataset_path: "evaluation/golden_dataset.json"
+  ragas_custom_prompts: false   # true เฉพาะตอน test
+
