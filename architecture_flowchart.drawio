@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" modified="2026-08-24T16:05:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="rag-architecture-comparison" name="RAG Architecture Comparison">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" background="#0F172A" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title & Header -->
+        <mxCell id="title" value="🏛️ AI Policy Assistant: Traditional RAG vs. Enterprise Agentic RAG Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#F8FAFC;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Comparing Linear Single-Pass Retrieval vs. Cyclic Multi-Agent LangGraph Pipeline with Two-Stage Re-ranking &amp; OWASP Guardrails" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontColor=#94A3B8;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="250" y="60" width="1100" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- LEFT CONTAINER: TRADITIONAL RAG PIPELINE   -->
+        <!-- ========================================== -->
+        <mxCell id="group_trad" value="🔴 Traditional Naïve RAG (Linear Pipeline)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#475569;fontColor=#F87171;fontSize=15;fontStyle=1;rounded=1;arcSize=8;startSize=35;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="420" height="920" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_user" value="👤 User Query&#xa;(No input filtering/sanitization)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;strokeColor=#64748B;fontColor=#F8FAFC;fontSize=12;fontStyle=1;" vertex="1" parent="group_trad">
+          <mxGeometry x="80" y="60" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_embed" value="⚡ Dense Embedding&#xa;(Single model, no synonym expansion)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;strokeColor=#64748B;fontColor=#CBD5E1;fontSize=12;" vertex="1" parent="group_trad">
+          <mxGeometry x="80" y="160" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_vector" value="🗄️ Vector DB Search&#xa;(Single-stream Cosine Top-K = 5)&#xa;❌ No Re-ranking (Noise &amp; Lost in the Middle)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#450A0A;strokeColor=#DC2626;fontColor=#FECACA;fontSize=12;" vertex="1" parent="group_trad">
+          <mxGeometry x="80" y="260" width="260" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_llm" value="🤖 Generic LLM Generation&#xa;❌ No groundedness check&#xa;❌ No structured 4-section policy schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#450A0A;strokeColor=#DC2626;fontColor=#FECACA;fontSize=12;" vertex="1" parent="group_trad">
+          <mxGeometry x="80" y="380" width="260" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_out" value="📤 Raw Response to User&#xa;⚠️ Risk of Hallucination&#xa;⚠️ Risk of PII &amp; Secret Leaks&#xa;⚠️ Vulnerable to Prompt Injection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7F1D1D;strokeColor=#EF4444;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="group_trad">
+          <mxGeometry x="80" y="500" width="260" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Traditional Limitations Card -->
+        <mxCell id="t_limitations" value="⚠️ Critical Bottlenecks:&#xa;• 0% Security Shield (Jailbreaks succeed)&#xa;• No query rewriting on ambiguous queries&#xa;• Hallucinations delivered directly to users&#xa;• High context noise degrades accuracy&#xa;• Fixed latency, no adaptive reasoning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#18181B;strokeColor=#71717A;fontColor=#A1A1AA;fontSize=11;align=left;spacingLeft=12;" vertex="1" parent="group_trad">
+          <mxGeometry x="30" y="650" width="360" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Connectors Traditional -->
+        <mxCell id="t_edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;strokeWidth=2;" edge="1" parent="group_trad" source="t_user" target="t_embed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;strokeWidth=2;" edge="1" parent="group_trad" source="t_embed" target="t_vector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;strokeWidth=2;" edge="1" parent="group_trad" source="t_vector" target="t_llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=2;" edge="1" parent="group_trad" source="t_llm" target="t_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- RIGHT CONTAINER: OUR AGENTIC RAG SYSTEM    -->
+        <!-- ========================================== -->
+        <mxCell id="group_agentic" value="🟢 Enterprise Multi-Agent RAG (Our System: LangGraph + Two-Stage Rerank + OWASP Shield)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#10B981;fontColor=#34D399;fontSize=15;fontStyle=1;rounded=1;arcSize=8;startSize=35;" vertex="1" parent="1">
+          <mxGeometry x="500" y="110" width="1050" height="920" as="geometry" />
+        </mxCell>
+
+        <!-- 1. User & UI -->
+        <mxCell id="a_user" value="👤 User Query&#xa;(Web UI / CLI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1D4ED8;strokeColor=#3B82F6;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="group_agentic">
+          <mxGeometry x="40" y="60" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Security Shield -->
+        <mxCell id="a_shield" value="🛡️ Node 1: OWASP Security Shield&#xa;• Thai National ID &amp; Credit Card PII Masking&#xa;• Jailbreak &amp; DAN Detection (Regex + Heuristics)&#xa;• System Prompt Leakage &amp; SQLi Blocking&#xa;• Sliding-Window Rate Limiting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E1B4B;strokeColor=#6366F1;fontColor=#E0E7FF;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="50" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_reject" value="🚫 Rejection Node&#xa;• Polite Enterprise Error&#xa;• Audit Log Incident" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7F1D1D;strokeColor=#EF4444;fontColor=#FECACA;fontSize=11;" vertex="1" parent="group_agentic">
+          <mxGeometry x="610" y="55" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Input Validator -->
+        <mxCell id="a_inputval" value="🔍 Node 2: Input Validator&#xa;• Length &amp; Token Check (500 tokens max)&#xa;• Fast TF-IDF / LLM Off-Topic Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F766E;strokeColor=#14B8A6;fontColor=#CCFBF1;fontSize=11;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="160" width="280" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- 4. Two-Stage Retrieval -->
+        <mxCell id="a_retriever" value="📂 Node 3: Two-Stage Retriever Agent&#xa;&#xa;1️⃣ Stage 1: High Recall Candidates (top_k=10)&#xa;   • Dense Vector Cosine (intfloat/multilingual-e5-small)&#xa;   • Lexical TF-IDF + Synonym Expansion&#xa;   • Reciprocal Rank Fusion (RRF) Hybrid Search&#xa;&#xa;2️⃣ Stage 2: Precision Cross-Encoder Re-ranker&#xa;   • BAAI/bge-reranker-v2-m3 (Deep Cross-Attention)&#xa;   • Calibrated Sigmoid Score (85%–95% Real Match)&#xa;   • Final Top-K Refinement (top_k=2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064E3B;strokeColor=#10B981;fontColor=#D1FAE5;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="260" width="360" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- 5. Decision Diamond: Confidence Check -->
+        <mxCell id="a_conf_check" value="🎯 Confidence Check&#xa;Score &gt;= 0.18?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#854D0E;strokeColor=#EAB308;fontColor=#FEF08A;fontSize=12;fontStyle=1;" vertex="1" parent="group_agentic">
+          <mxGeometry x="370" y="470" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- 6. Query Rewriter Agent -->
+        <mxCell id="a_rewriter" value="✍️ Node 4: Query Rewriter Agent&#xa;• Expands abbreviations (WFH, ลาพักร้อน)&#xa;• Enhances semantic clarity&#xa;• Max 2 retry loops" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#701A75;strokeColor=#D946EF;fontColor=#FDF4FF;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="group_agentic">
+          <mxGeometry x="40" y="480" width="240" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- 7. Generator Agent -->
+        <mxCell id="a_generator" value="📝 Node 5: Report Generator Agent (Azure APIM / DeepSeek)&#xa;• Model: GPT-5-Mini via /llm/responses (or DeepSeek-Chat)&#xa;• 1,000 TPM Exponential Backoff (429 Resilience)&#xa;• Structured 4-Section Enterprise Format&#xa;• Aggregated Citations at Bottom (📚 แหล่งอ้างอิงนโยบาย)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E3A8A;strokeColor=#3B82F6;fontColor=#DBEAFE;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="600" width="360" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- 8. Output Validator -->
+        <mxCell id="a_outval" value="🛡️ Node 6: Output Validator (Hallucination Guard)&#xa;• Fact-Checking against Retrieved Document Snippets&#xa;• Self-Reflection Binary Evaluation (Grounded / Ungrounded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F766E;strokeColor=#14B8A6;fontColor=#CCFBF1;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="730" width="360" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 9. Raw Snippets Fallback -->
+        <mxCell id="a_fallback" value="📄 Raw Snippets Fallback Node&#xa;• Triggers if Generation fails 3 attempts&#xa;• Delivers safe raw policy excerpts without hallucination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#78350F;strokeColor=#F59E0B;fontColor=#FEF3C7;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="group_agentic">
+          <mxGeometry x="690" y="730" width="320" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 10. Output Sanitizer & Delivery -->
+        <mxCell id="a_delivery" value="🎉 Node 7: Output Sanitizer &amp; Delivery&#xa;• Output PII &amp; API Key Scrubbing&#xa;• Render in Gradio UI (Dark Theme + Live Stop Button)&#xa;• 100% Factually Grounded &amp; Compliant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#065F46;strokeColor=#10B981;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="group_agentic">
+          <mxGeometry x="280" y="825" width="360" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Connectors Agentic -->
+        <mxCell id="a_edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=2;" edge="1" parent="group_agentic" source="a_user" target="a_shield">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_sec_fail" value="❌ Threat / PII Detected" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=2;fontColor=#F87171;fontSize=10;" edge="1" parent="group_agentic" source="a_shield" target="a_reject">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge2" value="✅ Safe Query" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#34D399;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="group_agentic" source="a_shield" target="a_inputval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_offtopic" value="❌ Off-Topic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=2;fontColor=#F87171;fontSize=10;" edge="1" parent="group_agentic" source="a_inputval" target="a_reject">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="187" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_edge3" value="✅ On-Topic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#34D399;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="group_agentic" source="a_inputval" target="a_retriever">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=2;" edge="1" parent="group_agentic" source="a_retriever" target="a_conf_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_low_conf" value="🔄 Low Confidence&#xa;(&lt; 0.18 &amp; retries &lt; 2)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=2;fontColor=#FBBF24;fontSize=10;" edge="1" parent="group_agentic" source="a_conf_check" target="a_rewriter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_rewrite_loop" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D946EF;strokeWidth=2;" edge="1" parent="group_agentic" source="a_rewriter" target="a_retriever">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_edge_high_conf" value="✅ High Confidence (85%–95%)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#34D399;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="group_agentic" source="a_conf_check" target="a_generator">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=2;" edge="1" parent="group_agentic" source="a_generator" target="a_outval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_hallucinate" value="🔄 Hallucination Detected (Retry)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=2;fontColor=#FBBF24;fontSize=10;" edge="1" parent="group_agentic" source="a_outval" target="a_generator">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="760" />
+              <mxPoint x="230" y="647" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_edge_fallback" value="❌ Max Retries Exceeded" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=2;fontColor=#F87171;fontSize=10;" edge="1" parent="group_agentic" source="a_outval" target="a_fallback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_verified" value="✅ 100% Grounded" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#34D399;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="group_agentic" source="a_outval" target="a_delivery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_edge_fb_deliver" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=2;" edge="1" parent="group_agentic" source="a_fallback" target="a_delivery">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="862" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
