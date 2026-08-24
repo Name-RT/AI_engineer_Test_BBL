@@ -41,14 +41,14 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 ## Features
 
 ### Multi-Agent Pipeline (LangGraph)
-- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and calculates calibrated confidence scores.
+- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and calculates weighted-average relevance scores.
 - **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom. Strictly preserves the question's language (English queries $\rightarrow$ English headers & content; Thai queries $\rightarrow$ Thai headers & content).
-- **Query Rewriter** — rewrites the query and retries when retrieval confidence falls below threshold (`< 0.50`).
+- **Query Rewriter** — rewrites the query and retries when retrieval relevance score falls below threshold (`< 0.15`).
 - **Fallback** — if hallucination checks keep failing, returns the raw verified snippets instead of guessing.
 
-### Two-Stage Retrieval & Score Calibration (`tools/search.py`)
-- **Stage 1 (recall):** Candidate retrieval (Top-10) using ChromaDB dense vectors (`multilingual-e5-small`) + TF-IDF with Reciprocal Rank Fusion (similarity threshold: `0.15`).
-- **Stage 2 (precision):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3` delivering Top-5 refined chunks with temperature-scaled logit calibration (85%-95% confidence).
+### Two-Stage Retrieval & Noise Filtering (`tools/search.py`)
+- **Stage 1 (recall):** Candidate retrieval (Top-10) using ChromaDB dense vectors (`multilingual-e5-small`) + TF-IDF with Reciprocal Rank Fusion.
+- **Stage 2 (precision & noise filtering):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3` featuring Level 1 chunk noise filtering (`min_chunk_score >= 0.0`), delivering Top-5 refined chunks sorted by raw relevance logit.
 - **Auto-Ingestion:** Automatically syncs and persists all 32 chunks into ChromaDB (`./chroma_db/`) on startup.
 - **Synonym mapping** for colloquial terms (*WFH* → *remote work*, *ลาพักร้อน* → *annual leave*, etc.)
 

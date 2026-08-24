@@ -26,6 +26,7 @@ reranking:
   model_name: "BAAI/bge-reranker-v2-m3" # Multilingual Cross-Encoder (Thai & English)
   candidate_top_k: 10                  # Stage 1: จำนวน candidate chunks ที่ดึงมารอบแรก
   final_top_k: 5                       # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่ (Top-5)
+  min_chunk_score: 0.0                 # Level 1: ตัด chunk ที่ได้ logit < 0.0 ทิ้ง (Noise filter)
   device: "cpu"                        # "cpu" หรือ "cuda"
   
 # === LLM Settings ===
@@ -39,7 +40,7 @@ llm:
 guardrails:
   max_query_length: 500
   min_query_length: 3
-  relevance_threshold: 0.20   # Raw Cross-Encoder logit threshold (NOT a probability)
+  relevance_threshold: 0.15   # Raw Cross-Encoder logit threshold (เกณฑ์ตัดสินใจ 0.15)
   max_generation_attempts: 2   # จำนวนครั้งที่ retry generation
 
 # === Security Shield (OWASP Top 10 for LLM Defense) ===

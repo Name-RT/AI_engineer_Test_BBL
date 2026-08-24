@@ -73,15 +73,22 @@ def create_graph(config: Dict[str, Any]):
         return "invalid"
         
     def route_confidence(state: AgentState) -> str:
-        threshold = config["guardrails"]["relevance_threshold"]
+        threshold = config["guardrails"].get("relevance_threshold", 0.15)
         max_attempts = config["llm"]["max_retries"]
         score = state.get("retrieval_score", 0.0)
+        docs = state.get("retrieved_documents", [])
         
+        # If no documents passed chunk-level filtering
+        if not docs:
+            if state.get("retrieval_attempts", 0) < max_attempts:
+                return "query_rewriter"
+            return "rejection_response"
+            
         if score >= threshold:
             return "generator"
         elif state.get("retrieval_attempts", 0) < max_attempts:
             return "query_rewriter"
-        elif score > -1.0:
+        elif score > -0.50:
             return "generator"
         else:
             return "rejection_response"

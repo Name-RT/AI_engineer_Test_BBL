@@ -125,3 +125,28 @@ def test_two_stage_search_end_to_end(mock_config):
     results = tool.search("travel expenses reimbursement", top_k=2)
     assert len(results) == 2
     assert results[0]["score"] >= results[1]["score"]
+
+
+def test_reranker_min_chunk_score_filtering(mock_config):
+    """Verify that candidate chunks with raw logits below min_chunk_score are dropped."""
+    mock_config["reranking"]["min_chunk_score"] = 0.0
+    tool = KnowledgeBaseSearchTool(mock_config)
+    
+    mock_encoder = MagicMock()
+    mock_encoder.predict.return_value = [1.5, -3.2, 0.8]
+    tool.reranker = mock_encoder
+    
+    candidates = [
+        {"chunk_id": 1, "content": "Doc 1", "score": 0.8},
+        {"chunk_id": 2, "content": "Doc 2", "score": 0.7},
+        {"chunk_id": 3, "content": "Doc 3", "score": 0.6},
+    ]
+    
+    reranked = tool.rerank("query", candidates, top_k=3)
+    
+    # Doc 2 (-3.2) should be filtered out by min_chunk_score=0.0
+    assert len(reranked) == 2
+    assert reranked[0]["chunk_id"] == 1
+    assert reranked[0]["score"] == 1.5
+    assert reranked[1]["chunk_id"] == 3
+    assert reranked[1]["score"] == 0.8

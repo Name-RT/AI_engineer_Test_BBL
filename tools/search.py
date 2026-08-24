@@ -320,8 +320,16 @@ class KnowledgeBaseSearchTool:
                 reranked_results.append(new_doc)
                 
             reranked_results.sort(key=lambda x: x["score"], reverse=True)
-            logger.debug(f"Re-ranked {len(candidates)} candidate chunks -> returning top {top_k}")
-            return reranked_results[:top_k]
+            
+            # Level 1: Chunk-Level Filtering (Drop noise chunks below min_chunk_score)
+            min_chunk_score = self.reranking_config.get("min_chunk_score", None)
+            if min_chunk_score is not None:
+                filtered_results = [doc for doc in reranked_results if doc["score"] >= float(min_chunk_score)]
+            else:
+                filtered_results = reranked_results
+                
+            logger.debug(f"Re-ranked {len(candidates)} candidate chunks -> {len(filtered_results)} passed min_chunk_score -> returning top {top_k}")
+            return filtered_results[:top_k]
         except Exception as e:
             logger.error(f"Error during re-ranking: {e}. Returning Stage 1 candidates.")
             return candidates[:top_k]
