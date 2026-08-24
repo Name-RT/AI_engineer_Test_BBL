@@ -110,8 +110,8 @@ graph TD
 ### Docker (recommended)
 
 ```bash
-git clone https://github.com/bangkokbank/rag-bbl.git
-cd rag-bbl
+git clone https://github.com/Name-RT/AI_engineer_Test_BBL.git
+cd AI_engineer_Test_BBL
 
 cp .env.example .env
 # fill in your API keys
@@ -123,6 +123,9 @@ docker compose up -d
 ### Local setup
 
 ```bash
+git clone https://github.com/Name-RT/AI_engineer_Test_BBL.git
+cd AI_engineer_Test_BBL
+
 conda create -n RAG_BBL python=3.11 -y
 conda activate RAG_BBL
 pip install -r requirements.txt
@@ -189,7 +192,7 @@ See [`TESTING.md`](TESTING.md) for detailed documentation on all test cases and 
 ## Project Structure
 
 ```text
-RAG_BBL/
+AI_engineer_Test_BBL/
 ├── main.py                             # CLI entrypoint
 ├── gradio_app.py                       # Web UI (Gradio, port 7861)
 ├── evaluate.py                         # Benchmark runner
