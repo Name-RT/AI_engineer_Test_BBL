@@ -348,14 +348,16 @@ def query_rag_pipeline(user_query: str):
                 current_state.update(ret_data)
                 docs = ret_data.get("retrieved_documents", [])
                 conf = ret_data.get("retrieval_score", 0.0)
+                logger.info(f"Retriever completed. Retrieved {len(docs)} docs, internal relevance score: {conf:.4f}")
 
-                # Format reference cards
+                # Format reference cards (Score hidden from UI, logged only)
                 if docs:
                     cards = []
                     for i, doc in enumerate(docs):
                         chunk_id = doc.get("chunk_id", i + 1)
                         score = doc.get("score", 0.0)
                         content = doc.get("content", "")
+                        logger.info(f"  - Chunk #{chunk_id} (internal score: {score:.4f})")
                         lines = content.strip().split("\n")
                         if lines and "===" in lines[0]:
                             title = lines[0].replace("===", "").strip()
@@ -367,7 +369,6 @@ def query_rag_pipeline(user_query: str):
                         <div class="ref-card">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <span class="ref-title">📄 {title}</span>
-                                <span class="ref-score">Score {score:.4f}</span>
                             </div>
                             <div class="ref-body">{body}</div>
                         </div>
@@ -379,7 +380,7 @@ def query_rag_pipeline(user_query: str):
                 yield (
                     "📝 *พบเอกสารที่เกี่ยวข้องแล้ว กำลังสังเคราะห์และจัดโครงสร้างคำตอบ...*",
                     f"""<div class="metrics-row">
-                        <span>🎯 Relevance Score: <span class="metric-val">{conf:.4f}</span></span>
+                        <span style="color:#10B981;">🎯 พบเอกสารที่เกี่ยวข้อง</span>
                         <span>·</span>
                         <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
                         <span>·</span>
@@ -395,8 +396,9 @@ def query_rag_pipeline(user_query: str):
                 rew_data = event["query_rewriter"]
                 current_state.update(rew_data)
                 expanded = rew_data.get("expanded_query", "")
+                logger.info(f"Query rewriter triggered. New query: {expanded}")
                 yield (
-                    f"✍️ *ความมั่นใจต่ำกว่าเกณฑ์ กำลังปรับปรุงคำค้นหา: \"{expanded}\"...*",
+                    f"✍️ *กำลังปรับปรุงคำค้นหา: \"{expanded}\"...*",
                     f"""<div class="metrics-row">
                         <span style="color:#F59E0B;">🔄 กำลังเกลาคำถามใหม่</span>
                         <span>·</span>
@@ -420,7 +422,7 @@ def query_rag_pipeline(user_query: str):
                     yield (
                         partial_text + " ▌",
                         f"""<div class="metrics-row">
-                            <span>🎯 ความมั่นใจ: <span class="metric-val">{conf:.2f} ({int(conf*100)}%)</span></span>
+                            <span style="color:#34D399;">📝 กำลังเรียบเรียงคำตอบ</span>
                             <span>·</span>
                             <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
                             <span>·</span>
@@ -457,10 +459,10 @@ def query_rag_pipeline(user_query: str):
         is_grounded = current_state.get("is_grounded", False)
         grounded_text = "✅ Grounded" if is_grounded else "ℹ️ Factually Grounded"
 
+        logger.info(f"Request completed in {elapsed:.2f}s (relevance_score={conf:.4f}, grounded={is_grounded})")
+
         metrics_html = f"""
         <div class="metrics-row">
-            <span>🎯 ความมั่นใจ: <span class="metric-val">{conf:.2f} ({int(conf*100)}%)</span></span>
-            <span>·</span>
             <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
             <span>·</span>
             <span>⏱️ <span class="metric-val">{elapsed:.2f}s</span></span>
