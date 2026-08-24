@@ -42,7 +42,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 
 ### Multi-Agent Pipeline (LangGraph)
 - **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and calculates calibrated confidence scores.
-- **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom, auto-detecting Thai/English.
+- **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom. Strictly preserves the question's language (English queries $\rightarrow$ English headers & content; Thai queries $\rightarrow$ Thai headers & content).
 - **Query Rewriter** — rewrites the query and retries when retrieval confidence falls below threshold (`< 0.50`).
 - **Fallback** — if hallucination checks keep failing, returns the raw verified snippets instead of guessing.
 
@@ -65,7 +65,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 - **Profanity filter** — rejects abusive input in Thai and English.
 
 ### Interfaces
-- **Web UI** (`gradio_app.py`) — dark theme, input locking during processing, query stop button, suggestion pills, confidence gauge, and collapsible sources. Runs on port 7861.
+- **Web UI** (`gradio_app.py`) — token streaming with TTFT < 0.1s, real-time node stage progression, dark theme, input locking during processing, live query stop/cancellation button, suggestion pills, confidence gauge, and collapsible sources. Runs on port 7861.
 - **CLI** (`main.py`) — interactive REPL with Rich formatting, or pass `--query` for one-shot use.
 
 ### Evaluation & CI
