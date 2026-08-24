@@ -227,11 +227,16 @@ class KnowledgeBaseSearchTool:
             results = []
             for i in range(len(self.chunks)):
                 rrf_score = 1.0/(k + tfidf_rank[i]) + 1.0/(k + embed_rank[i])
-                max_sim = max(tfidf_scores[i], embed_scores[i])
-                if max_sim >= self.threshold:
-                    results.append({"chunk_id": self.chunks[i]["id"], "content": self.chunks[i]["content"], "score": float(rrf_score)})
+                sim_score = max(float(tfidf_scores[i]), float(embed_scores[i]))
+                if sim_score >= self.threshold:
+                    results.append({
+                        "chunk_id": self.chunks[i]["id"],
+                        "content": self.chunks[i]["content"],
+                        "score": float(sim_score),
+                        "rrf_score": float(rrf_score)
+                    })
                     
-            results.sort(key=lambda x: x["score"], reverse=True)
+            results.sort(key=lambda x: x["rrf_score"], reverse=True)
             return results[:top_k]
             
         elif self.mode == "chroma" and self.collection is not None:
@@ -289,16 +294,19 @@ class KnowledgeBaseSearchTool:
             reranked_results = []
             for doc, raw_s in zip(candidates, raw_scores):
                 s = float(raw_s)
-                # Convert logits to 0.0 - 1.0 via Sigmoid for standard confidence compatibility
-                norm_score = 1.0 / (1.0 + math.exp(-s)) if (s > 1.0 or s < -1.0) else max(0.0, min(1.0, s))
+                stage1_s = float(doc.get("score", 0.0))
+                # Calibrate BGE reranker logits (typically centered around -4.0)
+                calibrated_logit = 1.0 / (1.0 + math.exp(-(s - (-4.0)) / 2.0))
+                # Preserve high stage 1 confidence when valid while re-ordering strictly by Cross-Encoder
+                final_score = max(stage1_s, calibrated_logit) if stage1_s > 0 else calibrated_logit
                 
                 new_doc = dict(doc)
-                new_doc["stage1_score"] = doc.get("score", 0.0)
-                new_doc["score"] = float(norm_score)
+                new_doc["stage1_score"] = stage1_s
+                new_doc["score"] = float(final_score)
                 new_doc["rerank_logit"] = float(s)
                 reranked_results.append(new_doc)
                 
-            reranked_results.sort(key=lambda x: x["score"], reverse=True)
+            reranked_results.sort(key=lambda x: x["rerank_logit"], reverse=True)
             logger.debug(f"Re-ranked {len(candidates)} candidate chunks -> returning top {top_k}")
             return reranked_results[:top_k]
         except Exception as e:
