@@ -71,51 +71,72 @@ class ChatAzureAPIM(SimpleChatModel):
             "input": input_text
         }
 
-        try:
-            response = requests.post(
-                self.endpoint,
-                headers=headers,
-                json=payload,
-                timeout=self.timeout
-            )
+        max_retries = 3
+        backoff = 2.0
 
-            if response.status_code != 200:
-                raise RuntimeError(
-                    f"Azure APIM Gateway returned HTTP {response.status_code}: {response.text}"
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(
+                    self.endpoint,
+                    headers=headers,
+                    json=payload,
+                    timeout=self.timeout
                 )
 
-            data = response.json()
+                # Handle 429 Too Many Requests / TPM Quota Throttling (1000 tokens/min limit)
+                if response.status_code == 429:
+                    retry_after = response.headers.get("Retry-After")
+                    sleep_time = float(retry_after) if retry_after and retry_after.isdigit() else backoff * (2 ** attempt)
+                    logging.warning(
+                        f"Azure APIM 429 Rate Limit exceeded (1000 TPM limit). "
+                        f"Retrying in {sleep_time:.1f}s (attempt {attempt + 1}/{max_retries})..."
+                    )
+                    time.sleep(sleep_time)
+                    continue
 
-            # Parse different potential response structures from APIM / Gateway
-            if isinstance(data, dict):
-                if "response" in data:
-                    return str(data["response"])
-                elif "output" in data:
-                    return str(data["output"])
-                elif "content" in data:
-                    return str(data["content"])
-                elif "text" in data:
-                    return str(data["text"])
-                elif "choices" in data and len(data["choices"]) > 0:
-                    choice = data["choices"][0]
-                    if isinstance(choice, dict):
-                        if "message" in choice and "content" in choice["message"]:
-                            return str(choice["message"]["content"])
-                        elif "text" in choice:
-                            return str(choice["text"])
-                # Fallback: if single key with text
-                for val in data.values():
-                    if isinstance(val, str) and len(val) > 0:
-                        return val
-                return str(data)
-            elif isinstance(data, str):
-                return data
-            else:
-                return str(data)
+                if response.status_code != 200:
+                    raise RuntimeError(
+                        f"Azure APIM Gateway returned HTTP {response.status_code}: {response.text}"
+                    )
 
-        except requests.exceptions.RequestException as e:
-            logging.error(f"Network error calling Azure APIM at {self.endpoint}: {e}")
-            raise RuntimeError(f"Azure APIM Connection Error: {e}")
+                data = response.json()
+
+                # Parse different potential response structures from APIM / Gateway
+                if isinstance(data, dict):
+                    if "response" in data:
+                        return str(data["response"])
+                    elif "output" in data:
+                        return str(data["output"])
+                    elif "content" in data:
+                        return str(data["content"])
+                    elif "text" in data:
+                        return str(data["text"])
+                    elif "choices" in data and len(data["choices"]) > 0:
+                        choice = data["choices"][0]
+                        if isinstance(choice, dict):
+                            if "message" in choice and "content" in choice["message"]:
+                                return str(choice["message"]["content"])
+                            elif "text" in choice:
+                                return str(choice["text"])
+                    # Fallback: if single key with text
+                    for val in data.values():
+                        if isinstance(val, str) and len(val) > 0:
+                            return val
+                    return str(data)
+                elif isinstance(data, str):
+                    return data
+                else:
+                    return str(data)
+
+            except requests.exceptions.RequestException as e:
+                if attempt < max_retries - 1:
+                    logging.warning(f"Network error calling Azure APIM: {e}. Retrying in {backoff}s...")
+                    time.sleep(backoff)
+                    continue
+                logging.error(f"Network error calling Azure APIM at {self.endpoint}: {e}")
+                raise RuntimeError(f"Azure APIM Connection Error: {e}")
+
+        raise RuntimeError("Azure APIM failed after maximum rate limit retries.")
 
 
 def load_config() -> Dict[str, Any]:
