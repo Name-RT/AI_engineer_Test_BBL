@@ -56,9 +56,13 @@ def create_generator_node(llm, config: Dict[str, Any]):
         if state.get("generation_attempts", 0) > 0 and not state.get("is_grounded", True):
             extra_instruction = "\n\nIMPORTANT: Stick strictly to the provided documents. Do not hallucinate."
             
+        # Explicit language directive
+        is_thai = any('\u0e00' <= char <= '\u0e7f' for char in query)
+        lang_directive = "Target Language: Thai (ตอบเป็นภาษาไทยทั้งหมด)" if is_thai else "Target Language: English (Write the entire response in English)"
+        
         messages = [
             SystemMessage(content=system_prompt + extra_instruction),
-            HumanMessage(content=f"Documents:\n{context_text}\n\nQuestion: {query}")
+            HumanMessage(content=f"{lang_directive}\n\nDocuments:\n{context_text}\n\nQuestion: {query}")
         ]
         
         try:
