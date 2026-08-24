@@ -32,7 +32,7 @@ RUN mkdir -p /app/chroma_db
 EXPOSE 7861 8501
 
 # Healthcheck for Gradio server
-HEALTHCHECK --interval=30s --timeout=10s --start-period=35s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:7861/ || exit 1
 
 # Default entrypoint: Run Gradio Dark Edition

@@ -501,9 +501,11 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
 
 
 if __name__ == "__main__":
+    server_name = os.getenv("GRADIO_SERVER_NAME", "0.0.0.0")
+    server_port = int(os.getenv("GRADIO_SERVER_PORT", "7861"))
     demo.launch(
-        server_name="127.0.0.1",
-        server_port=7861,
+        server_name=server_name,
+        server_port=server_port,
         show_error=True,
         theme=theme,
         css=CLEAN_CSS,
