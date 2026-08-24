@@ -1,11 +1,11 @@
 """
 gradio_app.py — Bangkok Bank AI Policy Assistant (Gradio Web Interface)
-Clean & Minimalist Dark Theme — Focused on Simplicity, Legibility & Usability
+Clean & Minimalist Dark Theme with Input Locking & Query Cancellation Support
 """
 import os
 import sys
 import time
-from typing import Tuple
+from typing import Tuple, List, Any
 
 import gradio as gr
 from config.settings import load_config
@@ -94,6 +94,18 @@ CLEAN_CSS = """
 .search-row textarea,
 .search-row input {
     font-size: 14.5px !important;
+}
+
+/* Stop Button Styling */
+.stop-btn {
+    background-color: #DC2626 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #EF4444 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+.stop-btn:hover {
+    background-color: #B91C1C !important;
 }
 
 /* Quick Suggestion Pills */
@@ -194,9 +206,77 @@ CLEAN_CSS = """
 """
 
 
-# ── Backend ────────────────────────────────────────────────────────────────────
+# ── Backend Handlers ──────────────────────────────────────────────────────────
+def on_start_query(user_query: str):
+    """
+    Locks input controls and activates the stop button when query starts.
+    """
+    if not user_query or not user_query.strip():
+        return (
+            gr.update(interactive=True),
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(interactive=True),
+            gr.update(interactive=True),
+            gr.update(interactive=True),
+            gr.update(interactive=True),
+            gr.update(interactive=True),
+            "⚠️ กรุณาพิมพ์คำถามก่อนกดค้นหา",
+            "",
+        )
+    return (
+        gr.update(interactive=False),  # Lock query textbox
+        gr.update(visible=False),      # Hide search button
+        gr.update(visible=True),       # Show cancel button
+        gr.update(interactive=False),  # Lock pill 1
+        gr.update(interactive=False),  # Lock pill 2
+        gr.update(interactive=False),  # Lock pill 3
+        gr.update(interactive=False),  # Lock pill 4
+        gr.update(interactive=False),  # Lock pill 5
+        "⏳ **กำลังสืบค้นและประมวลผลคำตอบ...** *(คุณสามารถกดปุ่ม '🛑 ยกเลิก' เพื่อหยุดได้)*",
+        """<div class="metrics-row"><span style="color:#F59E0B; font-weight:600;">⏳ กำลังประมวลผลคำถาม...</span></div>""",
+    )
+
+
+def on_end_query():
+    """
+    Unlocks input controls and restores the search button after execution ends.
+    """
+    return (
+        gr.update(interactive=True),
+        gr.update(visible=True),
+        gr.update(visible=False),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+    )
+
+
+def on_cancel_query():
+    """
+    Triggered when user clicks the stop button. Unlocks input and notifies cancellation.
+    """
+    return (
+        gr.update(interactive=True),
+        gr.update(visible=True),
+        gr.update(visible=False),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        "⚠️ **การประมวลผลถูกยกเลิกแล้ว** คุณสามารถพิมพ์คำถามใหม่ได้ทันทีครับ",
+        """<div class="metrics-row"><span style="color:#EF4444; font-weight:600;">🛑 ยกเลิกการค้นหาเรียบร้อย</span></div>""",
+        "<p style='color:#64748B; font-size:13px;'>ไม่มีเอกสารอ้างอิง (ยกเลิกก่อนประมวลผลเสร็จสิ้น)</p>"
+    )
+
+
 def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
-    """Run multi-agent RAG; return (answer_md, metrics_html, refs_html)."""
+    """
+    Runs multi-agent RAG pipeline and returns (answer_md, metrics_html, refs_html).
+    """
     if not user_query or not user_query.strip():
         return "⚠️ กรุณาพิมพ์คำถามก่อนกดค้นหา", "", ""
 
@@ -223,7 +303,7 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
         )
         elapsed = time.time() - start_time
 
-        # 1. Answer
+        # 1. Answer formatting
         final_ans = result.get("final_answer", "")
         if not final_ans:
             if result.get("error"):
@@ -236,7 +316,7 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
             else:
                 final_ans = result.get("generated_report", "ไม่พบข้อมูลที่ตรงกับคำถาม")
 
-        # 2. Clean Minimal Metrics
+        # 2. Metrics bar
         conf = result.get("retrieval_confidence", 0.0)
         docs = result.get("retrieved_documents", [])
         is_grounded = result.get("is_grounded", False)
@@ -254,20 +334,20 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
         </div>
         """
 
-        # 3. References HTML
+        # 3. References cards
         if docs:
             cards = []
             for i, doc in enumerate(docs):
                 chunk_id = doc.get("chunk_id", i + 1)
-                score    = doc.get("score", 0.0)
-                content  = doc.get("content", "")
-                lines    = content.strip().split("\n")
+                score = doc.get("score", 0.0)
+                content = doc.get("content", "")
+                lines = content.strip().split("\n")
                 if lines and "===" in lines[0]:
                     title = lines[0].replace("===", "").strip()
-                    body  = "\n".join(lines[1:]).strip()
+                    body = "\n".join(lines[1:]).strip()
                 else:
                     title = f"ส่วนที่ #{chunk_id}"
-                    body  = content.strip()
+                    body = content.strip()
                 cards.append(f"""
                 <div class="ref-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -287,21 +367,21 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
         return f"❌ เกิดข้อผิดพลาด: {exc}", "", ""
 
 
-# ── Simple & Clean UI Layout ──────────────────────────────────────────────────
-with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
+# ── Clean UI Layout ───────────────────────────────────────────────────────────
+with gr.Blocks(title="Bangkok Bank AI Policy Assistant") as demo:
 
     # 1. Compact Header
     gr.HTML("""
     <div class="app-header">
         <div>
-            <h1>🏦 AI ENGINEER TEST <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
+            <h1>🏦 Bangkok Bank <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
             <p>ระบบสืบค้นและสังเคราะห์ระเบียบนโยบายองค์กร (Enterprise Multi-Agent RAG)</p>
         </div>
         <span class="header-badge">Gradio Edition</span>
     </div>
     """)
 
-    # 2. Main Search Bar (Clean Single-Row Alignment)
+    # 2. Main Search Bar with Search & Cancel Buttons
     with gr.Row(equal_height=True, elem_classes=["search-row"]):
         query_input = gr.Textbox(
             placeholder="พิมพ์คำถาม เช่น สิทธิ์ลาพักร้อน, นโยบาย WFH, การเบิกค่าใช้จ่าย...",
@@ -311,7 +391,8 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
             max_lines=1,
             container=False,
         )
-        search_btn = gr.Button("🔍 ค้นหา", variant="primary", scale=1)
+        search_btn = gr.Button("🔍 ค้นหา", variant="primary", scale=1, visible=True)
+        stop_btn = gr.Button("🛑 ยกเลิก", variant="stop", scale=1, visible=False, elem_classes=["stop-btn"])
 
     # 3. Compact Suggestion Pills (1 Clean Row)
     with gr.Row(elem_classes=["pill-row"]):
@@ -335,19 +416,55 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
     with gr.Accordion("📂 เอกสารอ้างอิงต้นฉบับ (References Used)", open=False):
         refs_output = gr.HTML(value="<p style='color:#64748B; font-size:13px;'>กดค้นหาเพื่อดูเอกสารอ้างอิง</p>")
 
-    # 7. Simple Footer
+    # 7. Footer
     gr.HTML("""
     <div class="app-footer">
         Bangkok Bank PCL · Enterprise AI Policy Assistant · Powered by LangGraph & DeepSeek
     </div>
     """)
 
-    # ── Event Wiring ──────────────────────────────────────────────────────────
-    _out = [response_output, metrics_output, refs_output]
+    # ── Event Wiring with Input Locking & Cancellation ─────────────────────────
+    _ui_controls = [
+        query_input, search_btn, stop_btn,
+        btn_leave, btn_wfh, btn_travel, btn_expense, btn_security
+    ]
+    _start_outputs = _ui_controls + [response_output, metrics_output]
+    _pipe_outputs = [response_output, metrics_output, refs_output]
+    _cancel_outputs = _ui_controls + [response_output, metrics_output, refs_output]
 
-    search_btn.click(fn=query_rag_pipeline, inputs=[query_input], outputs=_out)
-    query_input.submit(fn=query_rag_pipeline, inputs=[query_input], outputs=_out)
+    # A. Search Button Events
+    start_search = search_btn.click(
+        fn=on_start_query,
+        inputs=[query_input],
+        outputs=_start_outputs,
+    )
+    pipe_search = start_search.then(
+        fn=query_rag_pipeline,
+        inputs=[query_input],
+        outputs=_pipe_outputs,
+    )
+    pipe_search.then(
+        fn=on_end_query,
+        outputs=_ui_controls,
+    )
 
+    # B. Textbox Enter Submit Events
+    start_submit = query_input.submit(
+        fn=on_start_query,
+        inputs=[query_input],
+        outputs=_start_outputs,
+    )
+    pipe_submit = start_submit.then(
+        fn=query_rag_pipeline,
+        inputs=[query_input],
+        outputs=_pipe_outputs,
+    )
+    pipe_submit.then(
+        fn=on_end_query,
+        outputs=_ui_controls,
+    )
+
+    # C. Suggestion Pills Events
     _prompts = {
         btn_leave:    "การขอลาพักร้อนและวันลาสะสมมีข้อกำหนดและขั้นตอนอย่างไร",
         btn_wfh:      "นโยบาย Remote Work (WFH) มีเงื่อนไขอะไรบ้าง",
@@ -355,12 +472,32 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
         btn_expense:  "ระเบียบการเบิกจ่ายค่าใช้จ่ายและใบเสร็จมีขั้นตอนอย่างไร",
         btn_security: "ข้อกำหนดเรื่องรหัสผ่านและความปลอดภัย IT มีอะไรบ้าง",
     }
+    
+    pill_events = []
     for btn, prompt in _prompts.items():
-        btn.click(fn=lambda p=prompt: p, outputs=[query_input]).then(
+        set_text = btn.click(fn=lambda p=prompt: p, outputs=[query_input])
+        start_pill = set_text.then(
+            fn=on_start_query,
+            inputs=[query_input],
+            outputs=_start_outputs,
+        )
+        pipe_pill = start_pill.then(
             fn=query_rag_pipeline,
             inputs=[query_input],
-            outputs=_out,
+            outputs=_pipe_outputs,
         )
+        pipe_pill.then(
+            fn=on_end_query,
+            outputs=_ui_controls,
+        )
+        pill_events.extend([set_text, start_pill, pipe_pill])
+
+    # D. Cancel / Stop Button Event (Terminates all running query tasks)
+    stop_btn.click(
+        fn=on_cancel_query,
+        outputs=_cancel_outputs,
+        cancels=[start_search, pipe_search, start_submit, pipe_submit, *pill_events],
+    )
 
 
 if __name__ == "__main__":
@@ -371,5 +508,3 @@ if __name__ == "__main__":
         theme=theme,
         css=CLEAN_CSS,
     )
-
-
