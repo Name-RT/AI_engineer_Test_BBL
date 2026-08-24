@@ -5,11 +5,14 @@ Clean & Minimalist Dark Theme with Input Locking & Query Cancellation Support
 import os
 import sys
 import time
+import logging
 from typing import Tuple, List, Any
 
 import gradio as gr
 from config.settings import load_config
 from agents.graph import create_graph
+
+logger = logging.getLogger(__name__)
 
 # ── Bootstrap ──────────────────────────────────────────────────────────────────
 config = load_config()
@@ -273,14 +276,26 @@ def on_cancel_query():
     )
 
 
-def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
+def query_rag_pipeline(user_query: str):
     """
-    Runs multi-agent RAG pipeline and returns (answer_md, metrics_html, refs_html).
+    Runs multi-agent RAG pipeline with real-time streaming updates and token streaming.
+    Yields (answer_md, metrics_html, refs_html) progressively.
     """
     if not user_query or not user_query.strip():
-        return "⚠️ กรุณาพิมพ์คำถามก่อนกดค้นหา", "", ""
+        yield ("⚠️ กรุณาพิมพ์คำถามก่อนกดค้นหา", "", "")
+        return
 
     start_time = time.time()
+
+    # ── Stage 0: Instant TTFT Feedback (< 0.1s) ──
+    yield (
+        "⚡ *กำลังวิเคราะห์คำถามและสืบค้นระเบียบนโยบาย...*",
+        """<div class="metrics-row">
+            <span style="color:#60A5FA;">🛡️ ตรวจสอบความปลอดภัยและขอบเขต...</span>
+        </div>""",
+        "<p style='color:#64748B; font-size:13px; margin:4px 0;'>⏳ กำลังค้นหาเอกสารอ้างอิง...</p>"
+    )
+
     initial_state = {
         "query": user_query.strip(),
         "expanded_query": "",
@@ -296,30 +311,148 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
         "error": "",
     }
 
+    current_state = dict(initial_state)
+    docs = []
+    conf = 0.0
+    refs_html = "<p style='color:#64748B; font-size:13px; margin:4px 0;'>กำลังประมวลผล...</p>"
+
     try:
-        result = graph.invoke(
+        # Stream graph node execution in real time
+        for event in graph.stream(
             initial_state,
             config={"configurable": {"thread_id": f"gradio_{time.time():.0f}"}},
-        )
-        elapsed = time.time() - start_time
+            stream_mode="updates"
+        ):
+            elapsed = time.time() - start_time
 
-        # 1. Answer formatting
-        final_ans = result.get("final_answer", "")
+            # 1. Input Validator node completed
+            if "input_validator" in event:
+                val_data = event["input_validator"]
+                current_state.update(val_data)
+                if not val_data.get("is_valid", True):
+                    yield (
+                        "🔍 *กำลังสร้างคำชี้แจงการปฏิเสธคำถาม...*",
+                        f"""<div class="metrics-row">
+                            <span style="color:#EF4444;">🚫 คำถามอยู่นอกขอบเขต</span>
+                            <span>·</span>
+                            <span>⏱️ <span class="metric-val">{elapsed:.2f}s</span></span>
+                        </div>""",
+                        refs_html
+                    )
+
+            # 2. Retriever node completed -> Show documents & metrics instantly (< 1s!)
+            elif "retriever" in event:
+                ret_data = event["retriever"]
+                current_state.update(ret_data)
+                docs = ret_data.get("retrieved_documents", [])
+                conf = ret_data.get("retrieval_confidence", 0.0)
+
+                # Format reference cards
+                if docs:
+                    cards = []
+                    for i, doc in enumerate(docs):
+                        chunk_id = doc.get("chunk_id", i + 1)
+                        score = doc.get("score", 0.0)
+                        content = doc.get("content", "")
+                        lines = content.strip().split("\n")
+                        if lines and "===" in lines[0]:
+                            title = lines[0].replace("===", "").strip()
+                            body = "\n".join(lines[1:]).strip()
+                        else:
+                            title = f"ส่วนที่ #{chunk_id}"
+                            body = content.strip()
+                        cards.append(f"""
+                        <div class="ref-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="ref-title">📄 {title}</span>
+                                <span class="ref-score">คะแนน {score:.2f} ({int(score*100)}%)</span>
+                            </div>
+                            <div class="ref-body">{body}</div>
+                        </div>
+                        """)
+                    refs_html = "".join(cards)
+                else:
+                    refs_html = "<p style='color:#64748B; font-size:13px; margin:4px 0;'>ไม่มีเอกสารอ้างอิง</p>"
+
+                yield (
+                    "📝 *พบเอกสารที่เกี่ยวข้องแล้ว กำลังสังเคราะห์และจัดโครงสร้างคำตอบ...*",
+                    f"""<div class="metrics-row">
+                        <span>🎯 ความมั่นใจ: <span class="metric-val">{conf:.2f} ({int(conf*100)}%)</span></span>
+                        <span>·</span>
+                        <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
+                        <span>·</span>
+                        <span>⏱️ <span class="metric-val">{elapsed:.2f}s</span></span>
+                        <span>·</span>
+                        <span style="color:#60A5FA;">⚡ กำลังเรียบเรียง...</span>
+                    </div>""",
+                    refs_html
+                )
+
+            # 3. Query Rewriter node
+            elif "query_rewriter" in event:
+                rew_data = event["query_rewriter"]
+                current_state.update(rew_data)
+                expanded = rew_data.get("expanded_query", "")
+                yield (
+                    f"✍️ *ความมั่นใจต่ำกว่าเกณฑ์ กำลังปรับปรุงคำค้นหา: \"{expanded}\"...*",
+                    f"""<div class="metrics-row">
+                        <span style="color:#F59E0B;">🔄 กำลังเกลาคำถามใหม่</span>
+                        <span>·</span>
+                        <span>⏱️ <span class="metric-val">{elapsed:.2f}s</span></span>
+                    </div>""",
+                    refs_html
+                )
+
+            # 4. Generator node completed -> Stream text tokens progressively
+            elif "generator" in event:
+                gen_data = event["generator"]
+                current_state.update(gen_data)
+                raw_report = gen_data.get("generated_report", "")
+
+                # Progressively stream words for smooth visual streaming
+                words = raw_report.split(" ")
+                chunk_step = max(1, len(words) // 25)
+                for idx in range(0, len(words), chunk_step):
+                    accumulated = words[:idx + chunk_step]
+                    partial_text = " ".join(accumulated)
+                    yield (
+                        partial_text + " ▌",
+                        f"""<div class="metrics-row">
+                            <span>🎯 ความมั่นใจ: <span class="metric-val">{conf:.2f} ({int(conf*100)}%)</span></span>
+                            <span>·</span>
+                            <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
+                            <span>·</span>
+                            <span>⏱️ <span class="metric-val">{elapsed:.2f}s</span></span>
+                            <span>·</span>
+                            <span style="color:#34D399;">⚡ กำลังแสดงผล...</span>
+                        </div>""",
+                        refs_html
+                    )
+                    time.sleep(0.015)
+
+            # 5. Output Validator / Rejection / Fallback
+            elif "output_validator" in event:
+                current_state.update(event["output_validator"])
+            elif "rejection_response" in event:
+                current_state.update(event["rejection_response"])
+            elif "max_attempts_fallback" in event:
+                current_state.update(event["max_attempts_fallback"])
+
+        # ── Final Yield (Completed & Verified) ──
+        elapsed = time.time() - start_time
+        final_ans = current_state.get("final_answer", "")
         if not final_ans:
-            if result.get("error"):
-                final_ans = f"⚠️ {result['error']}"
-            elif not result.get("is_valid", True):
+            if current_state.get("error"):
+                final_ans = f"⚠️ {current_state['error']}"
+            elif not current_state.get("is_valid", True):
                 final_ans = (
                     f"🚫 **ไม่สามารถประมวลผลได้:** "
-                    f"{result.get('rejection_reason', 'คำถามอยู่นอกเหนือขอบเขตนโยบาย')}"
+                    f"{current_state.get('rejection_reason', 'คำถามอยู่นอกเหนือขอบเขตนโยบาย')}"
                 )
             else:
-                final_ans = result.get("generated_report", "ไม่พบข้อมูลที่ตรงกับคำถาม")
+                final_ans = current_state.get("generated_report", "ไม่พบข้อมูลที่ตรงกับคำถาม")
 
-        # 2. Metrics bar
-        conf = result.get("retrieval_confidence", 0.0)
-        docs = result.get("retrieved_documents", [])
-        is_grounded = result.get("is_grounded", False)
+        is_grounded = current_state.get("is_grounded", False)
         grounded_text = "✅ Grounded" if is_grounded else "ℹ️ Factually Grounded"
 
         metrics_html = f"""
@@ -334,37 +467,15 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
         </div>
         """
 
-        # 3. References cards
-        if docs:
-            cards = []
-            for i, doc in enumerate(docs):
-                chunk_id = doc.get("chunk_id", i + 1)
-                score = doc.get("score", 0.0)
-                content = doc.get("content", "")
-                lines = content.strip().split("\n")
-                if lines and "===" in lines[0]:
-                    title = lines[0].replace("===", "").strip()
-                    body = "\n".join(lines[1:]).strip()
-                else:
-                    title = f"ส่วนที่ #{chunk_id}"
-                    body = content.strip()
-                cards.append(f"""
-                <div class="ref-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="ref-title">📄 {title}</span>
-                        <span class="ref-score">คะแนน {score:.2f} ({int(score*100)}%)</span>
-                    </div>
-                    <div class="ref-body">{body}</div>
-                </div>
-                """)
-            refs_html = "".join(cards)
-        else:
-            refs_html = "<p style='color:#64748B; font-size:13px; margin:4px 0;'>ไม่มีเอกสารอ้างอิง</p>"
+        yield (final_ans, metrics_html, refs_html)
 
-        return final_ans, metrics_html, refs_html
-
-    except Exception as exc:
-        return f"❌ เกิดข้อผิดพลาด: {exc}", "", ""
+    except Exception as e:
+        logger.error(f"Error in RAG pipeline stream: {e}", exc_info=True)
+        yield (
+            f"⚠️ **เกิดข้อผิดพลาดในการประมวลผล:** {str(e)}",
+            """<div class="metrics-row"><span style="color:#EF4444;">❌ Error</span></div>""",
+            refs_html or "<p style='color:#64748B;'>ไม่มีเอกสารอ้างอิง</p>"
+        )
 
 
 # ── Clean UI Layout ───────────────────────────────────────────────────────────
