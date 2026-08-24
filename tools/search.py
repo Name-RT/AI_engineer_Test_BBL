@@ -12,7 +12,19 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 SYNONYMS = {
-    "WFH": ["remote work", "work from home", "telecommute"],
+    "wfh": ["remote work", "work from home", "telecommute", "ทำงานที่บ้าน"],
+    "ทำงานที่บ้าน": ["remote work", "work from home", "WFH"],
+    "ทำงานนอกสถานที่": ["remote work", "work from home", "WFH"],
+    "ลาพักร้อน": ["annual leave", "vacation", "PTO", "วันลาสะสม"],
+    "ลาพักผ่อน": ["annual leave", "vacation", "PTO", "วันลาสะสม"],
+    "วันหยุด": ["holiday", "annual leave", "public holiday"],
+    "ลาป่วย": ["sick leave", "medical leave", "medical PTO"],
+    "เดินทางต่างประเทศ": ["international travel", "business trip", "overseas travel"],
+    "ค่าเดินทาง": ["travel expense", "international travel", "per diem"],
+    "เบิกเงิน": ["expense reimbursement", "claim", "receipt"],
+    "เบิกค่าใช้จ่าย": ["expense reimbursement", "claim", "receipt"],
+    "รหัสผ่าน": ["password", "credentials", "authentication", "IT security"],
+    "ความปลอดภัย": ["security policy", "confidentiality", "data protection"],
     "vacation": ["annual leave", "PTO", "time off", "holiday"],
     "sick leave": ["medical leave", "sick time", "medical PTO"],
     "travel": ["international travel", "business trip", "overseas"],
@@ -182,12 +194,11 @@ class KnowledgeBaseSearchTool:
             return None
 
     def _expand_synonyms(self, query: str) -> str:
-        words = query.split()
-        expanded = set(words)
-        for w in words:
-            for k, v in SYNONYMS.items():
-                if w.lower() == k.lower():
-                    expanded.update(v)
+        q_lower = query.lower()
+        expanded = set(query.split())
+        for k, v in SYNONYMS.items():
+            if k.lower() in q_lower:
+                expanded.update(v)
         return " ".join(expanded)
 
     def _stage1_retrieve(self, expanded_query: str, top_k: int) -> List[Dict[str, Any]]:
@@ -345,6 +356,6 @@ class KnowledgeBaseSearchTool:
         
         # Stage 2: Cross-Encoder Re-ranking
         if self.reranking_enabled and candidates:
-            return self.rerank(query, candidates, top_k=final_k)
+            return self.rerank(expanded_query, candidates, top_k=final_k)
             
         return candidates[:final_k]
