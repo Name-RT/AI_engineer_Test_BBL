@@ -36,27 +36,6 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
   <em>RAG Pipeline Flowchart — Editable via <code>architecture_flowchart.drawio</code> in <a href="https://app.diagrams.net">draw.io</a></em>
 </p>
 
-```mermaid
-graph TD
-    START([User Query]) --> IV[1. Input Validator & Security Shield]
-    IV --> |Threat / Off-Topic| RR[2. Rejection Response]
-    RR --> END_REJECT([Rejected Output])
-    
-    IV --> |Valid Query| RET[3. Two-Stage Retriever Agent]
-    RET --> RC{Relevance Score<br/>>= 0.15 ?}
-    
-    RC --> |"< 0.15 & Retries < 3"| QR[4. Query Rewriter]
-    QR --> |Rewritten Query| RET
-    
-    RC --> |">= 0.15"| GEN[5. Report Generator Agent]
-    GEN --> OV[6. Output Validator<br/>Factuality Check]
-    
-    OV --> |Passed| END_SUCCESS([Final Structured Answer])
-    OV --> |"Hallucinated & Retries < 2"| GEN
-    OV --> |"Max Retries Exceeded"| FB[7. Raw Excerpts Fallback]
-    FB --> END_FALLBACK([Fallback Output])
-```
-
 ---
 
 ## Features
