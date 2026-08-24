@@ -22,7 +22,7 @@
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
 </p>
 
-Enterprise Multi-Agent RAG system for querying, verifying, and synthesizing corporate policies (HR, IT Security, Finance, Operations). Built with **LangGraph**, **ChromaDB** vector search, **Two-Stage Cross-Encoder Re-ranking**, and **Azure APIM (GPT-5-Mini) / DeepSeek** backend. Supports both Thai and English.
+A multi-agent RAG system for querying and synthesizing company policies (HR, IT Security, Finance, Operations). Built with **LangGraph**, **ChromaDB** vector search, **Two-Stage Cross-Encoder Re-ranking**, and **Azure APIM (GPT-5-Mini) / DeepSeek** backend. Supports Thai and English.
 
 ---
 
@@ -30,10 +30,10 @@ Enterprise Multi-Agent RAG system for querying, verifying, and synthesizing corp
 
 <p align="center">
   <a href="architecture_flowchart.drawio">
-    <img src="architecture_flowchart.svg" alt="AI Policy Assistant Enterprise Agentic RAG Flowchart" width="100%" />
+    <img src="architecture_flowchart.svg" alt="AI Policy Assistant RAG Flowchart" width="100%" />
   </a>
   <br/>
-  <em>📊 Enterprise Multi-Agent RAG Flowchart — Click image or open <code>architecture_flowchart.drawio</code> directly in <a href="https://app.diagrams.net">draw.io / diagrams.net</a></em>
+  <em>RAG Pipeline Flowchart — Editable via <code>architecture_flowchart.drawio</code> in <a href="https://app.diagrams.net">draw.io</a></em>
 </p>
 
 ---
@@ -65,7 +65,7 @@ Enterprise Multi-Agent RAG system for querying, verifying, and synthesizing corp
 - **Profanity filter** — rejects abusive input in Thai and English.
 
 ### Interfaces
-- **Web UI** (`gradio_app.py`) — dark enterprise theme, input locking during processing, interactive query termination/stop button, suggestion pills, confidence gauge, and collapsible sources. Runs on port 7861.
+- **Web UI** (`gradio_app.py`) — dark theme, input locking during processing, query stop button, suggestion pills, confidence gauge, and collapsible sources. Runs on port 7861.
 - **CLI** (`main.py`) — interactive REPL with Rich formatting, or pass `--query` for one-shot use.
 
 ### Evaluation & CI

@@ -5,10 +5,6 @@
       <stop offset="0%" stop-color="#1E3A8A" />
       <stop offset="100%" stop-color="#2563EB" />
     </linearGradient>
-    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B" />
-      <stop offset="100%" stop-color="#0F172A" />
-    </linearGradient>
     
     <!-- Arrow Markers -->
     <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -29,14 +25,14 @@
     
     <!-- Shadow -->
     <filter id="dropShadow" x="-5%" y="-5%" width="110%" height="110%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
     </filter>
   </defs>
 
   <!-- Title Banner -->
   <rect x="40" y="20" width="920" height="60" rx="12" fill="url(#headerGrad)" filter="url(#dropShadow)" />
-  <text x="500" y="45" fill="#FFFFFF" font-size="19" font-weight="700" text-anchor="middle">🏛️ AI Policy Assistant — Enterprise Agentic RAG Architecture</text>
-  <text x="500" y="65" fill="#BFDBFE" font-size="12" text-anchor="middle">Multi-Agent Cyclic StateGraph with Two-Stage Re-ranking &amp; OWASP LLM Guardrails</text>
+  <text x="500" y="45" fill="#FFFFFF" font-size="18" font-weight="700" text-anchor="middle">AI Policy Assistant — RAG System Architecture</text>
+  <text x="500" y="65" fill="#BFDBFE" font-size="12" text-anchor="middle">Multi-Agent LangGraph Pipeline with Two-Stage Retrieval and Guardrails</text>
 
   <!-- =================================================== -->
   <!-- MAIN WORKFLOW NODES                                 -->
@@ -45,8 +41,8 @@
   <!-- Node 1: User Input -->
   <g transform="translate(60, 110)">
     <rect width="210" height="60" rx="10" fill="#1D4ED8" stroke="#60A5FA" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="105" y="26" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">👤 User Query</text>
-    <text x="105" y="44" fill="#DBEAFE" font-size="11" text-anchor="middle">Gradio Dark UI / CLI</text>
+    <text x="105" y="26" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">User Query</text>
+    <text x="105" y="44" fill="#DBEAFE" font-size="11" text-anchor="middle">Gradio Web UI / CLI</text>
   </g>
 
   <!-- Arrow User -> Security Shield -->
@@ -55,9 +51,9 @@
   <!-- Node 2: Security Shield -->
   <g transform="translate(345, 100)">
     <rect width="360" height="80" rx="10" fill="#1E1B4B" stroke="#6366F1" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="180" y="24" fill="#C7D2FE" font-size="13" font-weight="700" text-anchor="middle">🛡️ 1. OWASP Security Shield</text>
-    <text x="180" y="44" fill="#E0E7FF" font-size="11" text-anchor="middle">• PII Scrubbing (Thai ID, Cards, Phone, API Keys)</text>
-    <text x="180" y="62" fill="#E0E7FF" font-size="11" text-anchor="middle">• Jailbreak / DAN Defense &amp; Sliding Rate Limiter</text>
+    <text x="180" y="24" fill="#C7D2FE" font-size="13" font-weight="700" text-anchor="middle">1. Security Shield</text>
+    <text x="180" y="44" fill="#E0E7FF" font-size="11" text-anchor="middle">• PII Redaction (Thai ID, Cards, Phone, API Keys)</text>
+    <text x="180" y="62" fill="#E0E7FF" font-size="11" text-anchor="middle">• Jailbreak / Injection Detection &amp; Rate Limiter</text>
   </g>
 
   <!-- Arrow Shield -> Rejection Node -->
@@ -67,8 +63,8 @@
   <!-- Rejection Node -->
   <g transform="translate(775, 110)">
     <rect width="165" height="60" rx="10" fill="#7F1D1D" stroke="#EF4444" stroke-width="1.5" filter="url(#dropShadow)" />
-    <text x="82" y="26" fill="#FECACA" font-size="12" font-weight="700" text-anchor="middle">🚫 Rejection Node</text>
-    <text x="82" y="44" fill="#FCA5A5" font-size="10.5" text-anchor="middle">Polite Enterprise Error</text>
+    <text x="82" y="26" fill="#FECACA" font-size="12" font-weight="700" text-anchor="middle">Rejection Node</text>
+    <text x="82" y="44" fill="#FCA5A5" font-size="10.5" text-anchor="middle">Policy Rejection Message</text>
   </g>
 
   <!-- Arrow Shield -> Input Validator -->
@@ -78,8 +74,8 @@
   <!-- Node 3: Input Validator -->
   <g transform="translate(345, 220)">
     <rect width="360" height="60" rx="10" fill="#0F766E" stroke="#14B8A6" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="180" y="24" fill="#CCFBF1" font-size="13" font-weight="700" text-anchor="middle">🔍 2. Input Validator (Length &amp; Off-Topic)</text>
-    <text x="180" y="44" fill="#E6FFFA" font-size="11" text-anchor="middle">500 Token Bound + Fast TF-IDF / Binary LLM Gate</text>
+    <text x="180" y="24" fill="#CCFBF1" font-size="13" font-weight="700" text-anchor="middle">2. Input Validator</text>
+    <text x="180" y="44" fill="#E6FFFA" font-size="11" text-anchor="middle">Length Bounds (500 tokens) + Topic Scope Check</text>
   </g>
 
   <!-- Arrow InputVal -> Rejection (Off-topic) -->
@@ -93,11 +89,11 @@
   <!-- Node 4: Two-Stage Retriever Agent -->
   <g transform="translate(245, 320)">
     <rect width="560" height="135" rx="12" fill="#064E3B" stroke="#10B981" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="280" y="26" fill="#A7F3D0" font-size="14" font-weight="700" text-anchor="middle">📂 3. Two-Stage Retriever Agent</text>
-    <text x="20" y="52" fill="#D1FAE5" font-size="11.5" font-weight="600">1️⃣ Stage 1: High-Recall Candidates (Candidate Top-K = 10)</text>
+    <text x="280" y="26" fill="#A7F3D0" font-size="14" font-weight="700" text-anchor="middle">3. Two-Stage Retriever Agent</text>
+    <text x="20" y="52" fill="#D1FAE5" font-size="11.5" font-weight="600">Stage 1: Candidate Search (Top-10)</text>
     <text x="35" y="72" fill="#A7F3D0" font-size="11">• ChromaDB Dense (multilingual-e5-small) + TF-IDF with RRF (threshold: 0.15)</text>
-    <text x="20" y="94" fill="#D1FAE5" font-size="11.5" font-weight="600">2️⃣ Stage 2: Precision Cross-Encoder Re-ranker (Final Top-K = 5)</text>
-    <text x="35" y="114" fill="#A7F3D0" font-size="11">• BAAI/bge-reranker-v2-m3 with Calibrated Sigmoid Score (85%–95%)</text>
+    <text x="20" y="94" fill="#D1FAE5" font-size="11.5" font-weight="600">Stage 2: Cross-Encoder Re-ranking (Top-5)</text>
+    <text x="35" y="114" fill="#A7F3D0" font-size="11">• BAAI/bge-reranker-v2-m3 with Calibrated Sigmoid Scoring</text>
   </g>
 
   <!-- Arrow Retriever -> Decision Diamond -->
@@ -117,8 +113,8 @@
   <!-- Node 5: Query Rewriter Agent -->
   <g transform="translate(60, 495)">
     <rect width="220" height="60" rx="10" fill="#701A75" stroke="#D946EF" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="110" y="25" fill="#F5D0FE" font-size="12" font-weight="700" text-anchor="middle">✍️ 4. Query Rewriter</text>
-    <text x="110" y="43" fill="#FDF4FF" font-size="10.5" text-anchor="middle">Expands Acronyms &amp; Semantics</text>
+    <text x="110" y="25" fill="#F5D0FE" font-size="12" font-weight="700" text-anchor="middle">4. Query Rewriter</text>
+    <text x="110" y="43" fill="#FDF4FF" font-size="10.5" text-anchor="middle">Expands Acronyms &amp; Terms</text>
   </g>
 
   <!-- Loop Rewriter back to Retriever -->
@@ -127,14 +123,14 @@
 
   <!-- Arrow Decision -> Report Generator (High Confidence) -->
   <path d="M525, 565 L525, 595" stroke="#10B981" stroke-width="2.5" marker-end="url(#arrowGreen)" />
-  <text x="605" y="583" fill="#34D399" font-size="10.5" font-weight="600">&gt;= 0.50 (High Match: 85%–95%)</text>
+  <text x="605" y="583" fill="#34D399" font-size="10.5" font-weight="600">&gt;= 0.50</text>
 
   <!-- Node 6: Report Generator Agent -->
   <g transform="translate(245, 595)">
     <rect width="560" height="85" rx="12" fill="#1E3A8A" stroke="#3B82F6" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="280" y="24" fill="#93C5FD" font-size="14" font-weight="700" text-anchor="middle">📝 5. Report Generator Agent (Azure APIM / DeepSeek)</text>
-    <text x="280" y="46" fill="#DBEAFE" font-size="11.5" text-anchor="middle">• GPT-5-Mini via /llm/responses (1,000 TPM Exponential Backoff)</text>
-    <text x="280" y="66" fill="#BFDBFE" font-size="11" text-anchor="middle">• 4-Section Enterprise Structure + Aggregated Bottom Policy References (📚)</text>
+    <text x="280" y="24" fill="#93C5FD" font-size="14" font-weight="700" text-anchor="middle">5. Report Generator Agent (Azure APIM / DeepSeek)</text>
+    <text x="280" y="46" fill="#DBEAFE" font-size="11.5" text-anchor="middle">• GPT-5-Mini via /llm/responses (with 1,000 TPM rate limit retry)</text>
+    <text x="280" y="66" fill="#BFDBFE" font-size="11" text-anchor="middle">• 4-Section Structured Format + Policy References Section</text>
   </g>
 
   <!-- Arrow Generator -> Output Validator -->
@@ -143,13 +139,13 @@
   <!-- Node 7: Output Validator (Hallucination Guard) -->
   <g transform="translate(245, 715)">
     <rect width="560" height="55" rx="10" fill="#0F766E" stroke="#14B8A6" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="280" y="24" fill="#CCFBF1" font-size="13" font-weight="700" text-anchor="middle">🛡️ 6. Output Validator (Hallucination Guard)</text>
-    <text x="280" y="42" fill="#E6FFFA" font-size="11" text-anchor="middle">Self-Reflection Fact Checking against Retrieved Source Snippets</text>
+    <text x="280" y="24" fill="#CCFBF1" font-size="13" font-weight="700" text-anchor="middle">6. Output Validator</text>
+    <text x="280" y="42" fill="#E6FFFA" font-size="11" text-anchor="middle">Fact Checking against Retrieved Source Snippets</text>
   </g>
 
   <!-- Hallucination Retry Loop back to Generator -->
   <path d="M245, 742 L200, 742 L200, 637 L240, 637" fill="none" stroke="#F59E0B" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowYellow)" />
-  <text x="175" y="692" fill="#FBBF24" font-size="9.5" text-anchor="middle" transform="rotate(-90 175 692)" font-weight="600">Hallucination Retry (&lt; 3)</text>
+  <text x="175" y="692" fill="#FBBF24" font-size="9.5" text-anchor="middle" transform="rotate(-90 175 692)" font-weight="600">Ungrounded Retry (&lt; 3)</text>
 
   <!-- Max Retries -> Fallback -->
   <path d="M805, 742 L840, 742" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed)" />
@@ -158,19 +154,19 @@
   <!-- Node 8: Fallback -->
   <g transform="translate(845, 715)">
     <rect width="115" height="55" rx="10" fill="#78350F" stroke="#F59E0B" stroke-width="1.5" filter="url(#dropShadow)" />
-    <text x="57" y="24" fill="#FEF3C7" font-size="11" font-weight="700" text-anchor="middle">📄 Raw Excerpts</text>
-    <text x="57" y="42" fill="#FDE68A" font-size="9.5" text-anchor="middle">Zero Hallucination</text>
+    <text x="57" y="24" fill="#FEF3C7" font-size="11" font-weight="700" text-anchor="middle">Raw Excerpts</text>
+    <text x="57" y="42" fill="#FDE68A" font-size="9.5" text-anchor="middle">Fallback Snippets</text>
   </g>
 
   <!-- Arrow Validator -> Output Delivery -->
   <path d="M525, 770 L525, 805" stroke="#10B981" stroke-width="2.5" marker-end="url(#arrowGreen)" />
-  <text x="580" y="793" fill="#34D399" font-size="10.5" font-weight="600">100% Grounded</text>
+  <text x="570" y="793" fill="#34D399" font-size="10.5" font-weight="600">Grounded</text>
 
   <!-- Node 9: Delivery -->
   <g transform="translate(245, 805)">
     <rect width="560" height="70" rx="12" fill="#065F46" stroke="#10B981" stroke-width="2.5" filter="url(#dropShadow)" />
-    <text x="280" y="28" fill="#FFFFFF" font-size="14" font-weight="700" text-anchor="middle">🎉 7. Output Sanitizer &amp; Delivery</text>
-    <text x="280" y="48" fill="#A7F3D0" font-size="11.5" text-anchor="middle">• Secret &amp; PII Scrubbing + Render in Dark Gradio UI with Stop / Terminate Support</text>
+    <text x="280" y="28" fill="#FFFFFF" font-size="14" font-weight="700" text-anchor="middle">7. Output Sanitizer &amp; Delivery</text>
+    <text x="280" y="48" fill="#A7F3D0" font-size="11.5" text-anchor="middle">• PII &amp; Key Redaction + Delivery to Gradio UI / CLI</text>
   </g>
 
   <!-- Fallback connects down to Delivery -->

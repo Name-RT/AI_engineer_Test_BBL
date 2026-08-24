@@ -374,10 +374,10 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
     gr.HTML("""
     <div class="app-header">
         <div>
-            <h1>🏦 AI ENGINEER TEST <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
-            <p>ระบบสืบค้นและสังเคราะห์ระเบียบนโยบายองค์กร (Enterprise Multi-Agent RAG)</p>
+            <h1>AI ENGINEER TEST <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
+            <p>ระบบสืบค้นระเบียบนโยบายองค์กร</p>
         </div>
-        <span class="header-badge">Gradio Edition</span>
+        <span class="header-badge">Gradio UI</span>
     </div>
     """)
 
@@ -419,7 +419,7 @@ with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
     # 7. Footer
     gr.HTML("""
     <div class="app-footer">
-        Bangkok Bank AI ENGINEER TEST· AI Policy Assistant · Powered by LangGraph & DeepSeek
+        AI Policy Assistant · Powered by LangGraph
     </div>
     """)
 
