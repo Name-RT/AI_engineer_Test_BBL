@@ -71,11 +71,18 @@ def create_input_validator_node(llm, search_tool, config: Dict[str, Any]):
             logger.warning("Query too long rejected.")
             return {"is_valid": False, "rejection_reason": f"Query too long, max {max_length} characters."}
 
-        # Step 2: Off-topic Detection (Fast Check via TF-IDF)
-        results = search_tool.search(query, top_k=1)
+        # Step 2: Off-topic Detection (Fast Check via pure lexical TF-IDF)
         fast_check_passed = False
-        if results and results[0]["score"] > 0.05: # very low threshold
-            fast_check_passed = True
+        try:
+            if hasattr(search_tool, "vectorizer") and hasattr(search_tool, "tfidf_matrix"):
+                from sklearn.metrics.pairwise import cosine_similarity
+                q_vec = search_tool.vectorizer.transform([query])
+                scores = cosine_similarity(q_vec, search_tool.tfidf_matrix).flatten()
+                if len(scores) > 0 and max(scores) >= 0.20:
+                    fast_check_passed = True
+        except Exception as e:
+            logger.debug(f"Fast TF-IDF check error: {e}")
+            fast_check_passed = False
             
         if fast_check_passed:
             logger.info("Passed fast TF-IDF off-topic check.")
