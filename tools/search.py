@@ -295,10 +295,12 @@ class KnowledgeBaseSearchTool:
             for doc, raw_s in zip(candidates, raw_scores):
                 s = float(raw_s)
                 stage1_s = float(doc.get("score", 0.0))
-                # Calibrate BGE reranker logits (typically centered around -4.0)
-                calibrated_logit = 1.0 / (1.0 + math.exp(-(s - (-4.0)) / 2.0))
-                # Preserve high stage 1 confidence when valid while re-ordering strictly by Cross-Encoder
-                final_score = max(stage1_s, calibrated_logit) if stage1_s > 0 else calibrated_logit
+                # BGE Reranker v2 M3 CrossEncoder outputs normalized probability in [0.0, 1.0]
+                if s > 1.0 or s < 0.0:
+                    # Apply standard sigmoid only if model outputs unnormalized logits
+                    final_score = 1.0 / (1.0 + math.exp(-s))
+                else:
+                    final_score = s
                 
                 new_doc = dict(doc)
                 new_doc["stage1_score"] = stage1_s
@@ -306,7 +308,7 @@ class KnowledgeBaseSearchTool:
                 new_doc["rerank_logit"] = float(s)
                 reranked_results.append(new_doc)
                 
-            reranked_results.sort(key=lambda x: x["rerank_logit"], reverse=True)
+            reranked_results.sort(key=lambda x: x["score"], reverse=True)
             logger.debug(f"Re-ranked {len(candidates)} candidate chunks -> returning top {top_k}")
             return reranked_results[:top_k]
         except Exception as e:
