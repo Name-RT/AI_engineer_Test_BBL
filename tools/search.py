@@ -195,11 +195,16 @@ class KnowledgeBaseSearchTool:
 
     def _expand_synonyms(self, query: str) -> str:
         q_lower = query.lower()
-        expanded = set(query.split())
+        expanded_tokens = list(query.split())
+        added_synonyms = []
         for k, v in SYNONYMS.items():
             if k.lower() in q_lower:
-                expanded.update(v)
-        return " ".join(expanded)
+                for syn in v:
+                    if syn not in expanded_tokens and syn not in added_synonyms:
+                        added_synonyms.append(syn)
+        if added_synonyms:
+            return query + " " + " ".join(added_synonyms)
+        return query
 
     def _stage1_retrieve(self, expanded_query: str, top_k: int) -> List[Dict[str, Any]]:
         """
@@ -306,12 +311,8 @@ class KnowledgeBaseSearchTool:
             for doc, raw_s in zip(candidates, raw_scores):
                 s = float(raw_s)
                 stage1_s = float(doc.get("score", 0.0))
-                # BGE Reranker v2 M3 CrossEncoder outputs normalized probability in [0.0, 1.0]
-                if s > 1.0 or s < 0.0:
-                    # Apply standard sigmoid only if model outputs unnormalized logits
-                    final_score = 1.0 / (1.0 + math.exp(-s))
-                else:
-                    final_score = s
+                # Apply standard sigmoid to map unbounded Cross-Encoder logits to [0.0, 1.0]
+                final_score = 1.0 / (1.0 + math.exp(-s))
                 
                 new_doc = dict(doc)
                 new_doc["stage1_score"] = stage1_s

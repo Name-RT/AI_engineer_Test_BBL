@@ -28,8 +28,8 @@ COPY . .
 # Ensure storage directory for ChromaDB exists
 RUN mkdir -p /app/chroma_db
 
-# Expose ports: 7861 (Gradio), 8501 (Streamlit)
-EXPOSE 7861 8501
+# Expose port: 7861 (Gradio Dark Edition)
+EXPOSE 7861
 
 # Healthcheck for Gradio server
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \

@@ -46,7 +46,8 @@ def create_input_validator_node(llm, search_tool, config: Dict[str, Any]):
         max_length = config["guardrails"]["max_query_length"]
         
         # Step 0: Foundational Security Shield (Rate Limit, Jailbreak, Prompt Leakage, Code Injection, PII Masking)
-        sec_res = security_shield.validate_and_sanitize_input(raw_query)
+        client_id = state.get("client_id", "default")
+        sec_res = security_shield.validate_and_sanitize_input(raw_query, client_id=client_id)
         if not sec_res["is_safe"]:
             logger.warning(f"Security Shield rejection: {sec_res['rejection_reason']}")
             return {
@@ -66,7 +67,7 @@ def create_input_validator_node(llm, search_tool, config: Dict[str, Any]):
             logger.warning("Query too short rejected.")
             return {"is_valid": False, "rejection_reason": f"Query too short (min {min_length} chars)."}
             
-        if count_tokens(query) > 500 or len(query) > max_length:
+        if count_tokens(query) > max_length or len(query) > max_length:
             logger.warning("Query too long rejected.")
             return {"is_valid": False, "rejection_reason": f"Query too long, max {max_length} characters."}
 

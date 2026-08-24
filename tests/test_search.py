@@ -30,8 +30,9 @@ def test_search_respects_top_k(search_tool):
 
 def test_search_scores_are_sorted(search_tool):
     results = search_tool.search("travel remote")
-    if len(results) > 1:
-        assert results[0]["score"] >= results[1]["score"]
+    assert len(results) >= 2, "Expected at least 2 search results to verify sorting"
+    scores = [r["score"] for r in results]
+    assert scores == sorted(scores, reverse=True)
 
 def test_chunking_preserves_content(search_tool):
     # Our test_kb has two chunks

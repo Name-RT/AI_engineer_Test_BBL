@@ -38,7 +38,7 @@ graph TD
     
     IV --> |"ผ่าน (คำถามถูกต้อง)"| RET[3. Data Retriever Node]
     
-    RET --> RC{ตรวจสอบค่าความมั่นใจ<br/>Confidence >= 0.18 ?}
+    RET --> RC{ตรวจสอบค่าความมั่นใจ<br/>Confidence >= 0.50 ?}
     
     RC --> |"ต่ำกว่าเกณฑ์ และรอบค้นหา < 3"| QR[4. Query Rewriter Node]
     QR --> |"ส่ง Query ที่เรียบเรียงใหม่"| RET
@@ -94,13 +94,13 @@ graph LR
     Synonyms --> Stage1[Stage 1: Candidate Retrieval]
     Stage1 --> |ChromaDB Vector + TF-IDF| Candidates[Top-10 Candidates]
     Candidates --> Stage2[Stage 2: Cross-Encoder Re-ranking]
-    Stage2 --> |BAAI/bge-reranker-v2-m3| Ranked[Top-3 Final Chunks]
+    Stage2 --> |BAAI/bge-reranker-v2-m3| Ranked[Top-5 Final Chunks]
 ```
 
 ### รายละเอียดแต่ละขั้นตอน
 1. **Synonym Expansion:** แปลงคำภาษาพูดหรือคำย่อเป็นคำทางการ เช่น `WFH` $\rightarrow$ `remote work`, `vacation` $\rightarrow$ `annual leave`
 2. **Stage 1 (Recall):** ดึง Chunks เบื้องต้น 10 รายการด้วย ChromaDB (`multilingual-e5-small`) หรือ TF-IDF
-3. **Stage 2 (Precision):** นำคำถามและ Chunks มาจับคู่ส่งเข้าโมเดล Cross-Encoder `BAAI/bge-reranker-v2-m3` เพื่อคำนวณคะแนนความเกี่ยวข้องแบบ Cross-Attention และปรับค่าด้วย Sigmoid ให้อยู่ในช่วง $[0.0, 1.0]$ คัดเลือกเฉพาะ 3 อันดับแรก
+3. **Stage 2 (Precision):** นำคำถามและ Chunks มาจับคู่ส่งเข้าโมเดล Cross-Encoder `BAAI/bge-reranker-v2-m3` เพื่อคำนวณคะแนนความเกี่ยวข้องแบบ Cross-Attention และปรับค่าด้วย Sigmoid ให้อยู่ในช่วง $[0.0, 1.0]$ คัดเลือกเฉพาะ 5 อันดับแรก
 4. **Fallback:** หากโหลด Re-ranker ไม่สำเร็จ ระบบจะส่งผลลัพธ์จาก Stage 1 ต่อไปโดยอัตโนมัติ
 
 ---
@@ -132,7 +132,7 @@ class AgentState(TypedDict, total=False):
 | `input_validator` | ตรวจสอบความปลอดภัย (Security Shield), ความยาว และความเกี่ยวข้องกับนโยบาย |
 | `rejection_response` | คืนข้อความปฏิเสธตามสาเหตุ เช่น นอกขอบเขต หรือคำสั่งไม่ปลอดภัย |
 | `retriever` | ดึง Chunks จากคลังความรู้ตามค่า Top-K และคำนวณค่าความมั่นใจ |
-| `query_rewriter` | เรียบเรียงคำค้นหาใหม่เมื่อค่าความมั่นใจต่ำกว่า 0.18 |
+| `query_rewriter` | เรียบเรียงคำค้นหาใหม่เมื่อค่าความมั่นใจต่ำกว่า 0.50 |
 | `generator` | สรุปคำตอบตามโครงสร้าง 4 ส่วน พร้อมระบุแหล่งอ้างอิง |
 | `output_validator` | ตรวจสอบความถูกต้องของคำตอบเทียบกับเอกสารอ้างอิง (Factuality) และ Mask PII ขาออก |
 | `max_attempts_fallback` | คืนข้อความจากเอกสารต้นฉบับเมื่อสร้างคำตอบไม่สำเร็จครบตามจำนวนรอบที่กำหนด |

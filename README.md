@@ -1,7 +1,7 @@
 # AI ENGINEER TEST | AI Policy Assistant
 
 [![CI / Automated Testing](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml/badge.svg)](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml)
-[![Tests Passing](https://img.shields.io/badge/tests-57%2F57%20passing-brightgreen.svg)](tests/)
+[![Tests Passing](https://img.shields.io/badge/tests-58%2F58%20passing-brightgreen.svg)](tests/)
 [![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen.svg)](tests/)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Docker Ready](https://img.shields.io/badge/docker-ready-2496ED.svg)](docker-compose.yml)
@@ -159,11 +159,11 @@ Full results exported to [`evaluation/evaluation_report.json`](evaluation/evalua
 python -m pytest tests/ -v --cov=agents --cov=tools --cov=guardrails --cov=config --cov-report=term-missing --tb=short
 ```
 
-**57/57 passing:**
+**58/58 passing:**
 
 | File | Count | Covers |
 |:---|:---:|:---|
-| `test_config.py` | 7 | Config loading, DeepSeek/Azure APIM provider switching, token utils |
+| `test_config.py` | 8 | Config loading, DeepSeek/Azure APIM provider switching, 429 retry, token utils |
 | `test_reranker.py` | 5 | Two-stage re-ranking, sigmoid scores, fallback on error |
 | `test_guardrails.py` | 8 | Query length checks, off-topic detection, hallucination guard |
 | `test_integration.py` | 4 | End-to-end StateGraph flow, query rewrite loops |

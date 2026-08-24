@@ -39,4 +39,4 @@ jobs:
 
       - name: 🧪 Run Pytest with Coverage
         run: |
-          python -m pytest tests/ -v --cov=agents --cov=tools --cov=config --cov-report=term-missing --tb=short
+          python -m pytest tests/ -v --cov=agents --cov=tools --cov=config --cov=guardrails --cov-report=term-missing --tb=short

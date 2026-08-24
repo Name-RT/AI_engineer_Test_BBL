@@ -10,13 +10,13 @@
 
 | ไฟล์ทดสอบ | จำนวนเทส | ขอบเขตการทดสอบ |
 |:---|:---:|:---|
-| [`tests/test_config.py`](file:///e:/Project/RAG_BBL/tests/test_config.py) | 7 | การโหลด `config.yaml`, การสลับ LLM Provider (`deepseek`, `azure_apim`), การนับ/ตัด Token |
-| [`tests/test_reranker.py`](file:///e:/Project/RAG_BBL/tests/test_reranker.py) | 5 | Two-Stage Re-ranking ด้วย Cross-Encoder (`bge-reranker-v2-m3`), การแปลงคะแนน Sigmoid, Safe Fallback |
-| [`tests/test_search.py`](file:///e:/Project/RAG_BBL/tests/test_search.py) | 8 | Vector Search (ChromaDB), TF-IDF Search, การขยายคำพ้องความหมาย (Synonyms), การตัดแบ่ง Chunks |
-| [`tests/test_guardrails.py`](file:///e:/Project/RAG_BBL/tests/test_guardrails.py) | 8 | Input Validation (ความยาว, Off-topic), Output Validation (Fact Groundedness, Hallucination) |
-| [`tests/test_security_guardrails.py`](file:///e:/Project/RAG_BBL/tests/test_security_guardrails.py) | 25 | OWASP LLM Guardrails: PII Masking, Jailbreak, System Prompt Leakage, Code/SQL Injection, Rate Limiting |
-| [`tests/test_integration.py`](file:///e:/Project/RAG_BBL/tests/test_integration.py) | 4 | การทำงานแบบ End-to-End ของ LangGraph StateGraph, ลูป Self-correction Query Rewriting |
-| **รวมทั้งหมด** | **57** | **Pass 100%** |
+| [`tests/test_config.py`](tests/test_config.py) | 8 | การโหลด `config.yaml`, การสลับ LLM Provider (`deepseek`, `azure_apim`), การนับ/ตัด Token, 429 Rate Limit Retry |
+| [`tests/test_reranker.py`](tests/test_reranker.py) | 5 | Two-Stage Re-ranking ด้วย Cross-Encoder (`bge-reranker-v2-m3`), การแปลงคะแนน Sigmoid, Safe Fallback |
+| [`tests/test_search.py`](tests/test_search.py) | 8 | Vector Search (ChromaDB), TF-IDF Search, การขยายคำพ้องความหมาย (Synonyms), การตัดแบ่ง Chunks |
+| [`tests/test_guardrails.py`](tests/test_guardrails.py) | 8 | Input Validation (ความยาว, Off-topic), Output Validation (Fact Groundedness, Hallucination) |
+| [`tests/test_security_guardrails.py`](tests/test_security_guardrails.py) | 25 | OWASP LLM Guardrails: PII Masking, Jailbreak, System Prompt Leakage, Code/SQL Injection, Rate Limiting |
+| [`tests/test_integration.py`](tests/test_integration.py) | 4 | การทำงานแบบ End-to-End ของ LangGraph StateGraph, ลูป Self-correction Query Rewriting |
+| **รวมทั้งหมด** | **58** | **Pass 100%** |
 
 ---
 
@@ -31,6 +31,7 @@
 - **`test_get_llm_deepseek`**: ทดสอบการสร้าง Instance ของ `ChatDeepSeek` เมื่อตั้งค่า `LLM_PROVIDER=deepseek`
 - **`test_get_llm_azure_apim`**: ทดสอบการสร้าง Instance ของ Custom Wrapper `ChatAzureAPIM` เมื่อตั้งค่า `LLM_PROVIDER=azure_apim`
 - **`test_chat_azure_apim_mock_invoke`**: ทดสอบการส่งคำขอ HTTP POST ไปยัง Azure APIM Gateway ผ่าน Mocking และตรวจสอบการแปลง Message เป็น String Input
+- **`test_chat_azure_apim_rate_limit_retry`**: ทดสอบกลไก Exponential Backoff Retry เมื่อได้รับสถานะ HTTP 429 Rate Limit (1,000 TPM Quota) และกู้คืนได้สำเร็จ
 - **`test_count_tokens`**: ตรวจสอบฟังก์ชันคำนวณ Token ด้วย `tiktoken`
 - **`test_truncate_to_token_limit`**: ตรวจสอบการตัดทอนข้อความให้ไม่เกินจำนวน Token ที่กำหนด โดยไม่ทำให้ข้อความเสียหาย
 
