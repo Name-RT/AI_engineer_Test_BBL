@@ -17,10 +17,9 @@ def create_retriever_node(search_tool, config: Dict[str, Any]):
     """
     def retriever_node(state: AgentState) -> dict:
         query = state.get("expanded_query") or state.get("query", "")
-        top_k = config["search"]["top_k"]
         
         logger.info(f"Retrieving documents for query: {query}")
-        results = search_tool.search(query, top_k=top_k)
+        results = search_tool.search(query)
         
         if not results:
             confidence = 0.0
