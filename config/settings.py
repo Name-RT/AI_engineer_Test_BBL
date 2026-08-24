@@ -3,6 +3,8 @@ config/settings.py — Configuration loader & LLM Factory
 Supported Providers: DeepSeek & Azure APIM Gateway (BBL Candidate Endpoint)
 """
 import os
+import sys
+import time
 import yaml
 import logging
 import requests
@@ -86,7 +88,12 @@ class ChatAzureAPIM(SimpleChatModel):
                 # Handle 429 Too Many Requests / TPM Quota Throttling (1000 tokens/min limit)
                 if response.status_code == 429:
                     retry_after = response.headers.get("Retry-After")
-                    sleep_time = float(retry_after) if retry_after and retry_after.isdigit() else backoff * (2 ** attempt)
+                    try:
+                        sleep_time = float(retry_after) if retry_after else (backoff * (2 ** attempt))
+                    except (ValueError, TypeError):
+                        sleep_time = backoff * (2 ** attempt)
+
+                    sleep_time = min(max(sleep_time, 2.0), 65.0)
                     logging.warning(
                         f"Azure APIM 429 Rate Limit exceeded (1000 TPM limit). "
                         f"Retrying in {sleep_time:.1f}s (attempt {attempt + 1}/{max_retries})..."
