@@ -56,15 +56,20 @@ graph TD
 ## Features
 
 ### Multi-Agent Pipeline (LangGraph)
-- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` and scores similarity confidence.
-- **Report Generator** — produces a structured 4-section answer with inline citations, auto-detecting Thai/English.
-- **Query Rewriter** — rewrites the query and retries when confidence is low.
+- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and scores similarity confidence.
+- **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom, auto-detecting Thai/English.
+- **Query Rewriter** — rewrites the query and retries when retrieval confidence is low.
 - **Fallback** — if hallucination checks keep failing, returns the raw verified snippets instead of guessing.
 
-### Two-Stage Retrieval (`tools/search.py`)
+### Two-Stage Retrieval & Score Calibration (`tools/search.py`)
 - **Stage 1 (recall):** ChromaDB dense vectors (`multilingual-e5-small`) + TF-IDF, merged with Reciprocal Rank Fusion.
-- **Stage 2 (precision):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3`, scores normalized via sigmoid.
-- Synonym mapping for colloquial terms (*WFH* → *remote work*, *ลาพักร้อน* → *annual leave*, etc.)
+- **Stage 2 (precision):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3` with temperature-scaled logit calibration and score blending (yielding realistic 85%-95% confidence).
+- **Auto-Ingestion:** Automatically syncs and persists 32 chunks into ChromaDB (`./chroma_db/`) on startup.
+- **Synonym mapping** for colloquial terms (*WFH* → *remote work*, *ลาพักร้อน* → *annual leave*, etc.)
+
+### Azure APIM & Rate Limit Resilience (`config/settings.py`)
+- **OpenAI Responses API Integration:** Native parser for APIM `/llm/responses` endpoint, extracting text content while filtering raw encrypted reasoning blocks.
+- **1,000 TPM Exponential Backoff:** Automatic HTTP 429 detection and retry handling honoring `Retry-After` headers.
 
 ### Security (OWASP LLM Top 10)
 - **Jailbreak guard** — catches adversarial prompts like *"Ignore previous instructions"*, *"DAN Mode"*, *"ลืมกฎทั้งหมด"*.
@@ -75,7 +80,7 @@ graph TD
 - **Profanity filter** — rejects abusive input in Thai and English.
 
 ### Interfaces
-- **Web UI** (`gradio_app.py`) — dark theme, suggestion pills, confidence display, collapsible references. Runs on port 7861.
+- **Web UI** (`gradio_app.py`) — dark enterprise theme, input locking during processing, interactive query termination/stop button, suggestion pills, confidence gauge, and collapsible sources. Runs on port 7861.
 - **CLI** (`main.py`) — interactive REPL with Rich formatting, or pass `--query` for one-shot use.
 
 ### Evaluation & CI
