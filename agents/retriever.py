@@ -61,8 +61,8 @@ def create_query_rewriter_node(llm):
             "The following search query returned poor results. Rewrite it to be "
             "more specific and use different keywords that might appear in a "
             "company policy document.\n"
-            f"Original query: {original}\n"
-            f"Previous attempt: {previous}\n"
+            f"<original_query>{original}</original_query>\n"
+            f"<previous_attempt>{previous}</previous_attempt>\n"
             "Rewrite the query (output ONLY the new query, nothing else):"
         )
         

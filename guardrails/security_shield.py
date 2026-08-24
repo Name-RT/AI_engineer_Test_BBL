@@ -225,6 +225,12 @@ class SecurityShield:
         history = self._request_history.get(client_id, [])
         valid_history = [t for t in history if t > window_start]
 
+        # Periodic cleanup of idle clients to prevent unbounded memory growth
+        if len(self._request_history) > 100:
+            stale_clients = [cid for cid, hist in self._request_history.items() if not hist or max(hist) <= window_start]
+            for cid in stale_clients:
+                self._request_history.pop(cid, None)
+
         if len(valid_history) >= self.rate_limit_rpm:
             logger.warning(f"Rate limit exceeded for client '{client_id}': {len(valid_history)}/{self.rate_limit_rpm} rpm")
             self._request_history[client_id] = valid_history

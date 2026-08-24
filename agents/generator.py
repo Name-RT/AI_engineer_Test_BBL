@@ -37,32 +37,37 @@ def create_generator_node(llm, config: Dict[str, Any]):
                 "generation_attempts": state.get("generation_attempts", 0) + 1,
             }
             
-        context_text = "\n\n".join([f"Snippet from section {doc.get('chunk_id', 'unknown')}:\n{doc['content']}" for doc in documents])
+        context_text = "\n\n".join([f"<document id=\"{doc.get('chunk_id', 'unknown')}\">\n{doc['content']}\n</document>" for doc in documents])
         
-        # Token limit check
-        max_tokens = config["llm"]["max_tokens"]
+        # Context window limit check (use context_window capacity, not max output tokens)
+        context_window = config["llm"].get("context_window", 32000)
         total = count_tokens(system_prompt + context_text + query)
         
-        if total > max_tokens * 0.8:
+        if total > context_window * 0.85:
             logger.warning(f"Context too long ({total} tokens), truncating.")
-            # Approximation for max context tokens
-            max_context = int(max_tokens * 0.7)
+            max_context = int(context_window * 0.75)
             context_text = truncate_to_token_limit(context_text, max_context)
             
-        logger.info(f"Token usage: {total} tokens")
+        logger.info(f"Token usage: {total} tokens (context limit: {context_window})")
         
         # Retry logic: if we failed hallucination check previously, instruct to stick strictly
         extra_instruction = ""
         if state.get("generation_attempts", 0) > 0 and not state.get("is_grounded", True):
-            extra_instruction = "\n\nIMPORTANT: Stick strictly to the provided documents. Do not hallucinate."
+            extra_instruction = "\n\nIMPORTANT: Stick strictly to the provided documents. Do not hallucinate or extrapolate."
             
         # Explicit language directive
         is_thai = any('\u0e00' <= char <= '\u0e7f' for char in query)
         lang_directive = "Target Language: Thai (ตอบเป็นภาษาไทยทั้งหมด)" if is_thai else "Target Language: English (Write the entire response in English)"
         
+        user_prompt = (
+            f"{lang_directive}\n\n"
+            f"<documents>\n{context_text}\n</documents>\n\n"
+            f"<user_query>\n{query}\n</user_query>"
+        )
+        
         messages = [
             SystemMessage(content=system_prompt + extra_instruction),
-            HumanMessage(content=f"{lang_directive}\n\nDocuments:\n{context_text}\n\nQuestion: {query}")
+            HumanMessage(content=user_prompt)
         ]
         
         try:

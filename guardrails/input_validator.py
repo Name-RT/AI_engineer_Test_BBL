@@ -92,7 +92,7 @@ def create_input_validator_node(llm, search_tool, config: Dict[str, Any]):
         logger.info("Fast check failed or uncertain, falling back to LLM off-topic check.")
         messages = [
             SystemMessage(content=system_prompt),
-            HumanMessage(content=f"Query: {query}")
+            HumanMessage(content=f"<user_query>\n{query}\n</user_query>")
         ]
         
         try:

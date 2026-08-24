@@ -6,17 +6,17 @@
 
 ## ภาพรวมชุดการทดสอบ
 
-ชุดทดสอบพัฒนาโดยใช้ **Pytest** มีจำนวนการทดสอบทั้งหมด **57 Test Cases** ผ่าน 100% (Coverage ~80%) โดยใช้ Fixture และ Mocking ในการจำลอง LLM เพื่อให้รันได้อย่างรวดเร็วและเป็น Deterministic
+ชุดทดสอบพัฒนาโดยใช้ **Pytest** มีจำนวนการทดสอบทั้งหมด **61 Test Cases** ผ่าน 100% (Coverage ~76%) โดยใช้ Fixture และ Mocking ในการจำลอง LLM เพื่อให้รันได้อย่างรวดเร็วและเป็น Deterministic
 
 | ไฟล์ทดสอบ | จำนวนเทส | ขอบเขตการทดสอบ |
 |:---|:---:|:---|
 | [`tests/test_config.py`](tests/test_config.py) | 8 | การโหลด `config.yaml`, การสลับ LLM Provider (`deepseek`, `azure_apim`), การนับ/ตัด Token, 429 Rate Limit Retry |
-| [`tests/test_reranker.py`](tests/test_reranker.py) | 5 | Two-Stage Re-ranking ด้วย Cross-Encoder (`bge-reranker-v2-m3`), การแปลงคะแนน Sigmoid, Safe Fallback |
-| [`tests/test_search.py`](tests/test_search.py) | 8 | Vector Search (ChromaDB), TF-IDF Search, การขยายคำพ้องความหมาย (Synonyms), การตัดแบ่ง Chunks |
+| [`tests/test_reranker.py`](tests/test_reranker.py) | 6 | Two-Stage Re-ranking ด้วย Cross-Encoder (`bge-reranker-v2-m3`), Raw Logits Ordering, Level 1 Noise Filter, Safe Fallback |
+| [`tests/test_search.py`](tests/test_search.py) | 9 | Vector Search (ChromaDB), Hybrid Search (RRF), TF-IDF Search, การขยายคำพ้องความหมาย, การตัดแบ่ง Chunks |
 | [`tests/test_guardrails.py`](tests/test_guardrails.py) | 8 | Input Validation (ความยาว, Off-topic), Output Validation (Fact Groundedness, Hallucination) |
 | [`tests/test_security_guardrails.py`](tests/test_security_guardrails.py) | 25 | OWASP LLM Guardrails: PII Masking, Jailbreak, System Prompt Leakage, Code/SQL Injection, Rate Limiting |
-| [`tests/test_integration.py`](tests/test_integration.py) | 4 | การทำงานแบบ End-to-End ของ LangGraph StateGraph, ลูป Self-correction Query Rewriting |
-| **รวมทั้งหมด** | **58** | **Pass 100%** |
+| [`tests/test_integration.py`](tests/test_integration.py) | 5 | การทำงานแบบ End-to-End ของ LangGraph StateGraph, ลูป Self-correction, Max Attempts Fallback |
+| **รวมทั้งหมด** | **61** | **Pass 100%** |
 
 ---
 
@@ -26,7 +26,7 @@
 
 ทดสอบความถูกต้องของการโหลดค่าคอนฟิก, การสร้าง LLM client จาก Factory ตามตัวแปรสภาพแวดล้อม และฟังก์ชันจัดการ Token
 
-- **`test_load_config`**: ตรวจสอบว่า `config.yaml` ถูกโหลดขึ้นมาอย่างสมบูรณ์ และมีคีย์หลักครบถ้วน (`app`, `search`, `llm`)
+- **`test_load_config`**: ตรวจสอบว่า `config.yaml` ถูกโหลดขึ้นมาอย่างสมบูรณ์ และมีคีย์หลักครบถ้วน (`app`, `search`, `llm`, `guardrails`, `reranking`)
 - **`test_get_llm_invalid_provider`**: ตรวจสอบว่าระบบโยน `ValueError` ออกมาอย่างถูกต้องเมื่อระบุ Provider ที่ไม่รองรับ
 - **`test_get_llm_deepseek`**: ทดสอบการสร้าง Instance ของ `ChatDeepSeek` เมื่อตั้งค่า `LLM_PROVIDER=deepseek`
 - **`test_get_llm_azure_apim`**: ทดสอบการสร้าง Instance ของ Custom Wrapper `ChatAzureAPIM` เมื่อตั้งค่า `LLM_PROVIDER=azure_apim`
@@ -43,7 +43,8 @@
 
 - **`test_reranker_disabled_behavior`**: ตรวจสอบว่าเมื่อปิด Re-ranking (`enabled: false`) ระบบจะคืนผลลัพธ์จาก Stage 1 โดยตรง และไม่โหลดโมเดลเข้าหน่วยความจำ
 - **`test_reranker_scoring_reorders_chunks`**: ตรวจสอบว่า Cross-Encoder สามารถคำนวณคะแนนและสลับลำดับ Chunk ที่มีความเกี่ยวข้องสูงขึ้นมาเป็นอันดับ 1 ได้อย่างถูกต้อง
-- **`test_reranker_sigmoid_score_bounds`**: ตรวจสอบว่าคะแนนดิบ (Logits) จาก Cross-Encoder ถูกแปลงผ่านฟังก์ชัน Sigmoid ให้อยู่ในช่วง `[0.0, 1.0]` เสมอ
+- **`test_reranker_raw_logit_score_ordering`**: ตรวจสอบว่าคะแนนดิบ (Raw Logits) จาก Cross-Encoder เรียงลำดับถูกต้องตามความเกี่ยวข้อง
+- **`test_reranker_min_chunk_score_filtering`**: ตรวจสอบการกรอง Level 1 Noise Filter โดยตัด chunk ที่ได้ logit < 0.0 ทิ้งทันที
 - **`test_reranker_graceful_fallback_on_exception`**: ตรวจสอบว่าหากเกิดข้อผิดพลาด (เช่น GPU Out of Memory หรือ Network Error) ระบบจะไม่ Crash แต่จะ Fallback กลับไปใช้ผลลัพธ์จาก Stage 1
 - **`test_two_stage_search_end_to_end`**: ทดสอบการทำงานร่วมกันแบบ End-to-End ระหว่าง Stage 1 Candidate Retrieval และ Stage 2 Cross-Encoder Scoring
 
@@ -51,12 +52,17 @@
 
 ### 3. Information Retrieval & Search (`tests/test_search.py`)
 
-ทดสอบความแม่นยำของ Search Engine ทั้งแบบ Sparse (TF-IDF) และ Dense Vector (ChromaDB)
+ทดสอบความแม่นยำของ Search Engine ทั้งแบบ Sparse (TF-IDF), Dense Vector (ChromaDB) และ Hybrid Search (RRF)
 
 - **`test_tfidf_search_returns_relevant_chunks`**: ตรวจสอบว่าการค้นหาด้วยคีย์เวิร์ดสามารถดึง Chunk ที่มีเนื้อหาตรงกันกลับมาได้
 - **`test_tfidf_search_empty_query`**: ตรวจสอบ Edge Case เมื่อส่งข้อความค้นหาว่างเปล่า หรือมีเฉพาะช่องว่าง (Whitespace) ระบบต้องคืนค่าลิสต์ว่าง `[]`
 - **`test_tfidf_search_no_match`**: ตรวจสอบว่าเมื่อคะแนนความเกี่ยวข้องต่ำกว่าค่า Threshold ระบบจะไม่ส่ง Chunk ที่ไม่เกี่ยวข้องกลับไป
 - **`test_synonym_expansion`**: ตรวจสอบการขยายคำศัพท์ภาษาพูด เช่น "WFH" ต้องถูกแปลงเป็น "remote work" ก่อนนำไปค้นหา
+- **`test_search_respects_top_k`**: ตรวจสอบว่าผลลัพธ์การค้นหาถูกจำกัดจำนวนไว้ไม่เกินค่า `top_k`
+- **`test_search_scores_are_sorted`**: ตรวจสอบว่าผลการค้นหาถูกเรียงลำดับจากคะแนนสูงไปต่ำอย่างถูกต้อง
+- **`test_chunking_preserves_content`**: ตรวจสอบว่าการตัดแบ่ง Chunk ไม่ทำให้เนื้อหานโยบายขาดหาย
+- **`test_chroma_search_integration`**: ทดสอบการค้นหาผ่าน ChromaDB Dense Vector Search แบบ Offline ด้วย Mock Embeddings
+- **`test_hybrid_rrf_search_integration`**: ทดสอบการรวมผลการค้นหา Dense Vector + TF-IDF ด้วยอัลกอริทึม Reciprocal Rank Fusion (RRF)
 - **`test_search_respects_top_k`**: ตรวจสอบว่าจำนวนผลลัพธ์ที่คืนกลับมาไม่เกินค่า `top_k` ที่กำหนด
 - **`test_search_scores_are_sorted`**: ตรวจสอบว่าผลลัพธ์ถูกเรียงลำดับจากคะแนนความเกี่ยวข้องมากไปน้อย (Descending order)
 - **`test_chunking_preserves_content`**: ตรวจสอบว่าการตัดแบ่งเอกสาร `knowledge_base.txt` ตามส่วนหัว ไม่ทำให้เนื้อหาสำคัญสูญหาย
@@ -143,7 +149,7 @@
 
 ## การทดสอบวัดผลเชิงปริมาณ (Quantitative Benchmark)
 
-นอกเหนือจาก Unit/Integration Tests ระบบมีเครื่องมือรันการประเมินคุณภาพอัตโนมัติผ่าน [`evaluate.py`](file:///e:/Project/RAG_BBL/evaluate.py) โดยใช้ชุดข้อมูลมาตรฐาน [`evaluation/golden_dataset.json`](file:///e:/Project/RAG_BBL/evaluation/golden_dataset.json) (20 คำถาม ครอบคลุมคำถามยาก, คำถามภาษาพูด, และคำถาม Off-topic):
+นอกเหนือจาก Unit/Integration Tests ระบบมีเครื่องมือรันการประเมินคุณภาพอัตโนมัติผ่าน [`evaluate.py`](evaluate.py) โดยใช้ชุดข้อมูลมาตรฐาน [`evaluation/golden_dataset.json`](evaluation/golden_dataset.json) (20 คำถาม ครอบคลุมคำถามยาก, คำถามภาษาพูด, และคำถาม Off-topic):
 
 ### เกณฑ์การวัดผล (Metrics)
 1. **Context Retrieval Recall @ Top-K**: สัดส่วนที่ Retriever ดึงเอกสารหมวดหมู่ที่ถูกต้องกลับมาได้ (เกณฑ์ผ่าน $\ge 85\%$)
@@ -155,7 +161,7 @@
 
 ## คำสั่งสำหรับรันการทดสอบ
 
-### 1. รัน Unit & Integration Tests ทั้งหมด (57 Tests)
+### 1. รัน Unit & Integration Tests ทั้งหมด (59 Tests)
 ```bash
 python -m pytest tests/ -v --tb=short
 ```

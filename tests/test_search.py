@@ -67,3 +67,26 @@ def test_chroma_search_integration(sample_config, sample_knowledge_base, monkeyp
     assert "chunk_id" in results[0]
     assert "content" in results[0]
     assert "score" in results[0]
+
+def test_hybrid_rrf_search_integration(sample_config, sample_knowledge_base, monkeypatch):
+    sample_config["search"]["mode"] = "hybrid"
+    sample_config["search"]["knowledge_base_path"] = str(sample_knowledge_base)
+    sample_config["search"]["similarity_threshold"] = 0.0
+    
+    class FastMockEmbeddings:
+        def embed_documents(self, texts):
+            return [[float(i % 4 + 1) for i in range(8)] for _ in texts]
+        def embed_query(self, text):
+            return [float(i % 4 + 1) for i in range(8)]
+            
+    import config.settings
+    monkeypatch.setattr(config.settings, "get_embeddings", lambda: FastMockEmbeddings())
+    
+    tool = KnowledgeBaseSearchTool(sample_config)
+    assert tool.embed_matrix is not None
+    
+    results = tool.search("travel policy", top_k=2)
+    assert len(results) > 0
+    assert "chunk_id" in results[0]
+    assert "content" in results[0]
+    assert "rrf_score" in results[0]

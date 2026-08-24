@@ -32,7 +32,8 @@ reranking:
 # === LLM Settings ===
 llm:
   temperature: 0.3
-  max_tokens: 2048
+  max_tokens: 4096      # Maximum output completion tokens
+  context_window: 32000 # Maximum input context window capacity
   max_retries: 3
   retry_delay: 1        # seconds
 

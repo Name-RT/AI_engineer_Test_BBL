@@ -296,8 +296,10 @@ def query_rag_pipeline(user_query: str):
         "<p style='color:#64748B; font-size:13px; margin:4px 0;'>⏳ กำลังค้นหาเอกสารอ้างอิง...</p>"
     )
 
+    session_client_id = f"gradio_session_{abs(hash(user_query.strip())) % 10000}"
     initial_state = {
         "query": user_query.strip(),
+        "client_id": session_client_id,
         "expanded_query": "",
         "is_valid": True,
         "rejection_reason": "",

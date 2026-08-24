@@ -12,6 +12,7 @@ class AgentState(TypedDict, total=False):
     """
     # === Input Field ===
     query: str                          # Original user query string
+    client_id: str                      # Unique client/session identifier for rate limiting
     
     # === Intermediate Processing & Routing Fields ===
     expanded_query: str                 # Query after synonym expansion or LLM rewriting

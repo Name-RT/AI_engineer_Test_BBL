@@ -168,13 +168,13 @@ class AgentState(TypedDict, total=False):
 ## 8. การทดสอบและการวัดผล
 
 ### 8.1 การทดสอบอัตโนมัติ (Pytest)
-มีชุดทดสอบทั้งหมด **57 Test Cases** ในไดเรกทอรี `tests/` รันแบบ Offline โดย Mock การเรียกใช้งาน LLM:
-- `test_config.py` (7 tests): โหลดค่าคอนฟิก, สลับ Provider, จัดการ Token, Mock APIM
-- `test_reranker.py` (5 tests): Two-stage scoring, Sigmoid normalization, Fallback
-- `test_search.py` (8 tests): TF-IDF, ChromaDB, Synonym Expansion, Chunking
+มีชุดทดสอบทั้งหมด **61 Test Cases** ในไดเรกทอรี `tests/` รันแบบ Offline โดย Mock การเรียกใช้งาน LLM:
+- `test_config.py` (8 tests): โหลดค่าคอนฟิก, สลับ Provider, จัดการ Token, Mock APIM
+- `test_reranker.py` (6 tests): Two-stage scoring, Raw Logits, Level 1 Noise filter, Fallback
+- `test_search.py` (9 tests): TF-IDF, ChromaDB, Hybrid RRF, Synonym Expansion, Chunking
 - `test_guardrails.py` (8 tests): Input bounds, Off-topic detection, Fact-checking
 - `test_security_guardrails.py` (25 tests): PII, Jailbreak, Injection, Rate Limiter
-- `test_integration.py` (4 tests): StateGraph Workflow ทั้งหมด
+- `test_integration.py` (5 tests): StateGraph Workflow ทั้งหมด, Fallback on Max Attempts
 
 ### 8.2 การวัดผลเชิงปริมาณ (`evaluate.py`)
 ทดสอบกับชุดข้อมูลมาตรฐาน `evaluation/golden_dataset.json` จำนวน 20 คำถาม:
@@ -188,7 +188,7 @@ class AgentState(TypedDict, total=False):
 ## 9. โครงสร้างโปรเจกต์
 
 ```text
-RAG_BBL/
+AI_engineer_Test_BBL/
 ├── main.py                             # จุดเริ่มต้นโปรแกรม CLI
 ├── gradio_app.py                       # Web UI (Gradio, port 7861)
 ├── evaluate.py                         # สคริปต์รัน Benchmark
@@ -228,7 +228,7 @@ RAG_BBL/
 │   ├── evaluation_report.json          # รายงานผลการประเมิน
 │   └── metrics.py                      # ตัวคำนวณคะแนน
 │
-└── tests/                              # ชุดทดสอบ Pytest 57 ข้อ
+└── tests/                              # ชุดทดสอบ Pytest 61 ข้อ
     ├── conftest.py
     ├── test_config.py
     ├── test_reranker.py

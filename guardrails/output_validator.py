@@ -78,8 +78,15 @@ def create_output_validator_node(llm, config: Dict[str, Any]):
             answer = response.content.strip().lower()
             logger.info(f"Hallucination check response: {answer}")
             
-            # Robust affirmative checking
-            if "yes" in answer or answer.startswith("y") or "faithful" in answer or "supported" in answer:
+            # Strict affirmative checking (prevent false positives like 'not supported' or 'unfaithful')
+            is_affirmative = (
+                answer.startswith("yes") or 
+                answer == "y" or 
+                answer.startswith("true") or 
+                ("yes" in answer and "no" not in answer and "not" not in answer) or
+                (("faithful" in answer or "supported" in answer) and "not" not in answer and "unfaithful" not in answer and "unsupported" not in answer and "no" not in answer)
+            )
+            if is_affirmative:
                 logger.info("Report is grounded.")
                 sanitized_report = security_shield.sanitize_output(report)
                 return {"is_grounded": True, "final_answer": sanitized_report}

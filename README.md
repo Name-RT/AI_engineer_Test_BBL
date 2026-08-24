@@ -1,8 +1,8 @@
 # AI ENGINEER TEST | AI Policy Assistant
 
-[![CI / Automated Testing](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml/badge.svg)](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml)
-[![Tests Passing](https://img.shields.io/badge/tests-59%2F59%20passing-brightgreen.svg)](tests/)
-[![Coverage](https://img.shields.io/badge/coverage-75%25-brightgreen.svg)](tests/)
+[![CI / Automated Testing](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml/badge.svg)](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml)
+[![Tests Passing](https://img.shields.io/badge/tests-61%2F61%20passing-brightgreen.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-76%25-brightgreen.svg)](tests/)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Docker Ready](https://img.shields.io/badge/docker-ready-2496ED.svg)](docker-compose.yml)
 
@@ -85,7 +85,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 | **Re-ranking** | ![BGE Reranker](https://img.shields.io/badge/BGE_Reranker-v2_M3-0055FF?style=flat-square&logo=huggingface&logoColor=white) | `BAAI/bge-reranker-v2-m3` Cross-Encoder |
 | **Retrieval** | ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white) | TF-IDF + dense vectors + RRF |
 | **Security** | ![OWASP](https://img.shields.io/badge/OWASP-LLM_Top_10-000000?style=flat-square&logo=owasp&logoColor=white) | PII masking, jailbreak guard, rate limiter |
-| **Testing** | ![Pytest](https://img.shields.io/badge/Pytest-59_Tests-0A9EDC?style=flat-square&logo=pytest&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=flat-square&logo=githubactions&logoColor=white) | 59 tests, ~75% coverage |
+| **Testing** | ![Pytest](https://img.shields.io/badge/Pytest-61_Tests-0A9EDC?style=flat-square&logo=pytest&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=flat-square&logo=githubactions&logoColor=white) | 61 tests, ~79% coverage |
 | **UI / Deploy** | ![Gradio](https://img.shields.io/badge/Gradio-FF7C00?style=flat-square&logo=gradio&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) | Dark theme UI + Docker Compose |
 
 ---
@@ -159,15 +159,15 @@ Full results exported to [`evaluation/evaluation_report.json`](evaluation/evalua
 python -m pytest tests/ -v --cov=agents --cov=tools --cov=guardrails --cov=config --cov-report=term-missing --tb=short
 ```
 
-**58/58 passing:**
+**61/61 passing:**
 
 | File | Count | Covers |
 |:---|:---:|:---|
 | `test_config.py` | 8 | Config loading, DeepSeek/Azure APIM provider switching, 429 retry, token utils |
-| `test_reranker.py` | 5 | Two-stage re-ranking, sigmoid scores, fallback on error |
+| `test_reranker.py` | 6 | Two-stage re-ranking, raw logit scores, noise filtering, fallback on error |
 | `test_guardrails.py` | 8 | Query length checks, off-topic detection, hallucination guard |
-| `test_integration.py` | 4 | End-to-end StateGraph flow, query rewrite loops |
-| `test_search.py` | 8 | ChromaDB search, TF-IDF, synonym expansion, Top-K ordering |
+| `test_integration.py` | 5 | End-to-end StateGraph flow, query rewrite loops, max retry fallback |
+| `test_search.py` | 9 | ChromaDB search, TF-IDF, Hybrid RRF fusion, synonym expansion, Top-K ordering |
 | `test_security_guardrails.py` | 25 | PII masking, jailbreak, prompt leakage, injection, rate limiting |
 
 See [`TESTING.md`](TESTING.md) for detailed documentation on all test cases and scenarios.
@@ -183,7 +183,7 @@ AI_engineer_Test_BBL/
 ├── evaluate.py                         # Benchmark runner
 ├── config.yaml                         # All settings (thresholds, models, reranker, security)
 ├── knowledge_base.txt                  # Policy document (15 sections)
-├── TESTING.md                          # Test suite documentation (57 test cases)
+├── TESTING.md                          # Test suite documentation (59 test cases)
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
@@ -217,7 +217,7 @@ AI_engineer_Test_BBL/
 │   ├── evaluation_report.json
 │   └── metrics.py
 │
-├── tests/                              # 57 tests, ~80% coverage
+├── tests/                              # 61 tests, ~79% coverage
 │   ├── conftest.py
 │   ├── test_config.py
 │   ├── test_reranker.py

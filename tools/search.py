@@ -4,6 +4,7 @@ tools/search.py — RAG Search & Two-Stage Information Retrieval Engine
 import os
 import math
 import logging
+import hashlib
 from typing import List, Dict, Any, Optional
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -39,15 +40,15 @@ class KnowledgeBaseSearchTool:
     Two-Stage Information Retrieval & Re-ranking Engine for Knowledge Base text files.
     
     Features:
-    - Paragraph-aware chunking with sentence boundary fallback.
-    - Synonym normalization for common colloquialisms (e.g. WFH -> remote work).
+    - Paragraph-aware chunking with sliding-window overlap support.
+    - Synonym expansion for common colloquialisms (e.g. WFH -> remote work).
     - Stage 1: Candidate Retrieval (High Recall):
       1. 'chroma': Persistent dense semantic vector search via ChromaDB (multilingual-e5-small).
       2. 'tfidf': Lexical TF-IDF cosine similarity using scikit-learn.
       3. 'hybrid': Dense embedding + TF-IDF with Reciprocal Rank Fusion (RRF).
     - Stage 2: Semantic Re-ranking (High Precision):
       - Cross-Encoder model (BAAI/bge-reranker-v2-m3) with full cross-attention.
-      - Sigmoid normalization of logit scores for clean 0.0 - 1.0 confidence metrics.
+      - Raw Cross-Encoder logit scoring with Level 1 noise filtering (min_chunk_score).
     """
     def __init__(self, config: Dict[str, Any]):
         """
@@ -58,7 +59,8 @@ class KnowledgeBaseSearchTool:
         """
         self.config = config
         self.mode = config["search"]["mode"]
-        self.chunk_size = config["search"]["chunk_size"]
+        self.chunk_size = config["search"].get("chunk_size", 500)
+        self.chunk_overlap = config["search"].get("chunk_overlap", 50)
         self.threshold = config["search"]["similarity_threshold"]
         self.chunks = []
         self.embeddings = None
@@ -85,24 +87,35 @@ class KnowledgeBaseSearchTool:
             logger.error(f"Failed to read knowledge base at {kb_path}: {e}")
             return
             
-        # Paragraph-aware chunking
-        raw_chunks = [c.strip() for c in content.split("\n\n") if c.strip()]
+        content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        
+        # Paragraph and overlap aware chunking
+        raw_sections = [c.strip() for c in content.split("\n\n") if c.strip()]
         self.chunks = []
-        for i, chunk in enumerate(raw_chunks):
-            if len(chunk) > self.chunk_size:
-                # Naive sentence split if too long
-                sentences = chunk.split(". ")
-                temp = ""
-                for s in sentences:
-                    if len(temp) + len(s) > self.chunk_size and temp:
-                        self.chunks.append({"id": len(self.chunks), "content": temp.strip()})
-                        temp = s + ". "
-                    else:
-                        temp += s + ". "
-                if temp:
-                    self.chunks.append({"id": len(self.chunks), "content": temp.strip()})
+        step_size = max(100, self.chunk_size - self.chunk_overlap)
+        
+        for section in raw_sections:
+            if len(section) <= self.chunk_size:
+                self.chunks.append({"id": len(self.chunks), "content": section})
             else:
-                self.chunks.append({"id": len(self.chunks), "content": chunk})
+                # Extract header if present (e.g. === Section X: Name ===)
+                header = ""
+                body = section
+                if section.startswith("===") and "===" in section[3:]:
+                    parts = section.split("===", 2)
+                    if len(parts) >= 3:
+                        header = f"==={parts[1]}===\n"
+                        body = parts[2].strip()
+                
+                # Sliding window chunking
+                start = 0
+                while start < len(body):
+                    end = min(start + self.chunk_size, len(body))
+                    chunk_text = (header + body[start:end]).strip() if header else body[start:end].strip()
+                    self.chunks.append({"id": len(self.chunks), "content": chunk_text})
+                    if end >= len(body):
+                        break
+                    start += step_size
                 
         # TF-IDF Setup
         if not self.chunks:
@@ -129,7 +142,10 @@ class KnowledgeBaseSearchTool:
                 
         if self.mode == "hybrid" and self.embeddings is not None:
             try:
-                self.embed_matrix = self.embeddings.embed_documents(texts)
+                emb_model_name = self.config.get("embedding", {}).get("model_name", "")
+                is_e5 = "e5" in emb_model_name.lower()
+                doc_texts = [f"passage: {t}" for t in texts] if is_e5 else texts
+                self.embed_matrix = self.embeddings.embed_documents(doc_texts)
             except Exception as e:
                 logger.error(f"Failed to pre-compute embed matrix for hybrid search: {e}")
                 self.mode = "tfidf"
@@ -150,9 +166,20 @@ class KnowledgeBaseSearchTool:
                     metadata={"hnsw:space": "cosine"}
                 )
                 
-                # Ingest chunks if collection count does not match current chunk count
-                if self.collection.count() != len(self.chunks) and len(self.chunks) > 0:
-                    logger.info(f"Ingesting {len(self.chunks)} chunks into ChromaDB '{collection_name}'...")
+                # Check cache validity via hash file
+                hash_file = os.path.join(persist_dir, f".{collection_name}_hash")
+                cached_hash = ""
+                if os.path.exists(hash_file):
+                    try:
+                        with open(hash_file, "r", encoding="utf-8") as hf:
+                            cached_hash = hf.read().strip()
+                    except Exception:
+                        pass
+                
+                needs_reindex = (self.collection.count() != len(self.chunks)) or (cached_hash != content_hash)
+                
+                if needs_reindex and len(self.chunks) > 0:
+                    logger.info(f"Re-indexing {len(self.chunks)} chunks into ChromaDB '{collection_name}' (content changed)...")
                     existing = self.collection.get()
                     if existing and existing.get("ids"):
                         self.collection.delete(ids=existing["ids"])
@@ -160,7 +187,11 @@ class KnowledgeBaseSearchTool:
                     ids = [f"chunk_{c['id']}" for c in self.chunks]
                     documents = [c["content"] for c in self.chunks]
                     metadatas = [{"chunk_id": c["id"]} for c in self.chunks]
-                    embeddings_list = self.embeddings.embed_documents(documents)
+                    
+                    emb_model_name = self.config.get("embedding", {}).get("model_name", "")
+                    is_e5 = "e5" in emb_model_name.lower()
+                    doc_texts = [f"passage: {doc}" for doc in documents] if is_e5 else documents
+                    embeddings_list = self.embeddings.embed_documents(doc_texts)
                     
                     self.collection.add(
                         ids=ids,
@@ -168,6 +199,11 @@ class KnowledgeBaseSearchTool:
                         metadatas=metadatas,
                         embeddings=embeddings_list
                     )
+                    try:
+                        with open(hash_file, "w", encoding="utf-8") as hf:
+                            hf.write(content_hash)
+                    except Exception:
+                        pass
                     logger.info("ChromaDB vector ingestion successfully completed.")
             except Exception as e:
                 logger.error(f"Failed to initialize ChromaDB: {e}")
@@ -226,7 +262,11 @@ class KnowledgeBaseSearchTool:
             q_vec_tfidf = self.vectorizer.transform([expanded_query])
             tfidf_scores = cosine_similarity(q_vec_tfidf, self.tfidf_matrix).flatten()
             
-            q_vec_emb = self.embeddings.embed_query(expanded_query)
+            emb_model_name = self.config.get("embedding", {}).get("model_name", "")
+            is_e5 = "e5" in emb_model_name.lower()
+            e5_query = f"query: {expanded_query}" if is_e5 else expanded_query
+            
+            q_vec_emb = self.embeddings.embed_query(e5_query)
             embed_scores = cosine_similarity([q_vec_emb], self.embed_matrix).flatten()
             
             def normalize(scores):
@@ -256,7 +296,11 @@ class KnowledgeBaseSearchTool:
             return results[:top_k]
             
         elif self.mode == "chroma" and self.collection is not None:
-            q_vec_emb = self.embeddings.embed_query(expanded_query)
+            emb_model_name = self.config.get("embedding", {}).get("model_name", "")
+            is_e5 = "e5" in emb_model_name.lower()
+            e5_query = f"query: {expanded_query}" if is_e5 else expanded_query
+            
+            q_vec_emb = self.embeddings.embed_query(e5_query)
             query_results = self.collection.query(
                 query_embeddings=[q_vec_emb],
                 n_results=min(top_k, len(self.chunks)),

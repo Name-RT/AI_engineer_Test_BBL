@@ -82,3 +82,18 @@ def test_query_rewrite_on_low_confidence(test_graph, mock_llm):
     
     assert result.get("expanded_query", "") != ""
     assert result["retrieval_attempts"] > 1
+
+def test_max_attempts_fallback_execution(test_graph, mock_llm):
+    # Setup mock to fail hallucination check repeatedly (answering 'no')
+    mock_llm.responses = ["Hallucinated report 1", "no", "Hallucinated report 2", "no", "Hallucinated report 3", "no"]
+    
+    state = {
+        "query": "travel policy",
+        "retrieval_attempts": 0,
+        "generation_attempts": 0
+    }
+    
+    result = test_graph.invoke(state, config={"configurable": {"thread_id": "test5"}})
+    
+    assert result["generation_attempts"] >= 2
+    assert "raw snippets" in result["final_answer"].lower() or "unable to generate" in result["final_answer"].lower()
