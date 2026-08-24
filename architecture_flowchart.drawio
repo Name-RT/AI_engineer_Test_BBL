@@ -34,12 +34,12 @@
         </mxCell>
 
         <!-- Node 4: Two-Stage Retriever Agent -->
-        <mxCell id="n_retriever" value="3. Two-Stage Retriever Agent&#xa;&#xa;Stage 1: Candidate Search (Top-10)&#xa;   • ChromaDB Dense (multilingual-e5-small) + TF-IDF with RRF (threshold: 0.15)&#xa;&#xa;Stage 2: Cross-Encoder Re-ranking (Top-5)&#xa;   • BAAI/bge-reranker-v2-m3 with Calibrated Sigmoid Scoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064E3B;strokeColor=#10B981;fontColor=#D1FAE5;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+        <mxCell id="n_retriever" value="3. Two-Stage Retriever Agent&#xa;&#xa;Stage 1: Candidate Search (Top-10)&#xa;   • ChromaDB Dense (multilingual-e5-small) + TF-IDF with RRF&#xa;&#xa;Stage 2: Cross-Encoder Re-ranking (Top-5)&#xa;   • BAAI/bge-reranker-v2-m3 with Level 1 Noise Filter (score &gt;= 0.0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064E3B;strokeColor=#10B981;fontColor=#D1FAE5;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
           <mxGeometry x="250" y="310" width="500" height="130" as="geometry" />
         </mxCell>
 
-        <!-- Decision: Confidence Check -->
-        <mxCell id="n_conf" value="Confidence&#xa;&gt;= 0.50 ?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#854D0E;strokeColor=#EAB308;fontColor=#FEF08A;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+        <!-- Decision: Relevance Score Check -->
+        <mxCell id="n_conf" value="Relevance Score&#xa;&gt;= 0.15 ?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#854D0E;strokeColor=#EAB308;fontColor=#FEF08A;fontSize=11;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="420" y="475" width="160" height="75" as="geometry" />
         </mxCell>
 
@@ -91,7 +91,7 @@
         <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=2;" edge="1" parent="1" source="n_retriever" target="n_conf">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_low_conf" value="Low Conf (&lt; 0.50)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=2;fontColor=#FBBF24;fontSize=10;" edge="1" parent="1" source="n_conf" target="n_rewriter">
+        <mxCell id="e_low_conf" value="Low Score (&lt; 0.15)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=2;fontColor=#FBBF24;fontSize=10;" edge="1" parent="1" source="n_conf" target="n_rewriter">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e_rewrite_loop" value="Retry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D946EF;strokeWidth=2;strokeDasharray=4;fontColor=#E879F9;fontSize=10;" edge="1" parent="1" source="n_rewriter" target="n_retriever">
@@ -101,7 +101,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e_high_conf" value="&gt;= 0.50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#10B981;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="1" source="n_conf" target="n_gen">
+        <mxCell id="e_high_conf" value="&gt;= 0.15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#10B981;strokeWidth=2;fontColor=#34D399;fontSize=10;" edge="1" parent="1" source="n_conf" target="n_gen">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=2;" edge="1" parent="1" source="n_gen" target="n_outval">

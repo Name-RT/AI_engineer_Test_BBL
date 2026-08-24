@@ -1,8 +1,8 @@
 # AI ENGINEER TEST | AI Policy Assistant
 
 [![CI / Automated Testing](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml/badge.svg)](https://github.com/bangkokbank/rag-bbl/actions/workflows/ci.yml)
-[![Tests Passing](https://img.shields.io/badge/tests-58%2F58%20passing-brightgreen.svg)](tests/)
-[![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen.svg)](tests/)
+[![Tests Passing](https://img.shields.io/badge/tests-59%2F59%20passing-brightgreen.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-75%25-brightgreen.svg)](tests/)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Docker Ready](https://img.shields.io/badge/docker-ready-2496ED.svg)](docker-compose.yml)
 
@@ -35,6 +35,27 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
   <br/>
   <em>RAG Pipeline Flowchart — Editable via <code>architecture_flowchart.drawio</code> in <a href="https://app.diagrams.net">draw.io</a></em>
 </p>
+
+```mermaid
+graph TD
+    START([User Query]) --> IV[1. Input Validator & Security Shield]
+    IV --> |Threat / Off-Topic| RR[2. Rejection Response]
+    RR --> END_REJECT([Rejected Output])
+    
+    IV --> |Valid Query| RET[3. Two-Stage Retriever Agent]
+    RET --> RC{Relevance Score<br/>>= 0.15 ?}
+    
+    RC --> |"< 0.15 & Retries < 3"| QR[4. Query Rewriter]
+    QR --> |Rewritten Query| RET
+    
+    RC --> |">= 0.15"| GEN[5. Report Generator Agent]
+    GEN --> OV[6. Output Validator<br/>Factuality Check]
+    
+    OV --> |Passed| END_SUCCESS([Final Structured Answer])
+    OV --> |"Hallucinated & Retries < 2"| GEN
+    OV --> |"Max Retries Exceeded"| FB[7. Raw Excerpts Fallback]
+    FB --> END_FALLBACK([Fallback Output])
+```
 
 ---
 
@@ -85,7 +106,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 | **Re-ranking** | ![BGE Reranker](https://img.shields.io/badge/BGE_Reranker-v2_M3-0055FF?style=flat-square&logo=huggingface&logoColor=white) | `BAAI/bge-reranker-v2-m3` Cross-Encoder |
 | **Retrieval** | ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white) | TF-IDF + dense vectors + RRF |
 | **Security** | ![OWASP](https://img.shields.io/badge/OWASP-LLM_Top_10-000000?style=flat-square&logo=owasp&logoColor=white) | PII masking, jailbreak guard, rate limiter |
-| **Testing** | ![Pytest](https://img.shields.io/badge/Pytest-57_Tests-0A9EDC?style=flat-square&logo=pytest&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=flat-square&logo=githubactions&logoColor=white) | 57 tests, ~80% coverage |
+| **Testing** | ![Pytest](https://img.shields.io/badge/Pytest-59_Tests-0A9EDC?style=flat-square&logo=pytest&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=flat-square&logo=githubactions&logoColor=white) | 59 tests, ~75% coverage |
 | **UI / Deploy** | ![Gradio](https://img.shields.io/badge/Gradio-FF7C00?style=flat-square&logo=gradio&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) | Dark theme UI + Docker Compose |
 
 ---

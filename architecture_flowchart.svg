@@ -93,22 +93,22 @@
     <text x="20" y="52" fill="#D1FAE5" font-size="11.5" font-weight="600">Stage 1: Candidate Search (Top-10)</text>
     <text x="35" y="72" fill="#A7F3D0" font-size="11">• ChromaDB Dense (multilingual-e5-small) + TF-IDF with RRF (threshold: 0.15)</text>
     <text x="20" y="94" fill="#D1FAE5" font-size="11.5" font-weight="600">Stage 2: Cross-Encoder Re-ranking (Top-5)</text>
-    <text x="35" y="114" fill="#A7F3D0" font-size="11">• BAAI/bge-reranker-v2-m3 with Calibrated Sigmoid Scoring</text>
+    <text x="35" y="114" fill="#A7F3D0" font-size="11">• BAAI/bge-reranker-v2-m3 with Level 1 Noise Filter (score &gt;= 0.0)</text>
   </g>
 
   <!-- Arrow Retriever -> Decision Diamond -->
   <path d="M525, 455 L525, 485" stroke="#38BDF8" stroke-width="2.5" marker-end="url(#arrowBlue)" />
 
-  <!-- Decision Diamond: Confidence >= 0.50 -->
+  <!-- Decision Diamond: Relevance Score >= 0.15 -->
   <g transform="translate(435, 485)">
     <polygon points="90,0 180,40 90,80 0,40" fill="#854D0E" stroke="#EAB308" stroke-width="2" filter="url(#dropShadow)" />
-    <text x="90" y="36" fill="#FEF08A" font-size="12" font-weight="700" text-anchor="middle">Confidence</text>
-    <text x="90" y="52" fill="#FEF08A" font-size="11" text-anchor="middle">&gt;= 0.50 ?</text>
+    <text x="90" y="36" fill="#FEF08A" font-size="12" font-weight="700" text-anchor="middle">Relevance</text>
+    <text x="90" y="52" fill="#FEF08A" font-size="11" text-anchor="middle">&gt;= 0.15 ?</text>
   </g>
 
-  <!-- Arrow Decision -> Query Rewriter (Low Confidence) -->
+  <!-- Arrow Decision -> Query Rewriter (Low Score) -->
   <path d="M435, 525 L285, 525" stroke="#F59E0B" stroke-width="2" marker-end="url(#arrowYellow)" />
-  <text x="355" y="515" fill="#FBBF24" font-size="10" text-anchor="middle" font-weight="600">&lt; 0.50 &amp; Retries &lt; 2</text>
+  <text x="355" y="515" fill="#FBBF24" font-size="10" text-anchor="middle" font-weight="600">&lt; 0.15 &amp; Retries &lt; 3</text>
 
   <!-- Node 5: Query Rewriter Agent -->
   <g transform="translate(60, 495)">
@@ -121,9 +121,9 @@
   <path d="M170, 495 L170, 387 L240, 387" fill="none" stroke="#D946EF" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowPurple)" />
   <text x="195" y="375" fill="#E879F9" font-size="10" text-anchor="middle" font-weight="600">Retry Search</text>
 
-  <!-- Arrow Decision -> Report Generator (High Confidence) -->
+  <!-- Arrow Decision -> Report Generator (High Score) -->
   <path d="M525, 565 L525, 595" stroke="#10B981" stroke-width="2.5" marker-end="url(#arrowGreen)" />
-  <text x="605" y="583" fill="#34D399" font-size="10.5" font-weight="600">&gt;= 0.50</text>
+  <text x="605" y="583" fill="#34D399" font-size="10.5" font-weight="600">&gt;= 0.15</text>
 
   <!-- Node 6: Report Generator Agent -->
   <g transform="translate(245, 595)">
