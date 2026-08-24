@@ -368,13 +368,13 @@ def query_rag_pipeline(user_query: str) -> Tuple[str, str, str]:
 
 
 # ── Clean UI Layout ───────────────────────────────────────────────────────────
-with gr.Blocks(title="Bangkok Bank AI Policy Assistant") as demo:
+with gr.Blocks(title="AI ENGINEER TEST | AI Policy Assistant") as demo:
 
     # 1. Compact Header
     gr.HTML("""
     <div class="app-header">
         <div>
-            <h1>🏦 Bangkok Bank <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
+            <h1>🏦 AI ENGINEER TEST <span style="font-weight:400; font-size:16px; color:#94A3B8;">| AI Policy Assistant</span></h1>
             <p>ระบบสืบค้นและสังเคราะห์ระเบียบนโยบายองค์กร (Enterprise Multi-Agent RAG)</p>
         </div>
         <span class="header-badge">Gradio Edition</span>
@@ -419,7 +419,7 @@ with gr.Blocks(title="Bangkok Bank AI Policy Assistant") as demo:
     # 7. Footer
     gr.HTML("""
     <div class="app-footer">
-        Bangkok Bank PCL · Enterprise AI Policy Assistant · Powered by LangGraph & DeepSeek
+        Bangkok Bank AI ENGINEER TEST· AI Policy Assistant · Powered by LangGraph & DeepSeek
     </div>
     """)
 
