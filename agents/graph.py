@@ -75,13 +75,16 @@ def create_graph(config: Dict[str, Any]):
     def route_confidence(state: AgentState) -> str:
         threshold = config["guardrails"]["confidence_threshold"]
         max_attempts = config["llm"]["max_retries"]
+        confidence = state.get("retrieval_confidence", 0.0)
         
-        if state.get("retrieval_confidence", 0.0) >= threshold:
+        if confidence >= threshold:
             return "generator"
         elif state.get("retrieval_attempts", 0) < max_attempts:
             return "query_rewriter"
-        else:
+        elif confidence > 0.20:
             return "generator"
+        else:
+            return "rejection_response"
             
     def route_output_validation(state: AgentState) -> str:
         if state.get("is_grounded", False):
@@ -110,7 +113,8 @@ def create_graph(config: Dict[str, Any]):
         route_confidence,
         {
             "generator": "generator",
-            "query_rewriter": "query_rewriter"
+            "query_rewriter": "query_rewriter",
+            "rejection_response": "rejection_response"
         }
     )
     

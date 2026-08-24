@@ -96,40 +96,58 @@ def create_rejection_response_node(config: Dict[str, Any]):
     """
     def rejection_response_node(state: AgentState) -> dict:
         reason = state.get("rejection_reason", "")
+        query = state.get("query", "")
         max_length = config["guardrails"]["max_query_length"]
+        is_thai = any('\u0e00' <= char <= '\u0e7f' for char in query)
         
-        logger.info(f"Generating rejection response for reason: {reason}")
+        logger.info(f"Generating rejection response for reason: '{reason}', query: '{query}'")
         
         # 1. Security Violations (OWASP LLM Defense)
         if "jailbreak" in reason.lower() or "prompt injection" in reason.lower():
             message = ("⚠️ ขออภัย ระบบตรวจพบรูปแบบคำสั่งที่ไม่ได้รับอนุญาต (Prompt Injection / Jailbreak) "
-                       "กรุณาสอบถามข้อมูลเกี่ยวกับระเบียบนโยบายของธนาคารตามปกติครับ")
+                       "กรุณาสอบถามข้อมูลเกี่ยวกับระเบียบนโยบายของธนาคารตามปกติครับ" if is_thai else
+                       "⚠️ Security Warning: Unauthorized prompt injection or jailbreak attempt detected.")
         elif "system prompt" in reason.lower():
             message = ("🔒 ขออภัย ข้อมูลคำสั่งภายในระบบ (System Prompt) เป็นความลับของระบบ "
-                       "คุณสามารถสอบถามข้อมูลระเบียบนโยบายด้าน HR/IT ขององค์กรได้โดยตรงครับ")
+                       "คุณสามารถสอบถามข้อมูลระเบียบนโยบายด้าน HR/IT ขององค์กรได้โดยตรงครับ" if is_thai else
+                       "🔒 System instructions are confidential. Please ask about HR/IT policies.")
         elif "rate limit" in reason.lower():
             message = ("⏱️ มีการส่งคำถามถี่เกินกำหนด (Rate Limit Exceeded) "
-                       "กรุณารอสักครู่แล้วลองส่งคำถามใหม่อีกครั้งครับ")
+                       "กรุณารอสักครู่แล้วลองส่งคำถามใหม่อีกครั้งครับ" if is_thai else
+                       "⏱️ Rate limit exceeded. Please wait a moment and try again.")
         elif "profanity" in reason.lower() or "toxic" in reason.lower():
-            message = ("🚫 ขออภัย ระบบตรวจพบข้อความที่ไม่สุภาพ กรุณาใช้คำถามที่สุภาพในการสอบถามข้อมูลครับ")
+            message = ("🚫 ขออภัย ระบบตรวจพบข้อความที่ไม่สุภาพ กรุณาใช้คำถามที่สุภาพในการสอบถามข้อมูลครับ" if is_thai else
+                       "🚫 Please use professional language when querying policy documents.")
         elif "code" in reason.lower() or "sql" in reason.lower():
-            message = ("🛡️ ขออภัย ระบบตรวจพบคำสั่งที่มีความเสี่ยงด้านความปลอดภัย (Code/SQL Injection)")
+            message = ("🛡️ ขออภัย ระบบตรวจพบคำสั่งที่มีความเสี่ยงด้านความปลอดภัย (Code/SQL Injection)" if is_thai else
+                       "🛡️ Security Warning: Potential code or SQL injection detected.")
             
         # 2. Scope & Guardrail Violations
         elif "off-topic" in reason.lower():
-            message = ("I'm sorry, but your question appears to be outside the scope "
-                       "of our company knowledge base. I can only answer questions "
-                       "related to company policies, HR, IT security, travel, expenses, "
-                       "leave, and workplace guidelines. Please try rephrasing your "
-                       "question or ask about a specific company policy.")
+            if is_thai:
+                message = ("ขออภัย คำถามของคุณอยู่นอกเหนือขอบเขตของคลังข้อมูลนโยบายองค์กร "
+                           "ระบบสามารถตอบได้เฉพาะเรื่องนโยบายบริษัท, HR, ความปลอดภัย IT, การเดินทาง, การเบิกค่าใช้จ่าย, การลา และแนวปฏิบัติต่างๆ เท่านั้นครับ")
+            else:
+                message = ("I'm sorry, but your question appears to be outside the scope "
+                           "of our company knowledge base. I can only answer questions "
+                           "related to company policies, HR, IT security, travel, expenses, "
+                           "leave, and workplace guidelines. Please try rephrasing your "
+                           "question or ask about a specific company policy.")
         elif "empty" in reason.lower():
-            message = "Please provide a question. Your query cannot be empty."
+            message = "กรุณาระบุคำถามของคุณ คำถามต้องไม่เว้นว่างครับ" if is_thai else "Please provide a question. Your query cannot be empty."
         elif "too long" in reason.lower():
-            message = f"Your query is too long. Please keep it under {max_length} characters."
+            message = f"คำถามยาวเกินกำหนด กรุณาระบุความยาวไม่เกิน {max_length} ตัวอักษรครับ" if is_thai else f"Your query is too long. Please keep it under {max_length} characters."
         elif "too short" in reason.lower():
-            message = "Your query is too short. Please provide more detail."
+            message = "คำถามสั้นเกินไป กรุณาระบุรายละเอียดเพิ่มเติมครับ" if is_thai else "Your query is too short. Please provide more detail."
         else:
-            message = f"Your query could not be processed. Reason: {reason}"
+            # Low confidence / No matching documents in Knowledge Base
+            if is_thai:
+                message = ("📋 **ผลการสืบค้น:** ไม่พบนโยบายที่เกี่ยวข้องในคลังเอกสาร (No relevant information found in the knowledge base)\n\n"
+                           "ขออภัย ระบบไม่พบเอกสารหรือระเบียบนโยบายที่เกี่ยวข้องกับคำถามของคุณในคลังข้อมูลปัจจุบัน "
+                           "กรุณาตรวจสอบการสะกดคำ ปรับคำถามให้ตรงกับหมวดหมู่นโยบาย หรือติดต่อฝ่ายทรัพยากรบุคคล (HR) / IT Helpdesk สำหรับข้อมูลเพิ่มเติมครับ")
+            else:
+                message = ("No relevant information found in the knowledge base. "
+                           "Please check your query phrasing, verify the policy topic, or contact HR / IT Helpdesk for direct assistance.")
             
         return {"final_answer": message}
     return rejection_response_node
