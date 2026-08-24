@@ -7,6 +7,7 @@ import sys
 import time
 import yaml
 import logging
+import warnings
 import requests
 import tiktoken
 from typing import Dict, Any, List, Optional
@@ -15,7 +16,15 @@ from langchain_core.language_models.chat_models import BaseChatModel, SimpleChat
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 from langchain_core.embeddings import Embeddings
 from langchain_deepseek import ChatDeepSeek
-from langchain_community.embeddings import HuggingFaceEmbeddings
+
+try:
+    from langchain_huggingface import HuggingFaceEmbeddings
+except ImportError:
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+
+# Suppress harmless HuggingFace Hub unauthenticated notices
+warnings.filterwarnings("ignore", message=".*unauthenticated requests.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="huggingface_hub")
 
 # Load .env variables (without logging sensitive values)
 load_dotenv()
