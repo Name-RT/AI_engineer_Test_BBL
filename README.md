@@ -28,43 +28,28 @@ Enterprise Multi-Agent RAG system for querying, verifying, and synthesizing corp
 
 ## System Architecture
 
-```mermaid
-graph TD
-    UserQuery["👤 User Query"] --> Shield["🛡️ 1. Security Shield (OWASP LLM Guard)"]
-    
-    Shield -->|"❌ Jailbreak / PII / Code / Abuse"| Reject["🚫 Rejection Response Node"] --> END1["((END))"]
-    Shield -->|"✅ Safe & Sanitized Query"| InputVal["🔍 2. Input Validator (Length & Off-topic)"]
-    
-    InputVal -->|"❌ Off-topic"| Reject
-    InputVal -->|"✅ Valid Policy Query"| Retriever["📂 3. Data Retriever Agent (ChromaDB / TF-IDF)"]
-    
-    Retriever --> ConfidenceCheck{"🎯 Confidence Check (>= 0.18)"}
-    
-    ConfidenceCheck -->|"✅ High Confidence"| Generator["📝 4. Report Generator Agent (DeepSeek / Azure APIM)"]
-    ConfidenceCheck -->|"🔄 Low + Retries Left"| QueryRewriter["✍️ Query Rewriter Agent"] --> Retriever
-    ConfidenceCheck -->|"⚠️ Low + Max Retries"| Generator
-    
-    Generator --> OutputVal["🛡️ 5. Output Validator (Factuality & Hallucination Guard)"]
-    
-    OutputVal -->|"✅ Grounded & Verified"| OutputSanitizer["🧹 6. Output PII & Secret Redaction"] --> END2["((END - Deliver to User))"]
-    OutputVal -->|"🔄 Unverified + Retries Left"| Generator
-    OutputVal -->|"❌ Unverified + Max Retries"| Fallback["📄 Raw Snippets Fallback Node"] --> END3["((END))"]
-```
+<p align="center">
+  <a href="architecture_flowchart.drawio">
+    <img src="architecture_flowchart.svg" alt="AI Policy Assistant Enterprise Agentic RAG Flowchart" width="100%" />
+  </a>
+  <br/>
+  <em>📊 Enterprise Multi-Agent RAG Flowchart — Click image or open <code>architecture_flowchart.drawio</code> directly in <a href="https://app.diagrams.net">draw.io / diagrams.net</a></em>
+</p>
 
 ---
 
 ## Features
 
 ### Multi-Agent Pipeline (LangGraph)
-- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and scores similarity confidence.
+- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and calculates calibrated confidence scores.
 - **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom, auto-detecting Thai/English.
-- **Query Rewriter** — rewrites the query and retries when retrieval confidence is low.
+- **Query Rewriter** — rewrites the query and retries when retrieval confidence falls below threshold (`< 0.50`).
 - **Fallback** — if hallucination checks keep failing, returns the raw verified snippets instead of guessing.
 
 ### Two-Stage Retrieval & Score Calibration (`tools/search.py`)
-- **Stage 1 (recall):** ChromaDB dense vectors (`multilingual-e5-small`) + TF-IDF, merged with Reciprocal Rank Fusion.
-- **Stage 2 (precision):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3` with temperature-scaled logit calibration and score blending (yielding realistic 85%-95% confidence).
-- **Auto-Ingestion:** Automatically syncs and persists 32 chunks into ChromaDB (`./chroma_db/`) on startup.
+- **Stage 1 (recall):** Candidate retrieval (Top-10) using ChromaDB dense vectors (`multilingual-e5-small`) + TF-IDF with Reciprocal Rank Fusion (similarity threshold: `0.15`).
+- **Stage 2 (precision):** Cross-Encoder re-ranking with `BAAI/bge-reranker-v2-m3` delivering Top-5 refined chunks with temperature-scaled logit calibration (85%-95% confidence).
+- **Auto-Ingestion:** Automatically syncs and persists all 32 chunks into ChromaDB (`./chroma_db/`) on startup.
 - **Synonym mapping** for colloquial terms (*WFH* → *remote work*, *ลาพักร้อน* → *annual leave*, etc.)
 
 ### Azure APIM & Rate Limit Resilience (`config/settings.py`)

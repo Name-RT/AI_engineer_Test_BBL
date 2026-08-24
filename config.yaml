@@ -10,7 +10,7 @@ search:
   chunk_size: 500       # characters per chunk
   chunk_overlap: 50     # overlap between chunks
   top_k: 5              # จำนวน chunks ที่ return
-  similarity_threshold: 0.1   # minimum similarity score
+  similarity_threshold: 0.15   # minimum similarity score สำหรับ Stage 1 Candidate
   knowledge_base_path: "knowledge_base.txt"
   persist_directory: "./chroma_db"  # Directory สำหรับเก็บข้อมูล ChromaDB
   collection_name: "rag_bbl_policies"
@@ -25,7 +25,7 @@ reranking:
   enabled: true                        # สลับเปิด-ปิดการทำ Two-Stage Reranking
   model_name: "BAAI/bge-reranker-v2-m3" # Multilingual Cross-Encoder (Thai & English)
   candidate_top_k: 10                  # Stage 1: จำนวน candidate chunks ที่ดึงมารอบแรก
-  final_top_k:  5                      # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่
+  final_top_k: 5                       # Stage 2: จำนวน chunks ที่ดีที่สุดหลังจัดอันดับใหม่ (Top-5)
   device: "cpu"                        # "cpu" หรือ "cuda"
   
 # === LLM Settings ===
@@ -39,7 +39,7 @@ llm:
 guardrails:
   max_query_length: 500
   min_query_length: 3
-  confidence_threshold: 0.18   # เหมาะสมกับ TF-IDF lexical search
+  confidence_threshold: 0.50   # เหมาะสมกับ Hybrid Search + Cross-Encoder Reranker
   max_generation_attempts: 2   # จำนวนครั้งที่ retry generation
 
 # === Security Shield (OWASP Top 10 for LLM Defense) ===

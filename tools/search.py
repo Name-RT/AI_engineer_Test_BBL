@@ -330,7 +330,7 @@ class KnowledgeBaseSearchTool:
         # Determine Stage 1 candidate count and Stage 2 final top_k
         if self.reranking_enabled:
             stage1_k = self.reranking_config.get("candidate_top_k", 10)
-            final_k = top_k if top_k is not None else self.reranking_config.get("final_top_k", 3)
+            final_k = top_k if top_k is not None else self.reranking_config.get("final_top_k", 5)
         else:
             stage1_k = top_k if top_k is not None else self.config["search"].get("top_k", 5)
             final_k = stage1_k
