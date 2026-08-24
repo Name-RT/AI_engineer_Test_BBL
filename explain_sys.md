@@ -117,7 +117,7 @@ class AgentState(TypedDict, total=False):
     is_valid: bool                      # สถานะการตรวจสอบความถูกต้องของคำถาม
     rejection_reason: str               # เหตุผลการปฏิเสธคำถาม
     retrieved_documents: List[Dict]     # Chunks เอกสารที่ดึงมาได้
-    retrieval_confidence: float         # ค่าความมั่นใจ (Top-1 Score)
+    retrieval_score: float              # คะแนนความเกี่ยวข้องถ่วงน้ำหนัก (Weighted-Average Raw Logit)
     retrieval_attempts: int             # จำนวนรอบที่ค้นหา
     generated_report: str               # ข้อความคำตอบที่สร้างขึ้น
     is_grounded: bool                   # ผลการตรวจจับความถูกต้องเทียบกับเอกสาร
@@ -131,8 +131,8 @@ class AgentState(TypedDict, total=False):
 |:---|:---|
 | `input_validator` | ตรวจสอบความปลอดภัย (Security Shield), ความยาว และความเกี่ยวข้องกับนโยบาย |
 | `rejection_response` | คืนข้อความปฏิเสธตามสาเหตุ เช่น นอกขอบเขต หรือคำสั่งไม่ปลอดภัย |
-| `retriever` | ดึง Chunks จากคลังความรู้ตามค่า Top-K และคำนวณค่าความมั่นใจ |
-| `query_rewriter` | เรียบเรียงคำค้นหาใหม่เมื่อค่าความมั่นใจต่ำกว่า 0.50 |
+| `retriever` | ดึง Chunks จากคลังความรู้ตามค่า Top-K และคำนวณคะแนนความเกี่ยวข้องถ่วงน้ำหนัก Top-K |
+| `query_rewriter` | เรียบเรียงคำค้นหาใหม่เมื่อคะแนนความเกี่ยวข้องต่ำกว่า 0.20 |
 | `generator` | สรุปคำตอบตามโครงสร้าง 4 ส่วน พร้อมระบุแหล่งอ้างอิง |
 | `output_validator` | ตรวจสอบความถูกต้องของคำตอบเทียบกับเอกสารอ้างอิง (Factuality) และ Mask PII ขาออก |
 | `max_attempts_fallback` | คืนข้อความจากเอกสารต้นฉบับเมื่อสร้างคำตอบไม่สำเร็จครบตามจำนวนรอบที่กำหนด |

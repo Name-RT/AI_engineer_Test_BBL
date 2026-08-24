@@ -60,7 +60,7 @@ def run_evaluation(config: Dict[str, Any]) -> Dict[str, float]:
             "is_valid": True,
             "rejection_reason": "",
             "retrieved_documents": [],
-            "retrieval_confidence": 0.0,
+            "retrieval_score": 0.0,
             "retrieval_attempts": 0,
             "generated_report": "",
             "is_grounded": False,

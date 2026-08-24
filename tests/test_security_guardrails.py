@@ -14,7 +14,7 @@ def security_config():
         "guardrails": {
             "min_query_length": 3,
             "max_query_length": 500,
-            "confidence_threshold": 0.18,
+            "relevance_threshold": 0.18,
             "max_generation_attempts": 2
         },
         "security": {

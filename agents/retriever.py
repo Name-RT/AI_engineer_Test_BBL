@@ -13,8 +13,13 @@ def create_retriever_node(search_tool, config: Dict[str, Any]):
     Factory creating the Data Retriever Agent node for LangGraph.
     
     The Retriever Agent searches the knowledge base and extracts relevant raw snippets
-    without altering or summarizing them, computing the top-1 confidence score.
+    without altering or summarizing them, computing a weighted-average relevance score
+    across the top-K retrieved chunks.
     """
+    # Weights for top-K positions: top-1 contributes most, diminishing for lower ranks.
+    # Sum = 1.0 so the output is a weighted average in the same unit as raw logits.
+    TOP_K_WEIGHTS = [0.40, 0.25, 0.15, 0.12, 0.08]
+    
     def retriever_node(state: AgentState) -> dict:
         query = state.get("expanded_query") or state.get("query", "")
         
@@ -22,16 +27,19 @@ def create_retriever_node(search_tool, config: Dict[str, Any]):
         results = search_tool.search(query)
         
         if not results:
-            confidence = 0.0
+            score = 0.0
         else:
-            # Use top-1 chunk score as the primary retrieval confidence
-            confidence = float(results[0]["score"])
+            # Weighted average of top-K raw logits gives a more robust
+            # quality measure than relying on a single top-1 score.
+            weights = TOP_K_WEIGHTS[:len(results)]
+            weight_sum = sum(weights)
+            score = sum(w * float(r["score"]) for w, r in zip(weights, results)) / weight_sum
             
-        logger.info(f"Retrieved {len(results)} documents with top-1 confidence {confidence:.2f}")
+        logger.info(f"Retrieved {len(results)} documents with weighted relevance score {score:.4f}")
         
         return {
             "retrieved_documents": results,
-            "retrieval_confidence": confidence,
+            "retrieval_score": score,
             "retrieval_attempts": state.get("retrieval_attempts", 0) + 1,
         }
     return retriever_node

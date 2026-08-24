@@ -27,7 +27,7 @@ def run_query(graph, query: str) -> str:
         "is_valid": True,
         "rejection_reason": "",
         "retrieved_documents": [],
-        "retrieval_confidence": 0.0,
+        "retrieval_score": 0.0,
         "retrieval_attempts": 0,
         "generated_report": "",
         "is_grounded": False,
@@ -43,7 +43,7 @@ def run_query(graph, query: str) -> str:
         elapsed = time.time() - start_time
         final_answer = result.get("final_answer", "")
         docs = result.get("retrieved_documents", [])
-        confidence = result.get("retrieval_confidence", 0.0)
+        confidence = result.get("retrieval_score", 0.0)
         is_grounded = result.get("is_grounded", False)
         
         console.print(Panel(f"[bold cyan]🔍 Query:[/bold cyan] {query}"))
@@ -54,7 +54,7 @@ def run_query(graph, query: str) -> str:
             elif not result.get("is_valid", True):
                 final_answer = f"Rejected: {result.get('rejection_reason', 'Unknown')}"
         
-        info_str = f"📄 Retrieved: {len(docs)} chunks\n🎯 Confidence: {confidence:.2f}"
+        info_str = f"📄 Retrieved: {len(docs)} chunks\n🎯 Relevance Score: {confidence:.4f}"
         console.print(Panel(info_str))
         
         console.print(Panel(f"[bold green]📋 Answer:[/bold green]\n{final_answer}"))

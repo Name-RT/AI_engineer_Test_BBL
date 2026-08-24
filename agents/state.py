@@ -18,7 +18,7 @@ class AgentState(TypedDict, total=False):
     is_valid: bool                      # Boolean flag from input validator (True = allowed, False = rejected)
     rejection_reason: str               # Explicit reason if query is rejected (e.g. 'off-topic', 'too short')
     retrieved_documents: List[Dict[str, Any]] # Extracted chunks: [{'chunk_id': int, 'content': str, 'score': float}]
-    retrieval_confidence: float         # Top-1 retrieval confidence score (0.0 to 1.0)
+    retrieval_score: float              # Weighted-average raw Cross-Encoder logit (NOT a probability)
     retrieval_attempts: int             # Number of retrieval/rewrite attempts executed
     
     # === Synthesis & Quality Assurance Fields ===

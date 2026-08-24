@@ -302,7 +302,7 @@ def query_rag_pipeline(user_query: str):
         "is_valid": True,
         "rejection_reason": "",
         "retrieved_documents": [],
-        "retrieval_confidence": 0.0,
+        "retrieval_score": 0.0,
         "retrieval_attempts": 0,
         "generated_report": "",
         "is_grounded": False,
@@ -345,7 +345,7 @@ def query_rag_pipeline(user_query: str):
                 ret_data = event["retriever"]
                 current_state.update(ret_data)
                 docs = ret_data.get("retrieved_documents", [])
-                conf = ret_data.get("retrieval_confidence", 0.0)
+                conf = ret_data.get("retrieval_score", 0.0)
 
                 # Format reference cards
                 if docs:
@@ -365,7 +365,7 @@ def query_rag_pipeline(user_query: str):
                         <div class="ref-card">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <span class="ref-title">📄 {title}</span>
-                                <span class="ref-score">คะแนน {score:.2f} ({int(score*100)}%)</span>
+                                <span class="ref-score">Score {score:.4f}</span>
                             </div>
                             <div class="ref-body">{body}</div>
                         </div>
@@ -377,7 +377,7 @@ def query_rag_pipeline(user_query: str):
                 yield (
                     "📝 *พบเอกสารที่เกี่ยวข้องแล้ว กำลังสังเคราะห์และจัดโครงสร้างคำตอบ...*",
                     f"""<div class="metrics-row">
-                        <span>🎯 ความมั่นใจ: <span class="metric-val">{conf:.2f} ({int(conf*100)}%)</span></span>
+                        <span>🎯 Relevance Score: <span class="metric-val">{conf:.4f}</span></span>
                         <span>·</span>
                         <span>📄 อ้างอิง: <span class="metric-val">{len(docs)} ตอน</span></span>
                         <span>·</span>

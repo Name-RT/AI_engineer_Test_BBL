@@ -39,7 +39,7 @@ llm:
 guardrails:
   max_query_length: 500
   min_query_length: 3
-  confidence_threshold: 0.50   # เหมาะสมกับ Hybrid Search + Cross-Encoder Reranker
+  relevance_threshold: 0.20   # Raw Cross-Encoder logit threshold (NOT a probability)
   max_generation_attempts: 2   # จำนวนครั้งที่ retry generation
 
 # === Security Shield (OWASP Top 10 for LLM Defense) ===

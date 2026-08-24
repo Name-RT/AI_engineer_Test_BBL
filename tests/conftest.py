@@ -53,7 +53,7 @@ def sample_config():
         "guardrails": {
             "min_query_length": 3,
             "max_query_length": 100,
-            "confidence_threshold": 0.1,
+            "relevance_threshold": 0.1,
             "max_generation_attempts": 2
         }
     }

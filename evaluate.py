@@ -99,7 +99,7 @@ def run_benchmark(config: Dict[str, Any], limit: int = None) -> Dict[str, Any]:
                 "is_valid": True,
                 "rejection_reason": "",
                 "retrieved_documents": [],
-                "retrieval_confidence": 0.0,
+                "retrieval_score": 0.0,
                 "retrieval_attempts": 0,
                 "generated_report": "",
                 "is_grounded": False,
@@ -120,14 +120,14 @@ def run_benchmark(config: Dict[str, Any], limit: int = None) -> Dict[str, Any]:
                 run_res = {
                     "final_answer": f"ERROR: {exc}",
                     "retrieved_documents": [],
-                    "retrieval_confidence": 0.0,
+                    "retrieval_score": 0.0,
                     "is_grounded": False,
                     "is_valid": False,
                 }
 
             total_latency += latency
             retrieved_docs = run_res.get("retrieved_documents", [])
-            confidence = run_res.get("retrieval_confidence", 0.0)
+            confidence = run_res.get("retrieval_score", 0.0)
             is_grounded = run_res.get("is_grounded", False)
             is_valid = run_res.get("is_valid", True)
             final_answer = run_res.get("final_answer", "")

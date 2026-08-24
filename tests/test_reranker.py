@@ -69,8 +69,8 @@ def test_reranker_scoring_reorders_chunks(mock_config):
     assert reranked[0]["stage1_score"] == 0.5
 
 
-def test_reranker_sigmoid_score_bounds(mock_config):
-    """Verify that logit scores from CrossEncoder are normalized to [0.0, 1.0]."""
+def test_reranker_raw_logit_score_ordering(mock_config):
+    """Verify that raw logit scores from CrossEncoder are directly preserved and sorted."""
     tool = KnowledgeBaseSearchTool(mock_config)
     
     mock_encoder = MagicMock()
@@ -85,8 +85,14 @@ def test_reranker_sigmoid_score_bounds(mock_config):
     
     reranked = tool.rerank("query", candidates, top_k=3)
     
-    for doc in reranked:
-        assert 0.0 <= doc["score"] <= 1.0
+    # Doc 1 got 10.5, Doc 3 got 0.4, Doc 2 got -8.2
+    assert len(reranked) == 3
+    assert reranked[0]["chunk_id"] == 1
+    assert reranked[0]["score"] == 10.5
+    assert reranked[1]["chunk_id"] == 3
+    assert reranked[1]["score"] == 0.4
+    assert reranked[2]["chunk_id"] == 2
+    assert reranked[2]["score"] == -8.2
 
 
 def test_reranker_graceful_fallback_on_exception(mock_config):

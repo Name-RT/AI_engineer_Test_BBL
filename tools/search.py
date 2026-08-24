@@ -311,13 +311,12 @@ class KnowledgeBaseSearchTool:
             for doc, raw_s in zip(candidates, raw_scores):
                 s = float(raw_s)
                 stage1_s = float(doc.get("score", 0.0))
-                # Apply standard sigmoid to map unbounded Cross-Encoder logits to [0.0, 1.0]
-                final_score = 1.0 / (1.0 + math.exp(-s))
-                
+                # Use raw Cross-Encoder logit directly as the relevance score.
+                # These logits are valid for ranking and threshold comparison.
+                # They are NOT calibrated probabilities — do not call them "confidence".
                 new_doc = dict(doc)
                 new_doc["stage1_score"] = stage1_s
-                new_doc["score"] = float(final_score)
-                new_doc["rerank_logit"] = float(s)
+                new_doc["score"] = s
                 reranked_results.append(new_doc)
                 
             reranked_results.sort(key=lambda x: x["score"], reverse=True)

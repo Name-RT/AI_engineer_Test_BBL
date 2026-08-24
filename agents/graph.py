@@ -73,15 +73,15 @@ def create_graph(config: Dict[str, Any]):
         return "invalid"
         
     def route_confidence(state: AgentState) -> str:
-        threshold = config["guardrails"]["confidence_threshold"]
+        threshold = config["guardrails"]["relevance_threshold"]
         max_attempts = config["llm"]["max_retries"]
-        confidence = state.get("retrieval_confidence", 0.0)
+        score = state.get("retrieval_score", 0.0)
         
-        if confidence >= threshold:
+        if score >= threshold:
             return "generator"
         elif state.get("retrieval_attempts", 0) < max_attempts:
             return "query_rewriter"
-        elif confidence > 0.20:
+        elif score > -1.0:
             return "generator"
         else:
             return "rejection_response"
