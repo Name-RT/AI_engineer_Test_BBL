@@ -29,7 +29,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 ## Demo Preview
 
 <p align="center">
-  <img src="demo_RAG_BBL.gif" alt="AI Policy Assistant UI Demo" width="100%" />
+  <img src="docs/assets/demo_RAG_BBL.gif" alt="AI Policy Assistant UI Demo" width="100%" />
   <br/>
   <em>Interactive Gradio Web UI Demo — Token streaming, live node stage progression.</em>
 </p>
@@ -39,11 +39,11 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 ## System Architecture
 
 <p align="center">
-  <a href="architecture_flowchart.drawio">
-    <img src="architecture_flowchart.svg" alt="AI Policy Assistant RAG Flowchart" width="100%" />
+  <a href="docs/assets/architecture_flowchart.drawio">
+    <img src="docs/assets/architecture_flowchart.svg" alt="AI Policy Assistant RAG Flowchart" width="100%" />
   </a>
   <br/>
-  <em>RAG Pipeline Flowchart </em>
+  <em>RAG Pipeline Flowchart</em>
 </p>
 
 ---
@@ -51,7 +51,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 ## Features
 
 ### Multi-Agent Pipeline (LangGraph)
-- **Data Retriever** — pulls policy snippets from `knowledge_base.txt` with ChromaDB / Hybrid search and calculates weighted-average relevance scores.
+- **Data Retriever** — pulls policy snippets from `data/knowledge_base.txt` with ChromaDB / Hybrid search and calculates weighted-average relevance scores.
 - **Report Generator** — produces a structured 4-section answer with aggregated policy citations at the bottom. Strictly preserves the question's language (English queries $\rightarrow$ English headers & content; Thai queries $\rightarrow$ Thai headers & content).
 - **Query Rewriter** — rewrites the query and retries when retrieval relevance score falls below threshold (`< 0.15`).
 - **Fallback** — if hallucination checks keep failing, returns the raw verified snippets instead of guessing.
@@ -181,7 +181,8 @@ python -m pytest tests/ -v --cov=agents --cov=tools --cov=guardrails --cov=confi
 | `test_search.py` | 9 | ChromaDB search, TF-IDF, Hybrid RRF fusion, synonym expansion, Top-K ordering |
 | `test_security_guardrails.py` | 25 | PII masking, jailbreak, prompt leakage, injection, rate limiting |
 
-See [`TESTING.md`](TESTING.md) for detailed documentation on all test cases and scenarios.
+See [`docs/TESTING.md`](docs/TESTING.md) for detailed documentation on all test cases and scenarios.
+See [`docs/explain_sys.md`](docs/explain_sys.md) for detailed system architecture specification.
 
 ---
 
@@ -193,16 +194,21 @@ AI_engineer_Test_BBL/
 ├── gradio_app.py                       # Web UI (Gradio, port 7861)
 ├── evaluate.py                         # Benchmark runner
 ├── config.yaml                         # All settings (thresholds, models, reranker, security)
-├── knowledge_base.txt                  # Policy document (15 sections)
-├── explain_sys.md                      # System architecture & technical specification
-├── TESTING.md                          # Test suite documentation (61 test cases)
-├── demo_RAG_BBL.gif                    # Web UI demo walkthrough GIF
-├── architecture_flowchart.svg          # System architecture flowchart
-├── architecture_flowchart.drawio       # Editable draw.io diagram
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
+├── requirements.txt                    # Python dependencies
+├── Dockerfile                          # Docker build definition
+├── docker-compose.yml                  # Docker Compose orchestration
 ├── .env.example                        # API key template (DeepSeek / Azure APIM)
+│
+├── data/                               # Knowledge base data
+│   └── knowledge_base.txt              # Enterprise policy document (15 sections)
+│
+├── docs/                               # Documentation & Visual Assets
+│   ├── explain_sys.md                  # System architecture & technical specification
+│   ├── TESTING.md                      # Test suite documentation (61 test cases)
+│   └── assets/
+│       ├── architecture_flowchart.svg  # System architecture flowchart
+│       ├── architecture_flowchart.drawio
+│       └── demo_RAG_BBL.gif            # Web UI demo walkthrough GIF
 │
 ├── agents/
 │   ├── state.py                        # AgentState TypedDict

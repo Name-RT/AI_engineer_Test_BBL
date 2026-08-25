@@ -11,7 +11,7 @@ search:
   chunk_overlap: 50     # overlap between chunks
   top_k: 5              # จำนวน chunks ที่ return
   similarity_threshold: 0.15   # minimum similarity score สำหรับ Stage 1 Candidate
-  knowledge_base_path: "knowledge_base.txt"
+  knowledge_base_path: "data/knowledge_base.txt"
   persist_directory: "./chroma_db"  # Directory สำหรับเก็บข้อมูล ChromaDB
   collection_name: "rag_bbl_policies"
 

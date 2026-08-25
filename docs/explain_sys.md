@@ -194,12 +194,21 @@ AI_engineer_Test_BBL/
 ├── gradio_app.py                       # Web UI (Gradio, port 7861)
 ├── evaluate.py                         # สคริปต์รัน Benchmark
 ├── config.yaml                         # ค่าคอนฟิกหลักของระบบ
-├── knowledge_base.txt                  # เอกสารนโยบาย 15 หมวดหมู่
-├── TESTING.md                          # เอกสารอธิบายชุดการทดสอบ
 ├── requirements.txt                    # รายการไลบรารี
 ├── Dockerfile                          # Docker build definition
 ├── docker-compose.yml                  # Docker orchestration
 ├── .env.example                        # ตัวอย่างไฟล์ตั้งค่า API Key
+│
+├── data/                               # ข้อมูลเอกสาร
+│   └── knowledge_base.txt              # เอกสารนโยบาย 15 หมวดหมู่
+│
+├── docs/                               # เอกสารและแผนภาพ
+│   ├── explain_sys.md                  # สถาปัตยกรรมและรายละเอียดทางเทคนิค
+│   ├── TESTING.md                      # เอกสารอธิบายชุดการทดสอบ
+│   └── assets/
+│       ├── architecture_flowchart.svg  # แผนภาพสถาปัตยกรรมระบบ
+│       ├── architecture_flowchart.drawio
+│       └── demo_RAG_BBL.gif            # ภาพเคลื่อนไหวตัวอย่างการใช้งาน
 │
 ├── agents/                             # โมดูล LangGraph Agents
 │   ├── state.py                        # AgentState TypedDict

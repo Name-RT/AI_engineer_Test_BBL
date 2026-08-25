@@ -16,7 +16,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./knowledge_base.txt:/app/knowledge_base.txt:ro
+      - ./data:/app/data:ro
       - ./config.yaml:/app/config.yaml:ro
       - chroma_data:/app/chroma_db
     environment:

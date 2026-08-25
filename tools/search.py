@@ -78,7 +78,12 @@ class KnowledgeBaseSearchTool:
         if os.path.isabs(raw_kb_path):
             kb_path = raw_kb_path
         else:
-            kb_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), raw_kb_path)
+            base_dir = os.path.dirname(os.path.dirname(__file__))
+            kb_path = os.path.join(base_dir, raw_kb_path)
+            if not os.path.exists(kb_path) and not raw_kb_path.startswith("data"):
+                fallback_path = os.path.join(base_dir, "data", raw_kb_path)
+                if os.path.exists(fallback_path):
+                    kb_path = fallback_path
             
         try:
             with open(kb_path, "r", encoding="utf-8") as f:
