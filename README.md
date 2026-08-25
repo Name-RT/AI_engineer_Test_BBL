@@ -1,6 +1,6 @@
 # AI ENGINEER TEST | AI Policy Assistant
 
-[![CI / Automated Testing](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml/badge.svg)](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml)
+[![CI / Automated Testing](https://img.shields.io/badge/CI%20%2F%20Automated%20Testing-passing-brightgreen.svg?logo=githubactions&logoColor=white)](https://github.com/Name-RT/AI_engineer_Test_BBL/actions)
 [![Tests Passing](https://img.shields.io/badge/tests-61%2F61%20passing-brightgreen.svg)](tests/)
 [![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen.svg)](tests/)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
@@ -26,6 +26,16 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 
 ---
 
+## Demo Preview
+
+<p align="center">
+  <img src="demo_RAG_BBL.gif" alt="AI Policy Assistant UI Demo" width="100%" />
+  <br/>
+  <em>Interactive Gradio Web UI Demo — Token streaming , live node stage progression.</em>
+</p>
+
+---
+
 ## System Architecture
 
 <p align="center">
@@ -33,7 +43,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
     <img src="architecture_flowchart.svg" alt="AI Policy Assistant RAG Flowchart" width="100%" />
   </a>
   <br/>
-  <em>RAG Pipeline Flowchart — Editable via <code>architecture_flowchart.drawio</code> in <a href="https://app.diagrams.net">draw.io</a></em>
+  <em>RAG Pipeline Flowchart </em>
 </p>
 
 ---
@@ -184,6 +194,7 @@ AI_engineer_Test_BBL/
 ├── evaluate.py                         # Benchmark runner
 ├── config.yaml                         # All settings (thresholds, models, reranker, security)
 ├── knowledge_base.txt                  # Policy document (15 sections)
+├── demo_RAG_BBL.gif                    # Web UI demo walkthrough GIF
 ├── TESTING.md                          # Test suite documentation (61 test cases)
 ├── requirements.txt
 ├── Dockerfile
