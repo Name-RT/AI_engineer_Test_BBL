@@ -31,7 +31,7 @@ A multi-agent RAG system for querying and synthesizing company policies (HR, IT 
 <p align="center">
   <img src="demo_RAG_BBL.gif" alt="AI Policy Assistant UI Demo" width="100%" />
   <br/>
-  <em>Interactive Gradio Web UI Demo — Token streaming , live node stage progression.</em>
+  <em>Interactive Gradio Web UI Demo — Token streaming, live node stage progression.</em>
 </p>
 
 ---
@@ -194,8 +194,11 @@ AI_engineer_Test_BBL/
 ├── evaluate.py                         # Benchmark runner
 ├── config.yaml                         # All settings (thresholds, models, reranker, security)
 ├── knowledge_base.txt                  # Policy document (15 sections)
-├── demo_RAG_BBL.gif                    # Web UI demo walkthrough GIF
+├── explain_sys.md                      # System architecture & technical specification
 ├── TESTING.md                          # Test suite documentation (61 test cases)
+├── demo_RAG_BBL.gif                    # Web UI demo walkthrough GIF
+├── architecture_flowchart.svg          # System architecture flowchart
+├── architecture_flowchart.drawio       # Editable draw.io diagram
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
