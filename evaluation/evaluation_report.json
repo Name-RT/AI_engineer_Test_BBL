@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-23 14:36:27",
-  "total_test_cases": 5,
+  "timestamp": "2026-08-25 11:42:01",
+  "total_test_cases": 20,
   "metrics": {
     "retrieval_recall_percent": 100.0,
     "groundedness_rate_percent": 100.0,
     "guardrail_accuracy_percent": 100.0,
-    "avg_latency_seconds": 38.067
+    "avg_latency_seconds": 18.021
   },
   "detailed_results": [
     {
@@ -17,14 +17,14 @@
       "retrieved_sections": [
         "Section 1: International Travel Policy",
         "Section 4: Expense Reimbursement Policy",
-        "Section 2: Remote Work Policy"
+        "Section 3: Annual Leave Policy"
       ],
       "ground_truth": "Employees traveling internationally must obtain approval from their department head and HR at least 30 days prior to departure. The company covers flights (economy), lodging, and meals based on per diem rates, and provides travel insurance.",
-      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานทุกคนที่เดินทางไปต่างประเทศเพื่อวัตถุประสงค์ทางธุรกิจ **ต้องได้รับอนุมัติ** จากหัวหน้าฝ่ายและฝ่ายทรัพยากรบุคคล (HR) *(Section 1: International Travel Policy)*\n- บริษัทครอบคลุมค่าใช้จ่ายที่อนุญาต ได้แก่:\n  - ตั๋วเครื่องบิน (ชั้นประหยัด)\n  - ที่พัก\n  - ค่าอาหารตามอัตรา per diem ที่กำหนดตามประเทศปลายทาง\n- บริษัทจัดให้มี **ประกันการเดินทาง** ครอบคลุมตลอดระยะเวลาการเดินทาง *(Section 1: International Travel Policy)*\n- พนักงานต้องใช้ **พอร์ทัลจองที่บริษัทกำหนด** สำหรับการจองทั้งหมด *(Section 1: International Travel Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- ยื่นขออนุมัติการเดินทางล่วงหน้า **อย่างน้อย 30 วัน** ก่อนวันเดินทาง ต่อหัวหน้าฝ่ายและฝ่าย HR *(Section 1: International Travel Policy)*\n- การขออนุมัติค่าใช้จ่ายเป็นแบบลำดับชั้น (Tiered):\n  - ผู้จัดการอนุมัติได้สูงสุด **500 ดอลลาร์สหรัฐ**\n  - จำนวนที่เกิน 500 ดอลลาร์สหรัฐ ต้องได้รับการอนุมัติจากระดับผู้อำนวยการ *(Section 4: Expense Reimbursement Policy)*\n- สำหรับผู้ที่เดินทางบ่อยและหัวหน้าฝ่ายที่ใช้บัตรเครดิตองค์กร: ต้องใช้บัตรเพื่อธุรกิจเท่านั้น และต้องกระทบยอดรายการเดินบัญชีทุกเดือน *(Section 4: Expense Reimbursement Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- **ใบเสร็จรับเงินต้นฉบับทั้งหมด** (Original receipts)\n- **กำหนดการเดินทางโดยละเอียด** (Detailed itinerary)\n- **รายงานหลังการเดินทาง** (Post-travel report)\n- ยื่นเอกสารทั้งหมดภายใน **14 วัน** หลังกลับจากการเดินทาง *(Section 1: International Travel Policy)*\n- หมายเหตุ: สำหรับค่าใช้จ่ายที่เกิน 25 ดอลลาร์สหรัฐ ต้องมีใบเสร็จแบบระบุรายการ (Itemized receipt) *(Section 4: Expense Reimbursement Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **กำหนดเวลาเข้มงวด:** ต้องยื่นขออนุมัติล่วงหน้า 30 วัน และยื่นเอกสารเบิกจ่ายภายใน 14 วันหลังกลับ หากไม่ปฏิบัติตามอาจไม่ได้รับการพิจารณา *(Section 1: International Travel Policy)*\n- **ข้อห้ามเด็ดขาด:** ห้ามใช้บัตรเครดิตองค์กรกับค่าใช้จ่ายส่วนตัวโดยเด็ดขาด *(Section 4: Expense Reimbursement Policy)*\n- **การเบิกจ่ายทั่วไป:** สำหรับค่าใช้จ่ายทางธุรกิจอื่น ๆ (เช่น การเลี้ยงลูกค้า) ต้องยื่นภายใน 30 วันนับจากวันที่เกิดค่าใช้จ่าย *(Section 4: Expense Reimbursement Policy)*\n- **ไม่มีข้อยกเว้นเรื่องชั้นโดยสาร:** บริษัทครอบคลุมเฉพาะตั๋วชั้นประหยัดเท่านั้น *(Section 1: International Travel Policy)*",
-      "confidence": 0.981,
+      "final_answer": "### 📋 1. Overview & Eligibility\n- All employees traveling internationally for business purposes are covered under this policy.\n- The company covers expenses for flights (economy class), lodging, and meals based on established per diem rates for the destination country.\n- Comprehensive travel insurance is provided for the duration of the trip.\n- All reservations must be made through the company-approved booking portal.\n\n### 📝 2. Procedures & Approvals\n- Approval must be obtained from both the department head and the HR department at least 30 days prior to planned departure.\n- Advance notice ensures timely processing of visas, accommodations, and other arrangements.\n\n### 📄 3. Required Documentation\n- Original receipts for all expenses.\n- A detailed itinerary.\n- A post-travel report.\n- All documentation must be submitted within 14 days of returning from the trip.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Reimbursement claims must be submitted within 14 days of return; failure to provide required documentation may result in denied reimbursement.\n- For expenses related to travel, the general expense reimbursement policy applies: itemized receipts are required for any expense exceeding $25, and claims must meet the 30-day submission deadline from the date the expense was incurred (unless the travel-specific 14-day rule is stricter).\n- Approval tiers apply: managers can approve expenses up to $500; amounts above $500 require director-level approval.\n- Corporate credit card rules apply for frequent travelers and department heads: cards must be used strictly for business purposes, statements must be reconciled monthly, and personal expenses are strictly prohibited.\n\n---\n### 📚 Policy References\n- Section 1: International Travel Policy\n- Section 4: Expense Reimbursement Policy",
+      "confidence": 0.6148,
       "is_grounded": true,
       "recall_passed": true,
-      "latency_seconds": 92.338
+      "latency_seconds": 27.788
     },
     {
       "test_id": 2,
@@ -34,14 +34,16 @@
       ],
       "retrieved_sections": [
         "Section 1: International Travel Policy",
-        "Section 4: Expense Reimbursement Policy"
+        "Section 4: Expense Reimbursement Policy",
+        "Section 3: Annual Leave Policy",
+        "Section 15: Severance, Resignation & Offboarding Policy"
       ],
       "ground_truth": "You must obtain approval at least 30 days prior to your planned departure.",
-      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n\n- สำหรับการเดินทางระหว่างประเทศเพื่อวัตถุประสงค์ทางธุรกิจ พนักงานทุกคนต้องได้รับอนุมัติจากหัวหน้าฝ่ายและฝ่ายทรัพยากรบุคคล (HR) **ล่วงหน้าอย่างน้อย 30 วัน** ก่อนวันเดินทางตามแผน *(Section 1: International Travel Policy)*\n- บริษัทครอบคลุมค่าใช้จ่ายที่อนุญาต เช่น ตั๋วเครื่องบิน (ชั้นประหยัด) ที่พัก และค่าอาหารตามอัตรา per diem ของประเทศปลายทาง พร้อมประกันการเดินทางตลอดระยะเวลาทริป *(Section 1: International Travel Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n\n1. ยื่นขออนุมัติการเดินทางล่วงหน้าอย่างน้อย **30 วัน** ต่อหัวหน้าฝ่ายและฝ่าย HR\n2. ทำการจองทั้งหมดผ่าน **พอร์ทัลจองที่บริษัทกำหนด (company-approved booking portal)** เท่านั้น\n3. หลังเดินทางกลับ ต้องยื่นเอกสารเพื่อขอรับเงินคืนภายใน **14 วัน** นับจากวันเดินทางกลับ *(Section 1: International Travel Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n\n- **ใบเสร็จรับเงินต้นฉบับทั้งหมด (original receipts)** สำหรับค่าใช้จ่ายที่เกิดขึ้น\n- **กำหนดการเดินทางโดยละเอียด (detailed itinerary)**\n- **รายงานหลังการเดินทาง (post-travel report)** ส่งภายใน 14 วันหลังกลับ *(Section 1: International Travel Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n\n- **ระยะเวลาแจ้งล่วงหน้า 30 วัน** สำหรับการเดินทางระหว่างประเทศเป็นข้อกำหนดที่เคร่งครัด เพื่อให้การจัดการด้านวีซ่าและที่พักเป็นไปอย่างทันเวลา *(Section 1: International Travel Policy)*\n- หมายเหตุ: แม้จะไม่ใช่ข้อกำหนดของการเดินทางโดยตรง แต่ควรระวัง **ช่วงห้ามลา (blackout periods)** ในช่วงสองสัปดาห์สุดท้ายของปีงบประมาณและช่วงเปิดตัวผลิตภัณฑ์หลัก ซึ่งการขอลาอาจถูกปฏิเสธ เว้นแต่มีเหตุสุดวิสัย *(Section 6)*\n- สำหรับการยื่นขอ reimbursement ทั่วไป (นอกเหนือจากการเดินทาง) ต้องส่งใบเสร็จแบบมีรายการ (itemized) สำหรับค่าใช้จ่ายที่เกิน $25 และยื่นภายใน **30 วัน** นับจากวันที่เกิดค่าใช้จ่าย *(Section 4: Expense Reimbursement Policy)*",
-      "confidence": 0.984,
+      "final_answer": "### 📋 1. Overview & Eligibility\n- Employees traveling internationally for business purposes must obtain approval from their department head and the HR department at least **30 days** prior to planned departure.\n\n### 📝 2. Procedures & Approvals\n- Submit travel request for approval by department head and HR at least 30 days before departure.\n- Use the company-approved booking portal for all reservations (flights, lodging, etc.).\n\n### 📄 3. Required Documentation\n- • No additional documents required for the advance notification itself (documentation requirements apply to reimbursement after travel, not to the notification).\n\n### ⚠️ 4. Exceptions & Deadlines\n- The 30-day advance notice is a strict minimum; it ensures timely processing of visas and accommodations.\n- No exceptions or alternative notice periods are mentioned in the policy.\n\n---\n### 📚 Policy References\n- • Section 1: International Travel Policy",
+      "confidence": 0.4664,
       "is_grounded": true,
       "recall_passed": true,
-      "latency_seconds": 19.928
+      "latency_seconds": 13.965
     },
     {
       "test_id": 3,
@@ -53,14 +55,14 @@
         "Section 2: Remote Work Policy",
         "Section 6: IT Security Policy",
         "Section 1: International Travel Policy",
-        "Section 4: Expense Reimbursement Policy"
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy"
       ],
       "ground_truth": "Eligible employees (post 90-day probation) can work remotely up to 3 days per week. They must be online during core hours (10 AM to 3 PM) and use a secure VPN.",
-      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว มีสิทธิ์ยื่นขอทำงานระยะไกล (Remote Work) ได้ *(Section 2: Remote Work Policy)*\n- พนักงานที่ได้รับอนุมัติสามารถทำงานระยะไกลได้สูงสุด **3 วันต่อสัปดาห์** *(Section 2: Remote Work Policy)*\n- บริษัทจัดหาอุปกรณ์ที่จำเป็นให้ ได้แก่ **โน้ตบุ๊ก (Laptop)** และ **VPN ที่ปลอดภัย** สำหรับการเชื่อมต่อเครือข่ายองค์กรทั้งหมด *(Section 4)*\n- พนักงานต้องปฏิบัติตามนโยบายความปลอดภัยทางไซเบอร์อย่างเคร่งครัด เช่น การใช้รหัสผ่านที่ซับซ้อน และการยืนยันตัวตนสองขั้นตอน (2FA) *(Section 6: IT Security Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- พนักงานต้องยื่นคำขอทำงานระยะไกลผ่านกระบวนการภายในของบริษัท โดยต้องผ่านการอนุมัติตามลำดับขั้น *(Section 2: Remote Work Policy)*\n- **ข้อกำหนดด้านเวลา**: พนักงานที่ทำงานระยะไกลต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) คือ **10:00 - 15:00 น.** ตามเวลาท้องถิ่นของตนเอง *(Section 2: Remote Work Policy)*\n- หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องแจ้งฝ่าย IT Helpdesk **ทันที** *(Section 4)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- **ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติม** สำหรับการยื่นขอทำงานระยะไกล (สามารถดำเนินการผ่านระบบภายในของบริษัทได้) *(Section 2: Remote Work Policy)*\n- อย่างไรก็ตาม พนักงานต้องใช้อุปกรณ์ที่บริษัทจัดหาให้เท่านั้น (Laptop + VPN) และต้องติดตั้งซอฟต์แวร์ MDM (Mobile Device Management) บนอุปกรณ์องค์กรทุกเครื่อง เพื่อให้สามารถล้างข้อมูลระยะไกลได้ในกรณีที่อุปกรณ์สูญหาย *(Section 4 และ Section 6: IT Security Policy)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **ห้ามใช้การเชื่อมต่อเครือข่ายที่ไม่ปลอดภัย** ต้องใช้ VPN ของบริษัทสำหรับการเชื่อมต่อระบบองค์กรทั้งหมดเท่านั้น *(Section 4)*\n- **ข้อกำหนดด้านรหัสผ่าน**: ต้องมีความยาวอย่างน้อย 12 ตัวอักษร ประกอบด้วยอักขระหลายประเภท และต้องเปลี่ยนทุก 90 วัน *(Section 6: IT Security Policy)*\n- **บังคับใช้ 2FA** สำหรับการเข้าถึงระบบและอีเมลของบริษัททั้งหมด *(Section 6: IT Security Policy)*\n- พนักงานต้องรักษาระดับประสิทธิภาพและการตอบสนองในการทำงานให้เทียบเท่ากับการทำงานที่ออฟฟิศ หากละเลยอาจส่งผลต่อสิทธิ์การทำงานระยะไกล *(Section 4)*\n- *หมายเหตุ: นโยบายการเดินทางระหว่างประเทศ (Section 1) ไม่เกี่ยวข้องโดยตรงกับ Remote Work แต่หากพนักงานทำงานระยะไกลจากต่างประเทศ ควรตรวจสอบข้อกำหนดการเดินทางระหว่างประเทศเพิ่มเติม*",
-      "confidence": 0.9661,
+      "final_answer": "### 📋 1. Overview & Eligibility\n- Employees who have completed their initial 90-day probationary period are eligible to request remote work arrangements.\n- Approved employees may work remotely for a maximum of 3 days per week.\n- The company supports a flexible work environment.\n\n### 📝 2. Procedures & Approvals\n- Employees must submit a request for remote work arrangements (specific approval process not detailed in the provided text).\n- Remote workers must be online and available during core hours of 10:00 AM to 3:00 PM in their local time zone.\n- Any technical issues preventing work must be reported immediately to the IT helpdesk.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Remote work is limited to a maximum of 3 days per week.\n- Employees must maintain the same level of performance and responsiveness as they would in the office.\n- Company-provided equipment (laptop and secure VPN access) must be used for all corporate network connections.\n\n---\n### 📚 Policy References\n- • Section 2: Remote Work Policy\n- • Section 6: IT Security Policy (related to VPN and device requirements)",
+      "confidence": 0.6224,
       "is_grounded": true,
       "recall_passed": true,
-      "latency_seconds": 20.52
+      "latency_seconds": 11.32
     },
     {
       "test_id": 4,
@@ -70,14 +72,16 @@
       ],
       "retrieved_sections": [
         "Section 2: Remote Work Policy",
-        "Section 1: International Travel Policy"
+        "Section 4: Expense Reimbursement Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy",
+        "Section 6: IT Security Policy"
       ],
       "ground_truth": "No, approved employees may work remotely for a maximum of 3 days per week.",
-      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n\n- **ไม่สามารถทำงานจากที่บ้าน (WFH) ได้ทุกวัน** ตามนโยบาย Remote Work Policy กำหนดให้พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว สามารถยื่นขอทำงานระยะไกลได้สูงสุด **3 วันต่อสัปดาห์** เท่านั้น *(Section 2: Remote Work Policy)*\n- พนักงานที่ได้รับอนุมัติให้ทำงานระยะไกล ต้องปฏิบัติตามข้อกำหนดดังนี้:\n  - ต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) ระหว่าง **10:00 - 15:00 น.** ตามเวลาท้องถิ่นของตนเอง\n  - ต้องรักษาระดับการทำงานและความรับผิดชอบให้เทียบเท่ากับการทำงานที่ออฟฟิศ *(Section 2: Remote Work Policy)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n\n- พนักงานต้องยื่นคำขอทำงานระยะไกล และต้องผ่านการอนุมัติตามกระบวนการของบริษัท\n- หมายเหตุ: นโยบายนี้ไม่ระบุขั้นตอนการยื่นเรื่องโดยละเอียด แต่การทำงานระยะไกลต้องอยู่ภายใต้การอนุมัติจากผู้บังคับบัญชาโดยตรง *(Section 2: Remote Work Policy)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n\n- ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติม (สามารถดำเนินการผ่านระบบภายในได้ทันที) เนื่องจากนโยบายไม่ได้ระบุให้ต้องยื่นเอกสารใดเป็นพิเศษ\n- อย่างไรก็ตาม พนักงานต้องใช้อุปกรณ์ที่บริษัทจัดหาให้ ได้แก่ **แล็ปท็อปและ VPN ที่ปลอดภัย** สำหรับการเชื่อมต่อเครือข่ายของบริษัททั้งหมด *(Section 4)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n\n- **ข้อจำกัดด้านจำนวนวัน:** การทำงานระยะไกลจำกัดเพียง 3 วันต่อสัปดาห์ ไม่สามารถขอเพิ่มเติมได้ตามนโยบาย\n- **ช่วงเวลาห้าม (Blackout Periods):** แม้จะไม่เกี่ยวกับการทำงานระยะไกลโดยตรง แต่หากต้องการลาหยุดในช่วง **2 สัปดาห์สุดท้ายของปีงบประมาณ** หรือ **ช่วงการเปิดตัวผลิตภัณฑ์หลัก** คำขอมักจะถูกปฏิเสธ เว้นแต่มีเหตุจำเป็นพิเศษ *(Section 6)*\n- **การรายงานปัญหา:** หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องแจ้งฝ่าย IT Helpdesk ทันที *(Section 4)*\n- **การรักษาความลับ:** พนักงานที่ทำงานระยะไกลต้องรักษาความลับของข้อมูลบริษัท ทรัพย์สินทางปัญญา และข้อมูลลูกค้าอย่างเคร่งครัด รวมถึงปฏิบัติตามแนวทางโซเชียลมีเดียของบริษัท *(Section 10)*\n\n**สรุป:** คุณไม่สามารถทำงานจากที่บ้านทุกวันได้ เนื่องจากนโยบายกำหนดสูงสุดเพียง 3 วันต่อสัปดาห์ และต้องผ่านการอนุมัติตามขั้นตอนของบริษัท",
-      "confidence": 0.774,
+      "final_answer": "### 📋 1. Overview & Eligibility\n- No, you are not allowed to work from home (WFH) every day.\n- Under the Remote Work Policy, approved employees may work remotely for a **maximum of 3 days per week**.\n- Eligibility requires completion of the initial **90-day probationary period** before requesting remote work arrangements.\n\n### 📝 2. Procedures & Approvals\n- You must submit a formal request for remote work arrangements after completing your probationary period.\n- Approval is required before any remote work begins; the policy does not specify a separate approval hierarchy beyond the standard request process.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Remote work is capped at 3 days per week; the remaining days must be worked on-site.\n- While working remotely, you must be **online and available during core hours of 10:00 AM to 3:00 PM** in your local time zone.\n- All corporate network connections must use company-provided equipment (laptop and secure VPN).\n- Any technical issues preventing work must be reported immediately to the IT helpdesk.\n- Performance and responsiveness expectations remain the same as in-office work.\n\n---\n### 📚 Policy References\n- • Section 2: Remote Work Policy",
+      "confidence": 0.2405,
       "is_grounded": true,
       "recall_passed": true,
-      "latency_seconds": 27.826
+      "latency_seconds": 23.764
     },
     {
       "test_id": 5,
@@ -87,15 +91,274 @@
       ],
       "retrieved_sections": [
         "Section 2: Remote Work Policy",
-        "Section 4: Expense Reimbursement Policy",
-        "Section 6: IT Security Policy"
+        "Section 15: Severance, Resignation & Offboarding Policy",
+        "Section 11: Workplace Health, Safety & Emergency Procedures Policy"
       ],
       "ground_truth": "The company provides essential equipment, including a laptop and secure VPN access.",
-      "final_answer": "### 📋 1. สรุปภาพรวมและสิทธิ์ที่ได้รับ (Overview & Eligibility)\n- พนักงานที่ผ่านระยะเวลาทดลองงานครบ 90 วันแล้ว มีสิทธิ์ขอยืดหยุ่นการทำงานทางไกล (Remote Work) ได้สูงสุด 3 วันต่อสัปดาห์ *(Section 2: Remote Work Policy)*\n- บริษัทจัดหาอุปกรณ์ที่จำเป็นสำหรับการทำงานทางไกลให้แก่พนักงาน ได้แก่ **โน้ตบุ๊ก (Laptop)** และ **การเข้าถึง VPN ที่ปลอดภัย (Secure VPN Access)** *(Section 4)*\n- อุปกรณ์ที่บริษัทจัดให้ถือเป็นอุปกรณ์องค์กร และต้องใช้สำหรับการเชื่อมต่อเครือข่าย corporates ทั้งหมดเท่านั้น *(Section 4)*\n\n### 📝 2. ขั้นตอนการยื่นเรื่องและการขออนุมัติ (Procedures & Approvals)\n- พนักงานต้องยื่นคำขอทำงานทางไกลตามขั้นตอนภายในองค์กร และต้องได้รับอนุมัติก่อนเริ่มปฏิบัติงาน *(Section 2: Remote Work Policy)*\n- ระหว่างทำงานทางไกล พนักงานต้องปฏิบัติตามข้อกำหนดด้านความปลอดภัย IT อย่างเคร่งครัด เช่น การใช้ VPN สำหรับการเชื่อมต่อเครือข่าย และการรายงานปัญหาทางเทคนิคไปยัง IT Helpdesk ทันที *(Section 4)*\n\n### 📄 3. เอกสารและหลักฐานที่ต้องเตรียม (Required Documentation)\n- ไม่จำเป็นต้องเตรียมเอกสารเพิ่มเติมสำหรับการขอรับอุปกรณ์ (สามารถดำเนินการผ่านระบบภายในได้ทันที) เนื่องจากอุปกรณ์เป็นส่วนหนึ่งของการจัดเตรียมของฝ่าย IT\n- อย่างไรก็ตาม หากเกิดปัญหาทางเทคนิคที่ขัดขวางการทำงาน ต้องรายงานไปยัง IT Helpdesk ทันที *(Section 4)*\n\n### ⚠️ 4. ข้อควรระวังและข้อยกเว้น (Exceptions, Deadlines & Notes)\n- **ข้อจำกัดด้านเวลา**: พนักงานที่ทำงานทางไกลต้องออนไลน์และพร้อมให้ติดต่อได้ในช่วงเวลาหลัก (Core Hours) 10:00 - 15:00 น. ตามเวลาท้องถิ่น *(Section 2: Remote Work Policy)*\n- **ข้อกำหนดด้านความปลอดภัย**: อุปกรณ์ที่บริษัทจัดให้ต้องติดตั้งซอฟต์แวร์ MDM (Mobile Device Management) เพื่อให้สามารถล้างข้อมูลระยะไกลได้หากอุปกรณ์สูญหาย และต้องใช้ VPN สำหรับการเชื่อมต่อเครือข่าย corporates ทั้งหมด *(Section 6: IT Security Policy)*\n- **ข้อห้าม**: ห้ามติดตั้งซอฟต์แวร์นอกเหนือจากที่ได้รับอนุมัติจากบริษัท (Company Catalog) บนอุปกรณ์ทำงาน และห้ามละเลยการรายงานเหตุการณ์ด้านความปลอดภัย เช่น การโจมตีแบบ Phishing หรือการละเมิดข้อมูล *(Section 12)*\n- **การรักษาความลับ**: ข้อมูลที่มีความละเอียดอ่อนสูง (Highly Sensitive Data) ต้องเข้ารหัสทั้งขณะจัดเก็บ (At Rest) และขณะส่งผ่าน (In Transit) *(Section 12)*",
-      "confidence": 0.2254,
+      "final_answer": "### 📋 1. Overview & Eligibility\n- The company supports a flexible work environment and provides essential equipment for approved remote work arrangements.\n- Eligibility: Employees must have completed their initial 90-day probationary period to request remote work.\n\n### 📝 2. Procedures & Approvals\n- No specific approval steps are detailed in the provided policy snippets beyond submitting a request for remote work arrangements.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Approved employees may work remotely for a maximum of 3 days per week.\n- Remote workers must be online and available during core hours (10:00 AM to 3:00 PM local time).\n- Company-provided equipment (laptop and VPN) must be used for all corporate network connections.\n- Any technical issues must be reported immediately to the IT helpdesk.\n\n---\n### 📚 Policy References\n- Section 2: Remote Work Policy",
+      "confidence": 0.0044,
       "is_grounded": true,
       "recall_passed": true,
-      "latency_seconds": 29.723
+      "latency_seconds": 32.381
+    },
+    {
+      "test_id": 6,
+      "query": "How many vacation days do I get?",
+      "expected_sections": [
+        "Annual Leave Policy"
+      ],
+      "retrieved_sections": [
+        "Section 3: Annual Leave Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy",
+        "Section 14: Learning, Training & Professional Development Policy"
+      ],
+      "ground_truth": "The standard accrual rate is 1.5 days per month for the first three years of service.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- You accrue annual leave at a rate of **1.5 days per month** for the first three years of service.\n- This equates to **18 days per year** during your first three years.\n\n### 📝 2. Procedures & Approvals\n- All leave requests require sign-off from your direct manager.\n- You must provide a minimum notice of **14 days** for standard leave requests.\n- In cases of unforeseen personal emergencies, emergency leave can be requested with immediate notice, subject to HR review.\n\n### 📄 3. Required Documentation\n- • No additional documents required for standard annual leave requests.\n\n### ⚠️ 4. Exceptions & Deadlines\n- A maximum of **5 days** of unused annual leave can be carried over to the following calendar year.\n- **Blackout periods** apply during the last two weeks of the fiscal year and major product launches—leave requests will generally be denied during these times unless in exceptional circumstances.\n\n---\n### 📚 Policy References\n- Section 3: Annual Leave Policy",
+      "confidence": 0.4836,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 25.153
+    },
+    {
+      "test_id": 7,
+      "query": "Can I carry over unused sick time or PTO?",
+      "expected_sections": [
+        "Annual Leave Policy"
+      ],
+      "retrieved_sections": [
+        "Section 3: Annual Leave Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy",
+        "Section 15: Severance, Resignation & Offboarding Policy"
+      ],
+      "ground_truth": "A maximum of 5 days of unused annual leave can be carried over to the following calendar year.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- **Annual Leave (PTO):** Employees accrue 1.5 days per month for the first three years of service. A maximum of **5 days** of unused annual leave can be carried over to the following calendar year.\n- **Sick Leave:** Employees are entitled to up to **30 days** of paid sick leave per calendar year. There is **no provision** for carrying over unused sick leave; it is a per-calendar-year entitlement.\n\n### 📝 2. Procedures & Approvals\n- **Annual Leave Carryover:** No separate approval process is mentioned for carrying over unused annual leave; it is automatically permitted up to the 5-day cap.\n- **Sick Leave:** No carryover process exists. Sick leave is used within the calendar year only.\n\n### 📄 3. Required Documentation\n- **Annual Leave Carryover:** • No additional documents required.\n- **Sick Leave:** • No additional documents required for carryover (since carryover is not permitted).\n\n### ⚠️ 4. Exceptions & Deadlines\n- **Annual Leave:** Blackout periods apply during the last two weeks of the fiscal year and major product launches, where leave requests are generally denied unless in exceptional circumstances. Leave requests require a minimum notice of 14 days and sign-off from the direct manager.\n- **Sick Leave:** For sick leave exceeding 3 consecutive working days, a certified medical certificate must be submitted via the HR portal within 48 hours of returning to work. For immediate illness, staff must inform their direct supervisor prior to 9:00 AM on the day of absence.\n- **Unused Leave Compensation:** Upon separation, prorated unused leave compensation is paid within 7 business days following exit clearance (per offboarding policy).\n\n---\n### 📚 Policy References\n- Section 3: Annual Leave Policy\n- Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy\n- Section 15: Severance, Resignation & Offboarding Policy",
+      "confidence": 0.2359,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 36.874
+    },
+    {
+      "test_id": 8,
+      "query": "What are the rules for expense reimbursement?",
+      "expected_sections": [
+        "Expense Reimbursement Policy"
+      ],
+      "retrieved_sections": [
+        "Section 4: Expense Reimbursement Policy",
+        "Section 1: International Travel Policy",
+        "Section 14: Learning, Training & Professional Development Policy"
+      ],
+      "ground_truth": "Eligible expenses include client entertainment, travel, and office supplies. Itemized receipts are required for expenses over $25, and claims must be submitted within 30 days.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- Eligible expenses include client entertainment, business travel, and approved office supplies.\n- Itemized receipts are required for any expense exceeding $25.\n- For international business travel, the company covers flights (economy class), lodging, and meals based on established per diem rates for the destination country.\n- Corporate credit cards are provided to frequent travelers and department heads and must be used strictly for business purposes.\n\n### 📝 2. Procedures & Approvals\n- Reimbursement claims must be submitted within 30 days from the date the expense was incurred.\n- Approval follows a tiered system: managers can approve expenses up to $500; amounts above $500 require director-level approval.\n- For international travel, employees must obtain approval from their department head and the HR department at least 30 days prior to departure.\n- All travel reservations must be made through the company-approved booking portal.\n- Corporate credit card statements must be reconciled monthly.\n\n### 📄 3. Required Documentation\n- Itemized receipts for any expense exceeding $25.\n- For international travel reimbursements: all original receipts, a detailed itinerary, and a post-travel report must be submitted within 14 days of returning.\n- No additional documents required for standard expense claims beyond the receipts noted above.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Submission deadline: 30 days from the date the expense was incurred.\n- International travel documentation deadline: 14 days after returning; failure to provide required documentation may result in denied reimbursement.\n- Personal expenses on corporate cards are strictly prohibited.\n\n---\n### 📚 Policy References\n- Section 4: Expense Reimbursement Policy\n- Section 1: International Travel Policy",
+      "confidence": 0.5018,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 13.707
+    },
+    {
+      "test_id": 9,
+      "query": "Who needs to approve a $600 expense claim?",
+      "expected_sections": [
+        "Expense Reimbursement Policy"
+      ],
+      "retrieved_sections": [
+        "Section 4: Expense Reimbursement Policy",
+        "Section 1: International Travel Policy",
+        "Section 14: Learning, Training & Professional Development Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy"
+      ],
+      "ground_truth": "Amounts above $500 require director-level approval.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- The approval process for expense reimbursements follows a tiered system based on the claim amount.\n- Managers can approve expenses up to $500.\n- Amounts above $500 require director-level approval.\n\n### 📝 2. Procedures & Approvals\n- For a $600 expense claim, the amount exceeds the $500 manager approval threshold.\n- Therefore, the claim must be escalated to and approved by a director-level approver.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- All reimbursement claims must be submitted within 30 days from the date the expense was incurred.\n- Itemized receipts are required for any expense exceeding $25.\n\n---\n### 📚 Policy References\n- Section 4: Expense Reimbursement Policy",
+      "confidence": 0.1701,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 10.271
+    },
+    {
+      "test_id": 10,
+      "query": "Can I use the corporate credit card for personal purchases?",
+      "expected_sections": [
+        "Expense Reimbursement Policy"
+      ],
+      "retrieved_sections": [
+        "Section 4: Expense Reimbursement Policy",
+        "Section 15: Severance, Resignation & Offboarding Policy",
+        "Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+        "Section 9: Anti-Money Laundering (AML) & Know Your Customer (KYC) Policy",
+        "Section 5: Code of Conduct"
+      ],
+      "ground_truth": "No, personal expenses on corporate cards are strictly prohibited.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- No. The corporate credit card must be used strictly for business purposes only.\n- Personal expenses on corporate cards are strictly prohibited.\n\n### 📝 2. Procedures & Approvals\n- Corporate credit card statements must be reconciled monthly.\n- Frequent travelers and department heads are subject to these corporate credit card rules.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- There are no exceptions for personal use; the prohibition is absolute.\n- Monthly reconciliation of all statements is mandatory.\n\n---\n### 📚 Policy References\n- Section 4: Expense Reimbursement Policy\n- Section 15: Severance, Resignation & Offboarding Policy (relevant to surrender of corporate credit cards upon departure)",
+      "confidence": 0.3963,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 11.671
+    },
+    {
+      "test_id": 11,
+      "query": "What is the policy regarding gifts from clients?",
+      "expected_sections": [
+        "Code of Conduct"
+      ],
+      "retrieved_sections": [
+        "Section 5: Code of Conduct",
+        "Section 4: Expense Reimbursement Policy",
+        "Section 9: Anti-Money Laundering (AML) & Know Your Customer (KYC) Policy",
+        "Section 12: Whistleblowing & Grievance Policy"
+      ],
+      "ground_truth": "The gifts policy limits the acceptance of gifts from clients or vendors to a value of $50 or less, and cash gifts are never permitted.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- The bank's Code of Conduct strictly limits the acceptance of gifts from clients or vendors.\n- Gifts must have a value of **$50 or less**.\n- **Cash gifts are never permitted** under any circumstances.\n\n### 📝 2. Procedures & Approvals\n- No specific approval process is mentioned for accepting gifts within the limit.\n- Any potential **conflict of interest** arising from a gift must be **disclosed to HR immediately**.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Gifts exceeding $50 in value are not permitted.\n- Cash gifts are strictly prohibited at all times.\n- Immediate disclosure to HR is required for any potential conflict of interest.\n\n---\n### 📚 Policy References\n- • Section 5: Code of Conduct",
+      "confidence": 0.3966,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 11.95
+    },
+    {
+      "test_id": 12,
+      "query": "How should I handle my social media accounts?",
+      "expected_sections": [
+        "Code of Conduct"
+      ],
+      "retrieved_sections": [
+        "Section 5: Code of Conduct",
+        "Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+        "Section 15: Severance, Resignation & Offboarding Policy",
+        "Section 12: Whistleblowing & Grievance Policy"
+      ],
+      "ground_truth": "Social media guidelines require employees to clearly state that their views are their own and not representative of the company.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- When using social media, employees must clearly state that their views are their own and not representative of the company.\n- This requirement applies to all employees who maintain personal social media accounts.\n\n### 📝 2. Procedures & Approvals\n- No formal approval process is required for personal social media use.\n- Ensure any posts or statements include a clear disclaimer that your views do not represent the company.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- Do not disclose company data, intellectual property, or client information on social media.\n- If you witness violations of these guidelines, report them via the anonymous reporting violations hotline.\n\n---\n### 📚 Policy References\n- • Section 5: Code of Conduct",
+      "confidence": 0.3834,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 20.749
+    },
+    {
+      "test_id": 13,
+      "query": "Tell me about password requirements and IT security.",
+      "expected_sections": [
+        "IT Security Policy"
+      ],
+      "retrieved_sections": [
+        "Section 6: IT Security Policy",
+        "Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+        "Section 9: Anti-Money Laundering (AML) & Know Your Customer (KYC) Policy"
+      ],
+      "ground_truth": "Passwords must be at least 12 characters, include a mix of character types, and be changed every 90 days. 2FA is mandatory.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- **Password requirements:** Minimum 12 characters, mix of character types, and mandatory change every 90 days.\n- **Two-factor authentication (2FA):** Mandatory for accessing all company systems and emails.\n- **Device management:** All corporate devices must have Mobile Device Management (MDM) software installed to allow remote wiping in case of loss.\n- **Data protection:** Highly sensitive data must be encrypted at rest and in transit.\n- **Software restrictions:** Only approved software from the company catalog may be installed on work devices.\n- **Shared responsibility:** Maintaining security of company data is a shared responsibility for all employees.\n\n### 📝 2. Procedures & Approvals\n- **Incident reporting:** Employees must familiarize themselves with incident reporting procedures and immediately notify IT of any suspected phishing attempts or security breaches.\n- **Data breach reporting:** In the event of an actual or suspected data breach, employees must report the incident to the Data Protection Officer (DPO) immediately.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- **Regulatory deadline:** The organization is legally mandated to notify relevant regulatory authorities within 72 hours of a data breach.\n- **Strict prohibitions:** Unauthorized disclosure or mishandling of customer data will result in disciplinary action up to termination and legal prosecution.\n- **Access limits:** Staff may only access personal information strictly necessary for their specific job duties (data minimization principle).\n\n---\n### 📚 Policy References\n- Section 6: IT Security Policy\n- Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+      "confidence": 0.0207,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 35.509
+    },
+    {
+      "test_id": 14,
+      "query": "What should I do if my work laptop is stolen?",
+      "expected_sections": [
+        "IT Security Policy"
+      ],
+      "retrieved_sections": [
+        "Section 6: IT Security Policy",
+        "Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+        "Section 15: Severance, Resignation & Offboarding Policy",
+        "Section 5: Code of Conduct"
+      ],
+      "ground_truth": "All corporate devices have MDM installed for remote wiping. Employees should familiarize themselves with incident reporting procedures and notify IT immediately.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- All employees are responsible for maintaining the security of company data, including on corporate devices.\n- Corporate devices are required to have MDM (Mobile Device Management) software installed, which allows IT to remotely wipe the device in case of loss or theft.\n\n### 📝 2. Procedures & Approvals\n- Immediately notify IT of the suspected security breach or loss, as per incident reporting procedures.\n- If the theft involves or may involve personal data (customer or employee data), report the incident to the Data Protection Officer (DPO) immediately.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- The organization is legally mandated to notify relevant regulatory authorities within 72 hours of a data breach—report promptly to IT and the DPO to meet this deadline.\n- Do not attempt to handle the breach alone; follow the company's incident reporting procedures without delay.\n\n---\n### 📚 Policy References\n- Section 6: IT Security Policy\n- Section 7: Data Privacy & Personal Data Protection Policy (PDPA)",
+      "confidence": 0.171,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 21.828
+    },
+    {
+      "test_id": 15,
+      "query": "What do I need to know before going on a business trip abroad?",
+      "expected_sections": [
+        "International Travel Policy",
+        "Expense Reimbursement Policy"
+      ],
+      "retrieved_sections": [
+        "Section 1: International Travel Policy",
+        "Section 4: Expense Reimbursement Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy"
+      ],
+      "ground_truth": "You need HR and department head approval 30 days prior. Use the company portal for flights (economy) and lodging. Keep itemized receipts for expenses over $25 and submit them within 14 days of returning (overall expense policy allows 30 days, but travel requires post-travel report within 14 days).",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- International business travel requires approval from your department head and the HR department.\n- The company covers economy-class flights, lodging, and meals based on per diem rates for the destination country.\n- Comprehensive travel insurance is provided for the duration of the trip.\n- All reservations must be made through the company-approved booking portal.\n\n### 📝 2. Procedures & Approvals\n- Submit your travel request for approval at least **30 days prior** to planned departure.\n- Approval is required from both your department head and HR before travel.\n- After returning, submit a post-travel report and reimbursement claim within **14 days**.\n\n### 📄 3. Required Documentation\n- Original receipts for all expenses.\n- A detailed itinerary.\n- A post-travel report.\n- For any expense exceeding $25, itemized receipts are required.\n- Reimbursement claims above $500 require director-level approval (claims up to $500 can be approved by your manager).\n\n### ⚠️ 4. Exceptions & Deadlines\n- **Strict deadline:** Reimbursement claims must be submitted within 14 days of returning; failure to provide required documentation may result in denied reimbursement.\n- **Corporate card rules:** If you hold a corporate card, it must be used strictly for business purposes, statements must be reconciled monthly, and personal expenses on the card are strictly prohibited.\n- **Sick leave note (if applicable):** If you fall ill during or after travel, sick leave exceeding 3 consecutive working days requires a certified medical certificate submitted via the HR portal within 48 hours of returning to work.\n\n---\n### 📚 Policy References\n- Section 1: International Travel Policy\n- Section 4: Expense Reimbursement Policy\n- Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy",
+      "confidence": 0.1684,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 13.507
+    },
+    {
+      "test_id": 16,
+      "query": "If I am working from home, do I need to use the VPN?",
+      "expected_sections": [
+        "Remote Work Policy"
+      ],
+      "retrieved_sections": [
+        "Section 2: Remote Work Policy",
+        "Section 6: IT Security Policy",
+        "Section 7: Data Privacy & Personal Data Protection Policy (PDPA)"
+      ],
+      "ground_truth": "Yes, secure VPN access must be used for all corporate network connections.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- Yes, the VPN is mandatory for all remote work arrangements.\n- The company provides secure VPN access as essential equipment for employees approved to work remotely.\n- The VPN must be used for **all corporate network connections** while working remotely.\n\n### 📝 2. Procedures & Approvals\n- No additional procedures beyond standard remote work approval (completion of 90-day probationary period and approved remote work request).\n- If you experience any technical issues preventing work (including VPN problems), report them immediately to the IT helpdesk.\n\n### 📄 3. Required Documentation\n- • No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- There are no exceptions to the VPN requirement for corporate network access.\n- Ensure you are online and available during core hours (10:00 AM – 3:00 PM local time) when working remotely.\n\n---\n### 📚 Policy References\n- Section 2: Remote Work Policy\n- Section 6: IT Security Policy",
+      "confidence": 0.5098,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 18.841
+    },
+    {
+      "test_id": 17,
+      "query": "What is the weather like in Bangkok today?",
+      "expected_sections": [],
+      "retrieved_sections": [],
+      "ground_truth": "Rejected: off-topic",
+      "final_answer": "I'm sorry, but your question appears to be outside the scope of our company knowledge base. I can only answer questions related to company policies, HR, IT security, travel, expenses, leave, and workplace guidelines. Please try rephrasing your question or ask about a specific company policy.",
+      "confidence": 0.0,
+      "is_grounded": false,
+      "recall_passed": true,
+      "latency_seconds": 0.935
+    },
+    {
+      "test_id": 18,
+      "query": "How do I bake a chocolate cake?",
+      "expected_sections": [],
+      "retrieved_sections": [],
+      "ground_truth": "Rejected: off-topic",
+      "final_answer": "I'm sorry, but your question appears to be outside the scope of our company knowledge base. I can only answer questions related to company policies, HR, IT security, travel, expenses, leave, and workplace guidelines. Please try rephrasing your question or ask about a specific company policy.",
+      "confidence": 0.0,
+      "is_grounded": false,
+      "recall_passed": true,
+      "latency_seconds": 0.542
+    },
+    {
+      "test_id": 19,
+      "query": "Who won the premier league last year?",
+      "expected_sections": [],
+      "retrieved_sections": [],
+      "ground_truth": "Rejected: off-topic",
+      "final_answer": "I'm sorry, but your question appears to be outside the scope of our company knowledge base. I can only answer questions related to company policies, HR, IT security, travel, expenses, leave, and workplace guidelines. Please try rephrasing your question or ask about a specific company policy.",
+      "confidence": 0.0,
+      "is_grounded": false,
+      "recall_passed": true,
+      "latency_seconds": 0.748
+    },
+    {
+      "test_id": 20,
+      "query": "I need to take time off.",
+      "expected_sections": [
+        "Annual Leave Policy"
+      ],
+      "retrieved_sections": [
+        "Section 3: Annual Leave Policy",
+        "Section 1: International Travel Policy",
+        "Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy"
+      ],
+      "ground_truth": "Leave requests require sign-off from your direct manager with a minimum notice of 14 days. Standard accrual is 1.5 days per month.",
+      "final_answer": "### 📋 1. Overview & Eligibility\n- **Annual Leave:** You accrue 1.5 days per month for the first three years of service. A maximum of 5 unused days can be carried over to the next calendar year.\n- **Sick Leave:** You are entitled to up to 30 paid days per calendar year for legitimate illness or recovery.\n- **Parental Leave:** 16 weeks of fully paid maternity leave and 4 weeks of paid paternity leave are available.\n- **Emergency Leave:** Available for unforeseen personal emergencies, subject to HR review.\n\n### 📝 2. Procedures & Approvals\n- **Annual Leave:** Submit a request with a minimum of 14 days' notice, requiring sign-off from your direct manager.\n- **Emergency Leave:** Can be requested with immediate notice, but is subject to HR review.\n- **Sick Leave:** For immediate illness, inform your direct supervisor before 9:00 AM on the day of absence.\n- **International Travel (if applicable):** If your time off involves business travel, obtain approval from your department head and HR at least 30 days prior to departure.\n\n### 📄 3. Required Documentation\n- **Sick Leave (over 3 consecutive days):** Submit a certified medical certificate from a licensed physician via the HR portal within 48 hours of returning to work.\n- **Other leave types:** No additional documents required.\n\n### ⚠️ 4. Exceptions & Deadlines\n- **Blackout Periods:** Annual leave requests are generally denied during the last two weeks of the fiscal year and major product launches, unless exceptional circumstances apply.\n- **Sick Leave Notification:** Must be reported before 9:00 AM on the day of absence.\n\n---\n### 📚 Policy References\n- Section 3: Annual Leave Policy\n- Section 8: Health, Wellness, Sick Leave & Medical Benefits Policy\n- Section 1: International Travel Policy",
+      "confidence": 0.1908,
+      "is_grounded": true,
+      "recall_passed": true,
+      "latency_seconds": 28.927
     }
   ]
 }

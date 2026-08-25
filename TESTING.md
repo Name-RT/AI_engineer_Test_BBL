@@ -6,7 +6,7 @@
 
 ## ภาพรวมชุดการทดสอบ
 
-ชุดทดสอบพัฒนาโดยใช้ **Pytest** มีจำนวนการทดสอบทั้งหมด **61 Test Cases** ผ่าน 100% (Coverage ~76%) โดยใช้ Fixture และ Mocking ในการจำลอง LLM เพื่อให้รันได้อย่างรวดเร็วและเป็น Deterministic
+ชุดทดสอบพัฒนาโดยใช้ **Pytest** มีจำนวนการทดสอบทั้งหมด **61 Test Cases** ผ่าน 100% (Coverage ~79%) โดยใช้ Fixture และ Mocking ในการจำลอง LLM เพื่อให้รันได้อย่างรวดเร็วและเป็น Deterministic
 
 | ไฟล์ทดสอบ | จำนวนเทส | ขอบเขตการทดสอบ |
 |:---|:---:|:---|
@@ -16,7 +16,7 @@
 | [`tests/test_guardrails.py`](tests/test_guardrails.py) | 8 | Input Validation (ความยาว, Off-topic), Output Validation (Fact Groundedness, Hallucination) |
 | [`tests/test_security_guardrails.py`](tests/test_security_guardrails.py) | 25 | OWASP LLM Guardrails: PII Masking, Jailbreak, System Prompt Leakage, Code/SQL Injection, Rate Limiting |
 | [`tests/test_integration.py`](tests/test_integration.py) | 5 | การทำงานแบบ End-to-End ของ LangGraph StateGraph, ลูป Self-correction, Max Attempts Fallback |
-| **รวมทั้งหมด** | **61** | **Pass 100%** |
+| **รวมทั้งหมด** | **61** | **Pass 100% (Coverage 79%)** |
 
 ---
 
@@ -159,14 +159,29 @@
 
 ---
 
+## การทดสอบความถูกต้องของเนื้อหา 15 หมวดหมู่นโยบาย (15-Section Factual Audit)
+
+เพื่อรับประกันว่าโมเดลตอบข้อมูลตัวเลข สิทธิ์การลา งบประมาณ และกฎระเบียบได้อย่างถูกต้องตรงตาม `knowledge_base.txt` ทั้ง 15 หมวดหมู่นโยบาย มีการทดสอบความถูกต้องของข้อเท็จจริง (Factual Verification):
+
+- **สิทธิ์การลาพักร้อน:** สะสม 1.5 วัน/เดือน, ยกยอดได้สูงสุด 5 วัน
+- **การแจ้งเดินทางต่างประเทศ:** ล่วงหน้าอย่างน้อย 30 วัน, ชั้นประหยัด (Economy)
+- **การทำงานระยะไกล (WFH):** สูงสุด 3 วัน/สัปดาห์, หลังผ่านทดลองงาน 90 วัน
+- **การเบิกจ่ายค่าใช้จ่าย:** ผู้จัดการอนุมัติ $\le \$500$, เกิน $\$500$ ต้องระดับ Director
+- **การรับของขวัญ:** ไม่เกิน $\$50$, ห้ามรับเงินสดเด็ดขาด
+- **ความปลอดภัยไอที:** รหัสผ่าน $\ge 12$ ตัวอักษร, เปลี่ยนทุก 90 วัน, บังคับใช้ 2FA
+- **สิทธิประโยชน์และประกันสุขภาพ:** IPD/OPD 30 ครั้ง/ปี, ทันตกรรม $\$500$, ลาคลอด 16 สัปดาห์, ลาดูแลบุตร 4 สัปดาห์
+- **งบประมาณการอบรม:** $\$1,500$ ต่อคนต่อปี, สัญญารับทุน $> \$5,000$ ผูกพัน 12 เดือน
+
+---
+
 ## คำสั่งสำหรับรันการทดสอบ
 
-### 1. รัน Unit & Integration Tests ทั้งหมด (59 Tests)
+### 1. รัน Unit & Integration Tests ทั้งหมด (61 Tests)
 ```bash
 python -m pytest tests/ -v --tb=short
 ```
 
-### 2. รัน Tests พร้อมวัด Code Coverage
+### 2. รัน Tests พร้อมวัด Code Coverage (79% Coverage)
 ```bash
 python -m pytest tests/ -v --cov=agents --cov=tools --cov=guardrails --cov=config --cov-report=term-missing --tb=short
 ```

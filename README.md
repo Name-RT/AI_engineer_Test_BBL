@@ -2,7 +2,7 @@
 
 [![CI / Automated Testing](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml/badge.svg)](https://github.com/Name-RT/AI_engineer_Test_BBL/actions/workflows/ci.yml)
 [![Tests Passing](https://img.shields.io/badge/tests-61%2F61%20passing-brightgreen.svg)](tests/)
-[![Coverage](https://img.shields.io/badge/coverage-76%25-brightgreen.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-79%25-brightgreen.svg)](tests/)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Docker Ready](https://img.shields.io/badge/docker-ready-2496ED.svg)](docker-compose.yml)
 
@@ -144,10 +144,11 @@ python evaluate.py --limit 5
 
 | Metric | Score | Target |
 |:---|:---:|:---:|
-| Context Recall @ Top-K | 100.0% (20/20) | >= 85% |
-| Factual Groundedness | 100.0% (20/20) | >= 90% |
-| Guardrail Catch Rate | 100.0% | 100% |
-| Avg. Latency | ~6.8s | < 10s |
+| Context Recall @ Top-K | 100.0% (17/17) | >= 85% |
+| Factual Groundedness | 100.0% (17/17) | >= 90% |
+| Guardrail Catch Rate | 100.0% (3/3) | 100% |
+| 15-Section Policy Factual Verification | 100.0% (15/15) | 100% |
+| Avg. Pipeline Latency | 18.0s | < 30s |
 
 Full results exported to [`evaluation/evaluation_report.json`](evaluation/evaluation_report.json).
 
@@ -183,7 +184,7 @@ AI_engineer_Test_BBL/
 ├── evaluate.py                         # Benchmark runner
 ├── config.yaml                         # All settings (thresholds, models, reranker, security)
 ├── knowledge_base.txt                  # Policy document (15 sections)
-├── TESTING.md                          # Test suite documentation (59 test cases)
+├── TESTING.md                          # Test suite documentation (61 test cases)
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml

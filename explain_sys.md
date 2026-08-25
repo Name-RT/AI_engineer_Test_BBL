@@ -168,7 +168,7 @@ class AgentState(TypedDict, total=False):
 ## 8. การทดสอบและการวัดผล
 
 ### 8.1 การทดสอบอัตโนมัติ (Pytest)
-มีชุดทดสอบทั้งหมด **61 Test Cases** ในไดเรกทอรี `tests/` รันแบบ Offline โดย Mock การเรียกใช้งาน LLM:
+มีชุดทดสอบทั้งหมด **61 Test Cases** ในไดเรกทอรี `tests/` ผ่าน 100% (Coverage ~79%) รันแบบ Offline โดย Mock การเรียกใช้งาน LLM:
 - `test_config.py` (8 tests): โหลดค่าคอนฟิก, สลับ Provider, จัดการ Token, Mock APIM
 - `test_reranker.py` (6 tests): Two-stage scoring, Raw Logits, Level 1 Noise filter, Fallback
 - `test_search.py` (9 tests): TF-IDF, ChromaDB, Hybrid RRF, Synonym Expansion, Chunking
@@ -178,10 +178,11 @@ class AgentState(TypedDict, total=False):
 
 ### 8.2 การวัดผลเชิงปริมาณ (`evaluate.py`)
 ทดสอบกับชุดข้อมูลมาตรฐาน `evaluation/golden_dataset.json` จำนวน 20 คำถาม:
-- **Context Recall @ Top-K:** $\ge 85\%$
-- **Factual Groundedness:** $\ge 90\%$
-- **Guardrail Catch Rate:** $100\%$
-- **Average Latency:** $< 10$ วินาที
+- **Context Recall @ Top-K:** $100.0\%$ ($17/17$ คำถามที่ตรงหัวข้อ)
+- **Factual Groundedness:** $100.0\%$ ($17/17$ คำถามที่ตรงหัวข้อ)
+- **Guardrail Catch Rate:** $100.0\%$ ($3/3$ คำถามนอกขอบเขต)
+- **15-Section Policy Factual Verification:** $100.0\%$ (ตรวจสอบความถูกต้องตรงเอกสาร $15/15$ หมวดหมู่)
+- **Average Latency:** $\sim 18.0$ วินาที (รวม Cross-Encoder Re-ranking + LLM Verification)
 
 ---
 
